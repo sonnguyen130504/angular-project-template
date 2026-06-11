@@ -1,0 +1,16 @@
+<section class="section">
+  @if (title() || subtitle()) {
+    <div class="section-heading">
+      <div>
+        @if (subtitle()) {
+          <p class="eyebrow">{{ subtitle() }}</p>
+        }
+        @if (title()) {
+          <h2>{{ title() }}</h2>
+        }
+      </div>
+      <ng-content select="[sectionActions]" />
+    </div>
+  }
+  <ng-content />
+</section>

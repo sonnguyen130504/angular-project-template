@@ -1,0 +1,91 @@
+:host {
+  display: block;
+  margin: 0 auto;
+}
+
+.device-bezel {
+  width: 393px;
+  height: 852px; // Typical modern large phone
+  background: var(--surface);
+  border-radius: 54px;
+  border: 12px solid #1a1a1a;
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.1), // Inner glass rim
+    0 24px 80px rgba(0, 0, 0, 0.15), // Ambient premium lift
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden; // Ensures screen content obeys the rounded corners
+  
+  // To ensure it fits on smaller laptop screens
+  max-width: 100%;
+  max-height: 90vh;
+  margin: auto;
+}
+
+.device-bezel.dark-theme {
+  border-color: #000;
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.05),
+    0 24px 80px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+.dynamic-island {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 35px;
+  background: #000;
+  border-radius: 999px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 10px;
+  pointer-events: none; // Let clicks pass through if needed
+
+  .camera-lens {
+    width: 14px;
+    height: 14px;
+    background: #111;
+    border-radius: 50%;
+    box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.1);
+  }
+}
+
+.device-screen {
+  width: 100%;
+  height: 100%;
+  background: var(--surface);
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-width: 0; // Essential for preventing grid blowout inside the simulator
+  padding-top: 48px; // Safe area inset to avoid the dynamic island
+
+  
+  // Hide scrollbar for a native app feel
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// On actual mobile devices, strip the simulator bezel and go full screen
+@media (max-width: 768px) {
+  .device-bezel {
+    width: 100%;
+    height: 100dvh;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    max-height: none;
+  }
+  .dynamic-island {
+    display: none;
+  }
+  .device-screen {
+    padding-top: 0;
+  }
+}

@@ -1,0 +1,45 @@
+:host {
+  display: block;
+  margin-top: 18px;
+}
+
+.section {
+  padding: 22px 0;
+  border-radius: var(--radius-xl);
+  background: transparent;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+  padding: 0 2px;
+}
+
+h2 {
+  margin: 0;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  font-size: 2.25rem;
+  line-height: 1.08;
+  max-width: 18ch;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+@media (max-width: 720px) {
+  .section-heading {
+    display: grid;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+}

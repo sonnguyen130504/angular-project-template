@@ -1,0 +1,13 @@
+<button
+  [class.primary]="variant() === 'primary'"
+  [class.secondary]="variant() === 'secondary'"
+  [class.danger]="variant() === 'danger'"
+  [class.loading]="loading()"
+  [disabled]="disabled() || loading()"
+  [type]="type()"
+>
+  @if (loading()) {
+    <span class="spinner" aria-hidden="true"></span>
+  }
+  <ng-content />
+</button>

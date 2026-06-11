@@ -1,0 +1,36 @@
+:host {
+  display: inline-flex;
+}
+
+span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(154, 94, 52, 0.12);
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+:host(.positive) span {
+  background: rgba(33, 75, 87, 0.12);
+  color: var(--accent-2);
+}
+
+:host(.negative) span {
+  background: rgba(161, 61, 61, 0.1);
+  color: var(--danger);
+}
+
+:host(.warning) span {
+  background: rgba(122, 77, 0, 0.1);
+  color: var(--warning);
+}
+
+:host(.info) span {
+  background: rgba(47, 95, 145, 0.1);
+  color: var(--info);
+}

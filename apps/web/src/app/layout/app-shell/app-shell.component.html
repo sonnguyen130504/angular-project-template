@@ -1,0 +1,142 @@
+<div class="shell">
+  <header class="topbar">
+    <a class="brand" routerLink="/" aria-label="Open home">
+      <div class="brand-mark">O</div>
+      <div>
+        <div class="brand-name">Sion Studio</div>
+        <div class="brand-subtitle">Angular UI kit</div>
+      </div>
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav class="topnav desktop-nav" aria-label="Primary">
+      @for (group of navGroups; track group.label) {
+        <div class="nav-menu" [class.is-open]="openGroup === group.label">
+          <button
+            type="button"
+            class="nav-trigger"
+            [attr.aria-expanded]="openGroup === group.label"
+            (click)="toggleGroup(group.label)"
+          >
+            {{ group.label }}
+          </button>
+          @if (openGroup === group.label) {
+            <div class="menu-panel">
+              <p>{{ group.description }}</p>
+              @for (link of group.links; track link.path) {
+                <a
+                  [routerLink]="link.path"
+                  routerLinkActive="is-active"
+                  [routerLinkActiveOptions]="{ exact: link.exact ?? false }"
+                  (click)="closeMenus()"
+                >
+                  <span>{{ link.label }}</span>
+                  <small>{{ link.note }}</small>
+                </a>
+              }
+            </div>
+          }
+        </div>
+      }
+      <a routerLink="/mobile-patterns" routerLinkActive="is-active" class="nav-trigger" style="text-decoration: none;">
+        Mobile
+      </a>
+    </nav>
+
+    <div class="header-actions desktop-actions">
+      <div class="route-search" aria-label="Route search shortcut">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <span>Search pages</span>
+        <kbd>/</kbd>
+      </div>
+      <button
+        type="button"
+        class="theme-toggle"
+        (click)="themeService.toggleTheme()"
+        [attr.aria-label]="'Switch to ' + (themeService.theme() === 'light' ? 'dark' : 'light') + ' mode'"
+      >
+        <i class="pi" [class.pi-moon]="themeService.theme() === 'light'" [class.pi-sun]="themeService.theme() === 'dark'"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Actions -->
+    <div class="mobile-actions">
+      <button
+        type="button"
+        class="theme-toggle"
+        (click)="themeService.toggleTheme()"
+        [attr.aria-label]="'Switch to ' + (themeService.theme() === 'light' ? 'dark' : 'light') + ' mode'"
+      >
+        <i class="pi" [class.pi-moon]="themeService.theme() === 'light'" [class.pi-sun]="themeService.theme() === 'dark'"></i>
+      </button>
+
+      <button
+        type="button"
+        class="mobile-menu-toggle"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="isMobileMenuOpen"
+        aria-label="Toggle navigation menu"
+      >
+        <i class="pi" [class.pi-bars]="!isMobileMenuOpen" [class.pi-times]="isMobileMenuOpen"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Collapsible Drawer -->
+    @if (isMobileMenuOpen) {
+      <div class="mobile-drawer">
+        <div class="mobile-search-bar" aria-label="Route search mobile">
+          <i class="pi pi-search" aria-hidden="true"></i>
+          <input type="text" placeholder="Search pages..." disabled style="cursor: not-allowed; border: 0; background: transparent; width: 100%; font: inherit; padding: 0 4px;" />
+        </div>
+
+        <nav class="mobile-nav" aria-label="Mobile navigation">
+          @for (group of navGroups; track group.label) {
+            <div class="mobile-nav-group" [class.is-open]="openMobileGroup === group.label">
+              <button
+                type="button"
+                class="mobile-group-trigger"
+                (click)="toggleMobileGroup(group.label)"
+              >
+                <span>{{ group.label }}</span>
+                <i class="pi" [class.pi-chevron-down]="openMobileGroup !== group.label" [class.pi-chevron-up]="openMobileGroup === group.label"></i>
+              </button>
+              @if (openMobileGroup === group.label) {
+                <div class="mobile-menu-panel">
+                  <p class="group-description">{{ group.description }}</p>
+                  <div class="group-links">
+                    @for (link of group.links; track link.path) {
+                      <a
+                        [routerLink]="link.path"
+                        routerLinkActive="is-active"
+                        [routerLinkActiveOptions]="{ exact: link.exact ?? false }"
+                        (click)="closeMobileMenu()"
+                      >
+                        <strong>{{ link.label }}</strong>
+                        <small>{{ link.note }}</small>
+                      </a>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+          <div class="mobile-nav-group">
+            <a 
+              routerLink="/mobile-patterns" 
+              routerLinkActive="is-active" 
+              class="mobile-group-trigger" 
+              (click)="closeMobileMenu()" 
+              style="text-decoration: none; padding-left: 0;"
+            >
+              <span style="font-weight: 800; padding: 14px 16px;">Mobile</span>
+            </a>
+          </div>
+        </nav>
+      </div>
+    }
+  </header>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>
