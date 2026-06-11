@@ -1,0 +1,25 @@
+<div class="simulation-wrapper" [ngClass]="wrapperClass()">
+  @if (showVisual()) {
+    <div class="state-visual" [ngClass]="tone()">
+      <ng-content select="[visual]"></ng-content>
+      @if (!hasVisualContent()) {
+        <div class="default-icon-wrapper">
+          <i class="pi {{ icon() }}"></i>
+        </div>
+      }
+    </div>
+  }
+
+  @if (title()) {
+    <h3>{{ title() }}</h3>
+  }
+  @if (description()) {
+    <p>{{ description() }}</p>
+  }
+
+  <ng-content select="[content]"></ng-content>
+
+  <div class="drop-actions">
+    <ng-content select="[actions]"></ng-content>
+  </div>
+</div>

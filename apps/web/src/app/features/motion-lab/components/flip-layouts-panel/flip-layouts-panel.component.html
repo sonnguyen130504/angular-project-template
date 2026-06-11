@@ -1,0 +1,104 @@
+<div id="panel-flip" role="tabpanel" aria-labelledby="tab-flip" class="tab-panel active">
+  <div class="lab-grid">
+    <!-- Part 1: Grid Shuffle -->
+    <app-ui-card class="lab-card span-2">
+      <div class="card-header-row">
+        <div>
+          <app-ui-badge tone="info">Shuffle Solver</app-ui-badge>
+          <h3 class="lab-section-title">FLIP Grid Reordering</h3>
+          <p class="lab-section-desc">Change column boundaries or click to randomize elements. Position deltas are calculated dynamically to generate transitions.</p>
+        </div>
+      </div>
+
+      <div class="sandbox-controls-row">
+        <div class="button-group">
+          <app-ui-button variant="secondary" (click)="shuffleItems()" id="btn-shuffle">Shuffle Grid</app-ui-button>
+          <app-ui-button variant="secondary" (click)="sortItems('name')" id="btn-sort-name">Sort Name</app-ui-button>
+          <app-ui-button variant="secondary" (click)="sortItems('price')" id="btn-sort-price">Sort Price</app-ui-button>
+        </div>
+
+        <div class="layout-toggle-group">
+          <button type="button" class="layout-btn" [class.active]="columns === 2" (click)="setColumns(2)" id="btn-cols-2">2 Columns</button>
+          <button type="button" class="layout-btn" [class.active]="columns === 3" (click)="setColumns(3)" id="btn-cols-3">3 Columns</button>
+          <button type="button" class="layout-btn" [class.active]="columns === 4" (click)="setColumns(4)" id="btn-cols-4">4 Columns</button>
+        </div>
+      </div>
+
+      <div class="shuffle-grid-wrapper" [ngClass]="'cols-' + columns" [class.no-motion]="simulateReducedMotion()">
+        @for (item of items; track item.id) {
+          <div
+            class="shuffle-item"
+            [attr.data-id]="item.id"
+            [style.--item-accent]="item.color"
+          >
+            <div class="item-inner">
+              <span class="item-category">{{ item.category }}</span>
+              <h4 class="item-name">{{ item.name }}</h4>
+              <span class="item-price">{{ item.price }}</span>
+              <div class="accent-swatch"></div>
+            </div>
+          </div>
+        }
+      </div>
+    </app-ui-card>
+
+    <!-- Part 2: Bento Detail Expand -->
+    <app-ui-card class="lab-card">
+      <div class="card-header-row">
+        <div>
+          <app-ui-badge tone="positive">Shared Element</app-ui-badge>
+          <h3 class="lab-section-title">Bento Detail Morphing</h3>
+          <p class="lab-section-desc">Click any card below. A layout expansion overlay will launch, computing size transitions using FLIP mechanics.</p>
+        </div>
+      </div>
+
+      <div class="bento-layout-grid" [class.no-motion]="simulateReducedMotion()">
+        @for (card of bentoCards; track card.id) {
+          <div
+            class="bento-tile-card"
+            [ngClass]="card.size"
+            [attr.data-bento-id]="card.id"
+            [style.--tile-accent]="card.color"
+            (click)="selectBentoCard(card, $event)"
+          >
+            <div class="tile-inner">
+              <span class="tile-label">Module 0{{ card.id }}</span>
+              <h4 class="tile-title">{{ card.title }}</h4>
+              <p class="tile-desc">{{ card.desc }}</p>
+              <div class="tile-arrow-icon">
+                <i class="pi pi-arrow-up-right" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </app-ui-card>
+  </div>
+
+  <!-- FLIP Modal Portal Overlay -->
+  @if (selectedBentoCard) {
+    <div class="bento-modal-backdrop" (click)="closeBentoCard()" aria-modal="true" role="dialog">
+      <div class="bento-detail-overlay" (click)="$event.stopPropagation()" [style.--overlay-accent]="selectedBentoCard.color">
+        <button type="button" class="close-overlay-btn" (click)="closeBentoCard()" aria-label="Close detail modal" id="btn-close-bento">
+          <i class="pi pi-times" aria-hidden="true"></i>
+        </button>
+        <div class="modal-content-wrap">
+          <span class="modal-label">Module Reference 0{{ selectedBentoCard.id }}</span>
+          <h3 class="modal-title">{{ selectedBentoCard.title }}</h3>
+          <p class="modal-desc-main">{{ selectedBentoCard.desc }}</p>
+          
+          <div class="modal-divider"></div>
+          
+          <div class="modal-body-section">
+            <h5>Technical Architecture</h5>
+            <p>{{ selectedBentoCard.details }}</p>
+          </div>
+
+          <div class="modal-action-row">
+            <app-ui-button variant="primary" (click)="closeBentoCard()" id="btn-dismiss-modal">Dismiss Details</app-ui-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

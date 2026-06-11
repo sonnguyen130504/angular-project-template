@@ -1,0 +1,167 @@
+.team-actions select,
+.invite-panel input,
+.member-row button {
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink);
+  padding: 0 14px;
+  font: inherit;
+  font-weight: 800;
+}
+
+.team-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.45fr);
+  gap: 16px;
+}
+
+.team-brief,
+.members-panel,
+.invite-panel,
+.permissions-panel,
+.access-review {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  padding: 18px;
+}
+
+.team-brief {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: end;
+  margin-bottom: 16px;
+}
+
+.permissions-panel {
+  grid-column: 1;
+}
+
+.panel-title h3,
+.invite-panel h3,
+.member-row strong,
+.permission-row strong,
+.team-brief h3,
+.access-review h3,
+.access-review strong,
+.review-card strong {
+  color: var(--ink);
+}
+
+.team-brief h3 {
+  margin: 10px 0 6px;
+  font-size: clamp(1.3rem, 2vw, 1.9rem);
+  letter-spacing: -0.03em;
+}
+
+.team-brief p,
+.role-strip span,
+.access-review span,
+.review-card span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.role-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.role-strip span {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+  padding: 8px 10px;
+}
+
+.panel-title h3,
+.invite-panel h3 {
+  margin: 10px 0 16px;
+}
+
+.member-table,
+.invite-panel,
+.access-review {
+  display: grid;
+  gap: 12px;
+}
+
+.member-row,
+.permission-row,
+.review-card,
+.access-review div {
+  display: grid;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  padding: 12px;
+}
+
+.member-row {
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--control-soft);
+  color: var(--control);
+  font-weight: 900;
+}
+
+.member-row span,
+.invite-panel p {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.member-row button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.permission-row {
+  grid-template-columns: minmax(180px, 1fr) repeat(4, auto);
+  margin-top: 10px;
+}
+
+.permission-row span {
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  padding: 5px 9px;
+  font-weight: 800;
+}
+
+.permission-row span.enabled {
+  background: var(--control-soft);
+  color: var(--control);
+}
+
+@media (max-width: 860px) {
+  .team-brief,
+  .team-layout,
+  .member-row,
+  .permission-row {
+    grid-template-columns: 1fr;
+  }
+
+  .team-brief {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .role-strip {
+    justify-content: flex-start;
+  }
+}

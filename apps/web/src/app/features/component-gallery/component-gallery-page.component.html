@@ -1,0 +1,179 @@
+<app-page-section subtitle="Reference Catalog" title="Interactive Component Explorer">
+  <div class="explorer-intro">
+    <p class="intro-desc">
+      Configure props in real-time, inspect visual states (default, hover, active), and copy implementation-ready templates.
+    </p>
+  </div>
+
+  <div class="explorer-workspace">
+    <!-- Left panel: Navigation & Configurations -->
+    <div class="explorer-sidebar">
+      <div class="category-tabs" role="tablist" aria-label="Explorer categories">
+        <button
+          type="button"
+          class="category-tab-btn"
+          [class.active]="state.activeExplorerTab === 'button'"
+          (click)="state.activeExplorerTab = 'button'"
+          >
+          <i class="pi pi-box"></i> Buttons
+        </button>
+        <button
+          type="button"
+          class="category-tab-btn"
+          [class.active]="state.activeExplorerTab === 'badge'"
+          (click)="state.activeExplorerTab = 'badge'"
+          >
+          <i class="pi pi-bookmark"></i> Badges
+        </button>
+        <button
+          type="button"
+          class="category-tab-btn"
+          [class.active]="state.activeExplorerTab === 'card'"
+          (click)="state.activeExplorerTab = 'card'"
+          >
+          <i class="pi pi-clone"></i> Cards
+        </button>
+        <button
+          type="button"
+          class="category-tab-btn"
+          [class.active]="state.activeExplorerTab === 'dialog'"
+          (click)="state.activeExplorerTab = 'dialog'"
+          >
+          <i class="pi pi-window-maximize"></i> Dialogs
+        </button>
+        <button
+          type="button"
+          class="category-tab-btn"
+          [class.active]="state.activeExplorerTab === 'toggle'"
+          (click)="state.activeExplorerTab = 'toggle'"
+          >
+          <i class="pi pi-toggle-on"></i> Toggles
+        </button>
+        <button
+          type="button"
+          class="category-tab-btn"
+          [class.active]="state.activeExplorerTab === 'input'"
+          (click)="state.activeExplorerTab = 'input'"
+          >
+          <i class="pi pi-pencil"></i> Float Inputs
+        </button>
+        <button
+          type="button"
+          class="category-tab-btn"
+          [class.active]="state.activeExplorerTab === 'toast'"
+          (click)="state.activeExplorerTab = 'toast'"
+          >
+          <i class="pi pi-bell"></i> Toast Alerts
+        </button>
+        <button
+          type="button"
+          class="category-tab-btn"
+          [class.active]="state.activeExplorerTab === 'palette'"
+          (click)="state.activeExplorerTab = 'palette'"
+          >
+          <i class="pi pi-search"></i> Command Palette
+        </button>
+        <button
+          type="button"
+          class="category-tab-btn"
+          [class.active]="state.activeExplorerTab === 'skeleton'"
+          (click)="state.activeExplorerTab = 'skeleton'"
+          >
+          <i class="pi pi-align-left"></i> Skeleton Loader
+        </button>
+        <button
+          type="button"
+          class="category-tab-btn"
+          [class.active]="state.activeExplorerTab === 'spinner'"
+          (click)="state.activeExplorerTab = 'spinner'"
+          >
+          <i class="pi pi-spinner-dotted"></i> Premium Spinner
+        </button>
+      </div>
+
+      <app-component-properties-knobs></app-component-properties-knobs>
+    </div>
+
+    <!-- Right panel: Render Canvas & Exporter -->
+    <div class="explorer-main">
+      <app-component-preview-pane></app-component-preview-pane>
+
+      <!-- Decoupled Standalone Carbon Terminal Component -->
+      <app-carbon-terminal [htmlSnippet]="state.htmlCodeSnippet" [tsSnippet]="state.tsCodeSnippet"></app-carbon-terminal>
+    </div>
+  </div>
+
+
+  <section class="product-patterns" aria-labelledby="product-patterns-title">
+    <div class="pattern-head">
+      <app-ui-badge tone="info">Product app patterns</app-ui-badge>
+      <h3 id="product-patterns-title">Compact references for new workspace pages</h3>
+    </div>
+    <div class="pattern-grid">
+      <div class="pattern-card">
+        <span class="status-chip info">Timeline</span>
+        <strong>Audit trail row</strong>
+        <p>Actor, action, target, severity, and timestamp in one scannable line.</p>
+      </div>
+      <div class="pattern-card">
+        <span class="status-chip success">Permission</span>
+        <strong>Role matrix</strong>
+        <p>Use enabled chips for access rather than dense checkboxes in every cell.</p>
+      </div>
+      <div class="pattern-card">
+        <span class="status-chip warning">Upload</span>
+        <strong>File dropzone</strong>
+        <p>Drop state, queued state, empty folder, and selected metadata panel.</p>
+      </div>
+      <div class="pattern-card">
+        <span class="status-chip neutral">Command</span>
+        <strong>Route search</strong>
+        <p>Small command search affordance for jumping across reference pages.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reusable dialog target -->
+  <p-dialog
+    [(visible)]="state.dialogVisible"
+    [modal]="true"
+    [header]="state.dialogTitle"
+    [style]="{ width: state.dialogSize === 'small' ? 'min(92vw, 420px)' : 'min(92vw, 640px)' }"
+    >
+    <div class="dialog-content-inner">
+      <p style="color: var(--muted); line-height: 1.6; margin-bottom: 24px;">
+        This modal dialog is dynamically compiled using Sion Studio parameters. Click actions below will dismiss this view.
+      </p>
+    </div>
+    <div class="dialog-actions">
+      @if (state.dialogActionCount === 2) {
+        <app-ui-button (click)="state.dialogVisible = false">Confirm Action</app-ui-button>
+        <app-ui-button variant="secondary" (click)="state.dialogVisible = false">Cancel</app-ui-button>
+      } @else {
+        <app-ui-button (click)="state.dialogVisible = false" style="width: 100%;">Close</app-ui-button>
+      }
+    </div>
+  </p-dialog>
+
+  <!-- Reusable Toast Alert Target -->
+  <div class="toast-portal-container" [class.active]="state.toastVisible">
+    @if (state.toastVisible) {
+      <div class="slide-toast-alert" [class]="'toast-' + state.toastTone">
+        <div class="toast-body">
+          <i class="pi"
+            [class.pi-check-circle]="state.toastTone === 'success'"
+            [class.pi-info-circle]="state.toastTone === 'info'"
+            [class.pi-exclamation-triangle]="state.toastTone === 'danger'"
+          aria-hidden="true"></i>
+          <div class="toast-content">
+            <strong class="toast-title">{{ state.toastTitle }}</strong>
+            <p class="toast-msg">{{ state.toastMessage }}</p>
+          </div>
+        </div>
+        <button type="button" class="toast-close-btn" (click)="state.closeToast()" aria-label="Close notification" id="btn-close-toast">
+          <i class="pi pi-times" aria-hidden="true"></i>
+        </button>
+      </div>
+    }
+  </div>
+</app-page-section>

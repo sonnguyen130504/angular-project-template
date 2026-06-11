@@ -1,0 +1,54 @@
+<div id="panel-typography" role="tabpanel" aria-labelledby="tab-typography" class="tab-panel active">
+  <div class="lab-grid">
+    <!-- Part 1: Elastic Wave Text -->
+    <app-ui-card class="lab-card span-2">
+      <div class="card-header-row">
+        <div>
+          <app-ui-badge tone="info">Wave Solver</app-ui-badge>
+          <h3 class="lab-section-title">Elastic Character Wave</h3>
+          <p class="lab-section-desc">Sweep your cursor horizontally across the text container. Individual characters calculate spring accelerations relative to your cursor position to execute wave oscillations.</p>
+        </div>
+      </div>
+
+      <div
+        class="elastic-wave-container"
+        #waveTextContainer
+        (mousemove)="onWaveTextMouseMove($event)"
+        (mouseleave)="onWaveTextMouseLeave()"
+        [class.no-motion]="simulateReducedMotion()"
+      >
+        <div class="wave-text-wrapper">
+          @for (char of waveChars; track char.index) {
+            <span
+              class="wave-char-span"
+              [attr.data-char-idx]="char.index"
+              [class.whitespace]="char.char === ' '"
+            >
+              {{ char.char === ' ' ? '&nbsp;' : char.char }}
+            </span>
+          }
+        </div>
+      </div>
+    </app-ui-card>
+
+    <!-- Part 2: Matrix Scrambler -->
+    <app-ui-card class="lab-card">
+      <div class="card-header-row">
+        <div>
+          <app-ui-badge tone="positive">Scrambler</app-ui-badge>
+          <h3 class="lab-section-title">Matrix Scramble Text</h3>
+          <p class="lab-section-desc">Hover over the container or click below. A high-tech scramble cipher resolves character arrays step-by-step.</p>
+        </div>
+      </div>
+
+      <div class="scramble-panel-wrap" (mouseenter)="triggerScramble()">
+        <div class="scrambled-text-box">
+          <code>{{ scrambledText }}</code>
+        </div>
+        <app-ui-button variant="secondary" (click)="triggerScramble()" id="btn-trigger-scramble">
+          Run Scrambler
+        </app-ui-button>
+      </div>
+    </app-ui-card>
+  </div>
+</div>

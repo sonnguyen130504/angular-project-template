@@ -1,0 +1,64 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.spinner-demo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 48px;
+}
+
+.spinner-showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.premium-spinner {
+  width: 48px;
+  height: 48px;
+  animation: rotate 2s linear infinite;
+
+  .spinner-path {
+    stroke: var(--control);
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
+}
+
+.spinner-label {
+  color: var(--muted);
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  animation: pulse-opacity 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
+}
+
+@keyframes pulse-opacity {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}

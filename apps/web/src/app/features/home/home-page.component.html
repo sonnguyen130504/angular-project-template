@@ -1,0 +1,243 @@
+<main class="home-container">
+  <!-- Section 1: Hero -->
+  <section class="hero-section" aria-labelledby="hero-title">
+    <div class="hero-content">
+      <app-ui-badge tone="info">Sion Studio v1.0</app-ui-badge>
+      <h1 id="hero-title">Crafted animation labs & <em>modular</em> UI components.</h1>
+      <p class="hero-description">
+        Clean, high-performance reference templates showcasing custom spring solvers, FLIP morph elements, and fully configurable component code sandbox environments.
+      </p>
+      <div class="hero-actions">
+        <a class="button-link primary" routerLink="/motion-lab">Launch Animation Lab</a>
+        <a class="button-link secondary" routerLink="/component-gallery">Component gallery</a>
+      </div>
+    </div>
+
+    <div class="hero-media">
+      <img src="assets/calm_commerce_hero.png" alt="Sion Studio Calm Commerce Workbench" class="hero-img" />
+    </div>
+  </section>
+
+  <!-- Section 2: Trust Marquee -->
+  <div class="trust-marquee-container">
+    <div class="marquee-track">
+      <span><i class="pi pi-bolt"></i> 60+ FPS Spring Solvers</span>
+      <span><i class="pi pi-eye"></i> WCAG AA Contrast Ratios</span>
+      <span><i class="pi pi-code"></i> Copy-Paste HTML/TS Snips</span>
+      <span><i class="pi pi-mobile"></i> Fully Responsive Layouts</span>
+      <span><i class="pi pi-bolt"></i> 60+ FPS Spring Solvers</span>
+      <span><i class="pi pi-eye"></i> WCAG AA Contrast Ratios</span>
+      <span><i class="pi pi-code"></i> Copy-Paste HTML/TS Snips</span>
+      <span><i class="pi pi-mobile"></i> Fully Responsive Layouts</span>
+    </div>
+  </div>
+
+  <!-- Section 3: Bento Showcase & Interactive Sion Lab -->
+  <section class="bento-section" aria-labelledby="bento-title">
+    <div class="section-header">
+      <h2 id="bento-title">Template Architecture</h2>
+      <p>Investigate the two primary reference modules designed for Angular applications.</p>
+    </div>
+
+    <div class="bento-grid">
+      <!-- Cell 1: Spacing Dials Customizer (Double Width) -->
+      <div class="bento-cell double-width workbench-cell">
+        <div class="cell-body">
+          <div class="badge-row">
+            <app-ui-badge tone="positive">Spacing Sandbox</app-ui-badge>
+          </div>
+          <h3>Sion Design Lab</h3>
+          <p>Experiment with real-time UI density parameters, border-radius states, and brand theme accents.</p>
+          
+          <div class="workbench-controls">
+            <!-- Density Dials -->
+            <div class="control-group">
+              <span class="control-label">Density Dials</span>
+              <div class="pill-options">
+                <button type="button" [class.active]="labDensity === 'comfortable'" (click)="labDensity = 'comfortable'">Comfortable</button>
+                <button type="button" [class.active]="labDensity === 'compact'" (click)="labDensity = 'compact'">Compact</button>
+                <button type="button" [class.active]="labDensity === 'airy'" (click)="labDensity = 'airy'">Airy</button>
+              </div>
+            </div>
+
+            <!-- Accent Color -->
+            <div class="control-group">
+              <span class="control-label">Accent Theme</span>
+              <div class="pill-options">
+                <button type="button" [class.active]="labAccent === 'clay'" (click)="labAccent = 'clay'">Clay Warm</button>
+                <button type="button" [class.active]="labAccent === 'teal'" (click)="labAccent = 'teal'">Deep Teal</button>
+              </div>
+            </div>
+
+            <!-- Radius Shape -->
+            <div class="control-group">
+              <span class="control-label">Border Radius</span>
+              <div class="pill-options">
+                <button type="button" [class.active]="labRadius === 'soft'" (click)="labRadius = 'soft'">Soft (16px)</button>
+                <button type="button" [class.active]="labRadius === 'pill'" (click)="labRadius = 'pill'">Pill (999px)</button>
+                <button type="button" [class.active]="labRadius === 'none'" (click)="labRadius = 'none'">Sharp (0px)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="workbench-preview-area">
+          <div class="preview-card-container">
+            <div class="lab-preview-card" [class]="'density-' + labDensity + ' accent-' + labAccent + ' radius-' + labRadius">
+              <div class="card-badge-row">
+                <span class="preview-badge">Live Preview</span>
+              </div>
+              <h4 class="preview-title">Mina's Travel Pouch</h4>
+              <p class="preview-desc">Curated clay canvas with water-resistant lining.</p>
+              
+              <div class="preview-slider-wrap">
+                <div class="slider-info">
+                  <span>Capacity Limit</span>
+                  <strong>{{ labSliderValue }}%</strong>
+                </div>
+                <p-slider [(ngModel)]="labSliderValue" [min]="0" [max]="100" class="lab-slider" />
+              </div>
+              
+              <button class="preview-btn">Interactive Trigger</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cell 2: Animation Lab Card -->
+      <div class="bento-cell standard-bg">
+        <div class="cell-body">
+          <h3>Animation Playground</h3>
+          <p>Hooke's Law spring solvers, direct DOM magnetic hover drag, and Web Audio synthesizers.</p>
+        </div>
+        
+        <div class="mini-preview animation-preview-box">
+          <div class="bubble-element">
+            <i class="pi pi-bolt" aria-hidden="true"></i>
+          </div>
+          <span class="preview-label">Solver Active</span>
+        </div>
+        
+        <div class="cell-footer">
+          <a routerLink="/motion-lab" class="bento-link">Open playground <i class="pi pi-arrow-up-right"></i></a>
+        </div>
+      </div>
+
+      <!-- Cell 3: Component Sandbox Card -->
+      <div class="bento-cell standard-bg">
+        <div class="cell-body">
+          <h3>Component Sandbox</h3>
+          <p>Configurable sandboxes exposing clean, copyable HTML and TypeScript markup blocks.</p>
+        </div>
+        
+        <div class="mini-preview component-preview-box">
+          <div class="mock-card">
+            <span class="badge-mock">badge-outline</span>
+            <button class="button-mock">Primary Knobs</button>
+          </div>
+        </div>
+
+        <div class="cell-footer">
+          <a routerLink="/component-gallery" class="bento-link">Explore components <i class="pi pi-arrow-up-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Route Directory -->
+  <section class="route-directory" aria-labelledby="routes-title">
+    <div class="section-header">
+      <h2 id="routes-title">Explore Core Templates</h2>
+      <p>Launch the two major workspaces designed to serve as references for layout, controls, and animations.</p>
+    </div>
+    <div class="route-grid">
+      @for (group of groups; track group.name) {
+        <a class="route-card" [routerLink]="group.path">
+          <span>{{ group.highlight }}</span>
+          <h3>{{ group.name }}</h3>
+          <p>{{ group.summary }}</p>
+        </a>
+      }
+    </div>
+  </section>
+
+  <!-- Section 5: Editorial Testimonial Carousel -->
+  <section class="testimonial-section" aria-label="Customer testimonials">
+    <div class="testimonial-carousel-container">
+      <blockquote>
+        <p class="quote-text">“Sion Studio's components saved us weeks of design alignment. The code is clean, responsive, and extremely adaptable.”</p>
+        <cite class="quote-attribution">
+          <strong>Elena Rostova</strong>
+          <span>Lead Designer · Vanguard Labs</span>
+        </cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Section 5.5: Animation Playground Highlight Banner -->
+  <section class="animation-highlight-section" aria-labelledby="anim-highlight-title">
+    <div class="highlight-wrapper">
+      <div class="highlight-info">
+        <app-ui-badge tone="positive">Physics Lab</app-ui-badge>
+        <h2 id="anim-highlight-title">Experience spring physics & FLIP layout morphs.</h2>
+        <p class="highlight-desc">
+          Test interactive magnetic button fields, simulated loading pipelines, FLIP layouts, and scroll sticky card stacks in our new animation laboratory.
+        </p>
+        <div class="highlight-actions">
+          <a class="button-link primary" routerLink="/motion-lab">Launch Animation Playground</a>
+        </div>
+      </div>
+      
+      <div class="highlight-sandbox">
+        <div class="home-sandbox-canvas">
+          <div class="sandbox-dot-grid" aria-hidden="true"></div>
+          <div class="sandbox-magnet-bubble">
+            <i class="pi pi-bolt" aria-hidden="true"></i>
+            <span>Interactive Space</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Upgraded Spec Grid (Quality Gates) -->
+  <section class="gates-section" aria-labelledby="gates-title">
+    <div class="section-header">
+      <h2 id="gates-title">Engineered Quality</h2>
+      <p>Every pattern is audited to meet rigorous technical design standards.</p>
+    </div>
+
+    <div class="gates-grid">
+      @for (gate of qualityGates; track gate.title) {
+        <div class="gate-card">
+          <div class="gate-icon-wrapper">
+            <i class="pi {{ gate.icon }}" aria-hidden="true"></i>
+          </div>
+          <div class="gate-meta">
+            <span class="gate-tag">{{ gate.tag }}</span>
+            <h3>{{ gate.title }}</h3>
+            <p>{{ gate.desc }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Section 7: Newsletter & Footer -->
+  <footer class="newsletter-footer">
+    <div class="footer-cta">
+      <h2>Stay in sync.</h2>
+      <p>Receive notifications when new spacing controls or physics sandboxes are added to Sion Studio.</p>
+      <form class="newsletter-form">
+        <label for="email-input" class="sr-only">Email address</label>
+        <input type="email" id="email-input" placeholder="Enter your email address" required />
+        <button type="submit" class="submit-btn">Subscribe</button>
+      </form>
+    </div>
+    
+    <div class="footer-meta">
+      <span class="brand-text">Sion Studio.</span>
+      <span class="copyright">&copy; 2026 Sion. All rights reserved.</span>
+    </div>
+  </footer>
+</main>

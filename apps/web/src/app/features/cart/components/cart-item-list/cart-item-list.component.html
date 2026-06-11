@@ -1,0 +1,60 @@
+          <div class="cart-items">
+            @for (item of state.items; track item.id) {
+              <app-ui-card class="cart-item-card">
+                <div class="cart-item-media">
+                  <img [src]="item.image" [alt]="item.name" class="cart-item-img" />
+                </div>
+                <div class="cart-item-info">
+                  <span class="cart-item-cat">{{ item.category }}</span>
+                  <h4>{{ item.name }}</h4>
+                  <span class="cart-item-var">{{ item.variant }}</span>
+                  <span class="cart-item-del"><i class="pi pi-calendar"></i> {{ item.delivery }}</span>
+                </div>
+                <div class="cart-item-actions">
+                  <strong class="item-total-price">{{ item.price * item.quantity | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+                  
+                  <div class="stepper" aria-label="Quantity selector">
+                    <button type="button" (click)="state.decrement(item.id)">-</button>
+                    <span>{{ item.quantity }}</span>
+                    <button type="button" (click)="state.increment(item.id)">+</button>
+                  </div>
+                  
+                  <div class="action-links">
+                    <button type="button" (click)="state.saveForLater(item)" class="link-btn">Save for later</button>
+                    <button type="button" (click)="state.remove(item.id)" class="link-btn danger">Remove</button>
+                  </div>
+                </div>
+              </app-ui-card>
+            } @empty {
+              <app-ui-card class="empty-cart-card">
+                <i class="pi pi-shopping-bag empty-icon"></i>
+                <h4>Your shopping bag is empty</h4>
+                <p>Browse Sion Studio's high-fidelity catalog pages and add some premium travel layers.</p>
+                <app-ui-button variant="primary" routerLink="/catalog">View Catalog</app-ui-button>
+              </app-ui-card>
+            }
+          </div>
+
+          <!-- Save for later -->
+          @if (state.savedForLater.length > 0) {
+            <div class="saved-later-section">
+              <h3>Saved for Later ({{ state.savedForLater.length }} items)</h3>
+              <div class="saved-items">
+                @for (item of state.savedForLater; track item.id) {
+                  <app-ui-card class="saved-item-card">
+                    <div class="saved-item-media">
+                      <img [src]="item.image" [alt]="item.name" class="saved-item-img" />
+                    </div>
+                    <div class="saved-item-info">
+                      <h4>{{ item.name }}</h4>
+                      <span>{{ item.variant }}</span>
+                      <strong>{{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+                    </div>
+                    <div class="saved-item-action">
+                      <button type="button" (click)="state.moveToCart(item)" class="move-btn">Move to bag</button>
+                    </div>
+                  </app-ui-card>
+                }
+              </div>
+            </div>
+          }

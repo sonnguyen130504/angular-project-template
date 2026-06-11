@@ -1,0 +1,138 @@
+<div class="split-auth-layout">
+  <!-- Left panel: Sliding Carousel -->
+  <div class="brand-carousel-pane">
+    <div class="carousel-inner">
+      @for (slide of slides; track slide.title; let i = $index) {
+        <div class="carousel-slide" [class.active]="currentSlideIndex === i">
+          <div class="slide-image-wrapper">
+            <img [src]="slide.image" [alt]="slide.title" class="slide-image" />
+            <div class="image-overlay-vignette"></div>
+          </div>
+          <div class="slide-text-overlay">
+            <app-ui-badge tone="info">Sion Studio</app-ui-badge>
+            <h2 class="slide-headline">{{ slide.title }}</h2>
+            <p class="slide-desc">{{ slide.desc }}</p>
+          </div>
+        </div>
+      }
+    </div>
+    
+    <div class="carousel-indicators">
+      @for (slide of slides; track slide.title; let i = $index) {
+        <button
+          type="button"
+          class="indicator-dot"
+          [class.active]="currentSlideIndex === i"
+          (click)="setSlide(i)"
+          [attr.aria-label]="'Go to slide ' + (i + 1)"
+        ></button>
+      }
+    </div>
+  </div>
+
+  <!-- Right panel: Interactive Sign In Form -->
+  <div class="auth-form-pane">
+    <app-ui-card class="auth-card">
+      <div class="auth-header">
+        <h3 class="auth-title">Welcome back</h3>
+        <p class="auth-subtitle">Verify your studio credentials to access the workbench.</p>
+      </div>
+
+      <!-- Success Alert Banner -->
+      @if (isSuccess) {
+        <div class="success-alert-banner">
+          <i class="pi pi-check-circle"></i>
+          <div>
+            <strong>Access granted</strong>
+            <p>Redirecting you to dashboard workbench...</p>
+          </div>
+        </div>
+      }
+
+      <!-- Locked Warning Banner -->
+      @if (locked) {
+        <div class="danger-alert-banner">
+          <i class="pi pi-lock"></i>
+          <div>
+            <strong>Device ID Locked</strong>
+            <p>This workstation has been frozen by administration rules. Deselect simulate lock check to recover.</p>
+          </div>
+        </div>
+      }
+
+      <form (submit)="submit(); $event.preventDefault()" class="auth-fields-stack">
+        <!-- Floating Label Input Email -->
+        <div class="float-field" [class.has-error]="submitted && !email.includes('&#64;')">
+          <input
+            id="login-email"
+            type="email"
+            [(ngModel)]="email"
+            name="email"
+            placeholder=" "
+            required
+            class="float-input"
+            [disabled]="loading || locked"
+          />
+          <label for="login-email" class="float-label">Email Address</label>
+          @if (submitted && !email.includes('&#64;')) {
+            <small class="input-error-msg"><i class="pi pi-exclamation-circle"></i> Enter a valid email address.</small>
+          }
+        </div>
+
+        <!-- Floating Label Input Password -->
+        <div class="float-field password-field" [class.has-error]="submitted && password.length < 8">
+          <input
+            id="login-pass"
+            [type]="showPassword ? 'text' : 'password'"
+            [(ngModel)]="password"
+            name="password"
+            placeholder=" "
+            required
+            class="float-input"
+            [disabled]="loading || locked"
+          />
+          <label for="login-pass" class="float-label">Password</label>
+          <button
+            type="button"
+            class="reveal-password-btn"
+            (click)="showPassword = !showPassword"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+            tabindex="-1"
+          >
+            <i class="pi" [class.pi-eye]="!showPassword" [class.pi-eye-slash]="showPassword"></i>
+          </button>
+          @if (submitted && password.length < 8) {
+            <small class="input-error-msg"><i class="pi pi-exclamation-circle"></i> Password must be at least 8 characters.</small>
+          }
+        </div>
+
+        <div class="options-row">
+          <label class="remember-checkbox-control">
+            <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe" [disabled]="loading || locked" />
+            <span class="indicator-checkbox"></span>
+            <span>Remember workstation</span>
+          </label>
+
+          <a routerLink="/forgot-password" class="forgot-link">Forgot Password?</a>
+        </div>
+
+        <div class="locked-simulator-toggle">
+          <label class="remember-checkbox-control">
+            <input type="checkbox" [checked]="locked" (change)="toggleLocked()" name="locked" />
+            <span class="indicator-checkbox"></span>
+            <span>Simulate locked device status</span>
+          </label>
+        </div>
+
+        <div class="action-submit-row">
+          <app-ui-button
+            [disabled]="loading || locked || !canSubmit"
+            style="width: 100%;"
+          >
+            {{ loading ? 'Authorizing connection...' : 'Verify & Sign In' }}
+          </app-ui-button>
+        </div>
+      </form>
+    </app-ui-card>
+  </div>
+</div>

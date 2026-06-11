@@ -1,0 +1,65 @@
+<div id="panel-canvas" role="tabpanel" aria-labelledby="tab-canvas" class="tab-panel active">
+  <div class="lab-grid">
+    <!-- Part 1: Canvas Physics Sandbox -->
+    <app-ui-card class="lab-card span-2">
+      <div class="card-header-row">
+        <div>
+          <app-ui-badge tone="info">Canvas 2D Physics</app-ui-badge>
+          <h3 class="lab-section-title">Elastic Particle Sandbox</h3>
+          <p class="lab-section-desc">Click inside the canvas grid to spawn dynamic, elastic particles. They fall under gravity, bounce off boundaries, and transfer momentum on collision.</p>
+        </div>
+        <div class="btn-group" style="display: flex; gap: 8px;">
+          <app-ui-button variant="secondary" (click)="clearCanvasPhysics()" id="btn-clear-canvas">Clear Particles</app-ui-button>
+        </div>
+      </div>
+
+      <div class="canvas-physics-container">
+        <canvas #physicsCanvasEl class="interactive-physics-canvas" (click)="addParticle($event)"></canvas>
+        @if (particles.length === 0) {
+          <div class="canvas-physics-overlay" (click)="addParticle($event)">
+            <i class="pi pi-plus-circle" aria-hidden="true" style="font-size: 1.5rem; color: var(--muted); margin-bottom: 8px;"></i>
+            <span style="font-size: 0.84rem; color: var(--muted); font-weight: 500;">Click inside grid to spawn particles</span>
+          </div>
+        }
+      </div>
+    </app-ui-card>
+
+    <!-- Part 2: SVG Morphing -->
+    <app-ui-card class="lab-card">
+      <div class="card-header-row">
+        <div>
+          <app-ui-badge tone="positive">SVG Morphing</app-ui-badge>
+          <h3 class="lab-section-title">Play/Pause Path Morph</h3>
+          <p class="lab-section-desc">An interactive SVG shape controller that transitions path vectors between states using continuous interpolation.</p>
+        </div>
+      </div>
+
+      <div class="svg-morph-sandbox">
+        <button
+          type="button"
+          class="morph-control-btn"
+          [class.is-playing]="playState === 'play'"
+          (click)="togglePlayState()"
+          aria-label="Toggle morph play state"
+          id="btn-svg-morph-toggle"
+        >
+          <svg viewBox="0 0 24 24" class="morph-svg">
+            <path
+              [attr.d]="playState === 'play'
+                ? 'M 8 5 L 14 8.5 L 14 15.5 L 8 19 Z'
+                : 'M 6 5 L 10 5 L 10 19 L 6 19 Z'"
+              fill="currentColor"
+            />
+            <path
+              [attr.d]="playState === 'play'
+                ? 'M 14 8.5 L 20 12 L 20 12 L 14 15.5 Z'
+                : 'M 14 5 L 18 5 L 18 19 L 14 19 Z'"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <span class="morph-state-indicator">State: <strong>{{ playState | uppercase }}</strong></span>
+      </div>
+    </app-ui-card>
+  </div>
+</div>

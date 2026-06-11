@@ -1,0 +1,94 @@
+<div id="panel-scroll" role="tabpanel" aria-labelledby="tab-scroll" class="tab-panel active">
+  <div class="lab-grid">
+    <!-- Part 1: Entrance sequences -->
+    <app-ui-card class="lab-card">
+      <div class="card-header-row">
+        <div>
+          <app-ui-badge tone="info">Stagger Pipeline</app-ui-badge>
+          <h3 class="lab-section-title">Staggered Entrance Sequence</h3>
+          <p class="lab-section-desc">Simulate a sequential layout initialization pipeline. Replay the stagger to see the delay dynamics.</p>
+        </div>
+        <app-ui-button variant="secondary" (click)="replayStagger()" id="btn-replay-stagger">Replay Sequence</app-ui-button>
+      </div>
+
+      <div class="stagger-controller">
+        <div class="slider-control-group inline">
+          <div class="control-label-row">
+            <label for="stagger-slider">Delay per Card</label>
+            <span class="value-badge">{{ staggerDelay }}ms</span>
+          </div>
+          <p-slider id="stagger-slider" [(ngModel)]="staggerDelay" [min]="20" [max]="200"></p-slider>
+        </div>
+      </div>
+
+      @if (staggerVisible) {
+        <div class="stagger-list" [class.no-motion]="simulateReducedMotion()">
+          @for (step of staggerItems; track step.title; let i = $index) {
+            <div
+              class="stagger-row"
+              [style.--stagger-index]="i"
+              [style.--stagger-delay.ms]="staggerDelay"
+            >
+              <div class="stagger-num">0{{ i + 1 }}</div>
+              <div class="stagger-details">
+                <strong class="stagger-title">{{ step.title }}</strong>
+                <p class="stagger-desc">{{ step.desc }}</p>
+              </div>
+              <div class="stagger-status-indicator">
+                <span class="pulse-dot"></span>
+                <span class="pulse-label">Active</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </app-ui-card>
+
+    <!-- Part 2: Scroll stack feed -->
+    <app-ui-card class="lab-card span-2">
+      <div class="card-header-row">
+        <div>
+          <app-ui-badge tone="positive">Scroll Linked</app-ui-badge>
+          <h3 class="lab-section-title">Sticky Card Stacking Feed</h3>
+          <p class="lab-section-desc">Scroll the container below. As cards reach the top boundary, they stack, dim, and scale down sequentially, mimicking mobile-app folder behaviors.</p>
+        </div>
+      </div>
+
+      <!-- Scrollable Feed viewport -->
+      <div
+        class="scroll-feed-container"
+        #scrollFeed
+        (scroll)="onScrollFeed()"
+        [class.no-motion]="simulateReducedMotion()"
+      >
+        <div class="scroll-feed-spacer top">
+          <div class="scroll-indicator-prompt">
+            <i class="pi pi-chevron-down" aria-hidden="true"></i>
+            <span>Scroll down to stack feed items</span>
+          </div>
+        </div>
+        
+        <div class="scroll-stack-wrapper">
+          @for (card of scrollCards; track card.title; let i = $index) {
+            <div
+              class="scroll-stack-card"
+              [style.top.px]="32 + i * 20"
+              [style.z-index]="10 + i"
+            >
+              <div class="stack-card-header">
+                <app-ui-badge>{{ card.tag }}</app-ui-badge>
+                <span class="card-index">0{{ i + 1 }}</span>
+              </div>
+              <h4 class="stack-card-title">{{ card.title }}</h4>
+              <p class="stack-card-desc">{{ card.desc }}</p>
+            </div>
+          }
+        </div>
+
+        <div class="scroll-feed-spacer bottom">
+          <p>All items stacked successfully.</p>
+        </div>
+      </div>
+    </app-ui-card>
+  </div>
+</div>

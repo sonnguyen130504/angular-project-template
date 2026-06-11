@@ -1,0 +1,89 @@
+<app-page-section subtitle="Workspace" title="Calendar">
+  <div sectionActions>
+    <input class="date-input" type="date" [(ngModel)]="selectedDate" aria-label="Select calendar date" />
+  </div>
+
+  <section class="calendar-brief" aria-label="Schedule health">
+    <div>
+      <app-ui-badge tone="info">Operations calendar</app-ui-badge>
+      <h3>{{ visibleEvents.length }} events on {{ selectedDate | date: 'mediumDate' }}</h3>
+      <p>Schedule reference for date filters, availability, conflict resolution, resource load, and selected-event detail.</p>
+    </div>
+    <div class="availability-card">
+      <span>Open focus windows</span>
+      <strong>3</strong>
+      <small>Best slot: 15:30</small>
+    </div>
+  </section>
+
+  <div class="calendar-layout">
+    <section class="schedule-grid" aria-label="Weekly schedule">
+      <div class="grid-head"></div>
+      @for (day of days; track day) {
+        <strong class="day-head">{{ day }}</strong>
+      }
+      @for (slot of slots; track slot) {
+        <strong class="slot">{{ slot }}</strong>
+        @for (day of days; track day) {
+          @let event = eventFor(day, slot);
+          <button type="button" class="schedule-cell" [class.has-event]="event" [class.conflict]="event?.conflict" (click)="event && selectEvent(event)">
+            @if (event) {
+              <span>{{ event.title }}</span>
+              <small>{{ event.room }} · {{ event.duration }}</small>
+            }
+          </button>
+        }
+      }
+    </section>
+
+    <aside class="event-panel" aria-label="Events for selected date">
+      <div class="panel-head">
+        <app-ui-badge tone="info">{{ selectedDate | date: 'mediumDate' }}</app-ui-badge>
+        <h3>Day agenda</h3>
+      </div>
+      @if (visibleEvents.length) {
+        <div class="event-list">
+          @for (event of visibleEvents; track event.id) {
+            <button type="button" class="event-row" [class.selected]="selectedEvent?.id === event.id" (click)="selectEvent(event)">
+              <span>{{ event.time }}</span>
+              <strong>{{ event.title }}</strong>
+              <small>{{ event.owner }} · {{ event.room }}</small>
+              @if (event.conflict) {
+                <b>Conflict</b>
+              }
+            </button>
+          }
+        </div>
+      } @else {
+        <div class="empty-agenda">
+          <i class="pi pi-calendar"></i>
+          <strong>No events scheduled</strong>
+          <span>This state is useful for availability screens.</span>
+        </div>
+      }
+      @if (selectedEvent?.conflict) {
+        <div class="conflict-box">
+          <strong>Conflict warning</strong>
+          <span>{{ selectedEvent?.title }} overlaps another booking.</span>
+          <app-ui-button (click)="shiftSelected()">Move to next slot</app-ui-button>
+        </div>
+      }
+      @if (selectedEvent) {
+        <div class="selected-event">
+          <strong>{{ selectedEvent.type }} detail</strong>
+          <span>{{ selectedEvent.attendees }} attendees · {{ selectedEvent.duration }} · {{ selectedEvent.room }}</span>
+        </div>
+      }
+      <div class="room-load">
+        <strong>Room load</strong>
+        @for (room of rooms; track room.name) {
+          <div>
+            <span>{{ room.name }}</span>
+            <i><b [style.width.%]="room.load"></b></i>
+            <small>{{ room.load }}%</small>
+          </div>
+        }
+      </div>
+    </aside>
+  </div>
+</app-page-section>

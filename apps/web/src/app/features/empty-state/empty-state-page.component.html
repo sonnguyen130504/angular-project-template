@@ -1,0 +1,334 @@
+<app-page-section subtitle="Interactive Showroom" title="Empty & Error State Simulator">
+  <div class="intro-bar">
+    <p>
+      Toggle between different application failure points, onboarding wizards, and data voids. Test user recovery flows in real-time.
+    </p>
+    <a class="nav-back-link" routerLink="/component-gallery">
+      <i class="pi pi-angle-left"></i> View components explorer
+    </a>
+  </div>
+
+  <div class="simulator-workspace">
+    <!-- Left Panel: State Trigger list -->
+    <div class="states-sidebar">
+      <span class="sidebar-tag">Select System State</span>
+      <div class="states-menu" role="tablist">
+        @for (state of statesList; track state.id) {
+          <button
+            type="button"
+            class="state-menu-btn"
+            [class.active]="activeStateId === state.id"
+            (click)="selectState(state.id)"
+            >
+            <div class="state-icon-box" [ngClass]="state.tone">
+              <i class="pi {{ state.icon }}"></i>
+            </div>
+            <div class="state-menu-details">
+              <strong>{{ state.title }}</strong>
+              <small>{{ state.desc }}</small>
+            </div>
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Right Panel: Simulator Preview Canvas -->
+    <div class="simulator-canvas">
+      <span class="canvas-tag">Active State Workspace</span>
+
+      <div class="canvas-view-port" [ngClass]="'env-' + activeStateId">
+        <!-- 1. NO DATA / BLANK INBOX -->
+        @if (activeStateId === 'no-data') {
+          <div class="simulation-wrapper-parent">
+            @if (!isDropped) {
+              <app-empty-state-variant
+                icon="pi-cloud-upload"
+                title="Import CSV Spreadsheet"
+                description="Drag and drop your inventory CSV files directly in this window, or click to upload from local disk."
+                tone="info"
+                wrapperClass="workspace-shell"
+                (click)="simulateFileDrop()"
+                >
+                <div actions>
+                  <app-ui-button>Choose File</app-ui-button>
+                  <app-ui-button variant="secondary" (click)="simulateFileDrop(); $event.stopPropagation()">Simulate CSV Drop</app-ui-button>
+                </div>
+              </app-empty-state-variant>
+            } @else {
+              <app-empty-state-variant
+                icon="pi-check"
+                title="File Uploaded Successfully"
+                tone="positive"
+                wrapperClass="workspace-shell"
+                >
+                <div content class="file-details">
+                  <i class="pi pi-file-excel"></i>
+                  <div>
+                    <strong>{{ droppedFileName }}</strong>
+                    <small>42 rows of product variants mapped</small>
+                  </div>
+                </div>
+                <div actions>
+                  <app-ui-button (click)="clearDrop()">Reset Playground</app-ui-button>
+                </div>
+              </app-empty-state-variant>
+            }
+          </div>
+        }
+
+        <!-- 2. NO SEARCH RESULTS -->
+        @if (activeStateId === 'no-results') {
+          <div class="search-layout-container">
+            <!-- Fixed Search Bar Section -->
+            <div class="search-toolbar-section">
+              <div class="search-bar-row">
+                <i class="pi pi-search"></i>
+                <input
+                  type="text"
+                  placeholder="Search variants... (e.g. Jacket, Tote, Beanie)"
+                  [(ngModel)]="searchQuery"
+                  class="search-input-field"
+                />
+                @if (searchQuery) {
+                  <button type="button" class="clear-search-btn" (click)="searchQuery = ''"><i class="pi pi-times"></i></button>
+                }
+              </div>
+            </div>
+
+            <!-- Fixed Results Section -->
+            <div class="search-results-section">
+              @if (filteredProducts.length > 0) {
+                <div class="results-list">
+                  @for (prod of filteredProducts; track prod.name) {
+                    <div class="result-row">
+                      <div>
+                        <strong>{{ prod.name }}</strong>
+                        <small>{{ prod.category }}</small>
+                      </div>
+                      <strong>{{ prod.price }}</strong>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <app-empty-state-variant [showVisual]="false" wrapperClass="search-empty-state-card">
+                  <div content class="no-match-state">
+                    <div class="no-match-icon">
+                      <i class="pi pi-search-minus"></i>
+                    </div>
+                    <h3>No search matches</h3>
+                    <p>
+                      No inventory matches were found for query <code>"{{ searchQuery }}"</code>.
+                    </p>
+                    <app-ui-button (click)="searchQuery = ''">Clear Search Filter</app-ui-button>
+                  </div>
+                </app-empty-state-variant>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- 3. PERMISSION DENIED -->
+        @if (activeStateId === 'denied') {
+          <app-empty-state-variant
+            title="Permission Level Denied"
+            description="Access level verification failed. Administrative permission settings are required to sync this pipeline database."
+            tone="negative"
+            [hasVisualContent]="accessRequestStatus !== 'granted'"
+            wrapperClass="workspace-shell"
+            >
+            @if (accessRequestStatus !== 'granted') {
+              <div visual class="shield-lock-graphic">
+                <div class="shield-icon-wrapper">
+                  <i class="pi pi-lock"></i>
+                </div>
+              </div>
+            }
+
+            <div content class="variant-content-fill">
+              @if (accessRequestStatus === 'pending') {
+                <div class="pending-notice">
+                  <span class="inline-spinner"></span>
+                  <span>Requesting permission token parameters from administrative hosts...</span>
+                </div>
+              } @else if (accessRequestStatus === 'granted') {
+                <div class="granted-alert">
+                  <div class="alert-header">
+                    <i class="pi pi-check-circle"></i>
+                    <strong>Authorization Token Loaded</strong>
+                  </div>
+                  <p>Welcome. Your temporary administrative credentials have been signed and validated successfully.</p>
+                  <app-ui-button variant="secondary" (click)="accessRequestStatus = 'idle'">Reset Permissions</app-ui-button>
+                </div>
+              }
+            </div>
+
+            @if (accessRequestStatus === 'idle') {
+              <div actions>
+                <app-ui-button (click)="requestAccess()">Request Admin Privileges</app-ui-button>
+                <app-ui-button variant="secondary" routerLink="/dashboard">Return to Dashboard</app-ui-button>
+              </div>
+            }
+          </app-empty-state-variant>
+        }
+
+        <!-- 4. OFFLINE MODE -->
+        @if (activeStateId === 'offline') {
+          <div class="variant-fill-shell">
+            @if (isOfflineMode) {
+              <app-empty-state-variant
+                title="Network Disconnected"
+                description="Host parameters indicate loss of internet telemetry. Traffic sync is paused."
+                tone="warning"
+                [hasVisualContent]="true"
+                wrapperClass="workspace-shell workspace-shell--wide offline-shell"
+                >
+                <div visual class="wifi-disconnected-graphic">
+                  <div class="offline-visual-stack">
+                    <div class="wifi-icon-wrapper pulse-anim">
+                      <i class="pi pi-wifi"></i>
+                    </div>
+                    <div class="offline-signal-pill">
+                      <span class="offline-dot"></span>
+                      Signal lost
+                    </div>
+                  </div>
+                </div>
+
+                <div content class="offline-workspace-body">
+                  <div class="countdown-card">
+                    <div class="countdown-meta">
+                      <span>Auto-retry window</span>
+                      <strong>0:{{ offlineCountdown | number:'2.0-0' }}</strong>
+                    </div>
+                    <div class="countdown-track">
+                      <div class="countdown-bar" [style.width.%]="offlineCountdown * 10"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div actions>
+                  <app-ui-button (click)="toggleOfflineMode()">Reconnect Now</app-ui-button>
+                </div>
+              </app-empty-state-variant>
+            } @else {
+              <app-empty-state-variant
+                title="Network Connected"
+                description="Synchronization pipelines are operational. Click button below to simulate connection loss parameters."
+                tone="positive"
+                [hasVisualContent]="true"
+                wrapperClass="workspace-shell workspace-shell--wide offline-shell"
+                >
+                <div visual class="wifi-connected-graphic">
+                  <div class="wifi-connected-badge">
+                    <i class="pi pi-check-circle wifi-connected-icon"></i>
+                    <span>Connection restored</span>
+                  </div>
+                </div>
+
+                <div actions>
+                  <app-ui-button variant="secondary" (click)="toggleOfflineMode()">Simulate Connection Loss</app-ui-button>
+                </div>
+              </app-empty-state-variant>
+            }
+          </div>
+        }
+
+        <!-- 5. SERVER ERROR -->
+        @if (activeStateId === 'error') {
+          <app-empty-state-variant
+            title="Internal Database Error"
+            description="Database queries took longer than standard limits to complete. A sync retry may solve the thread limit bottleneck."
+            tone="negative"
+            [showVisual]="false"
+            wrapperClass="workspace-shell workspace-shell--wide"
+            >
+            <div content class="error-state-content">
+              <div class="error-visual-header">
+                <div class="error-number">500</div>
+                <div class="error-badge">Database Fail</div>
+              </div>
+
+              @if (retryResult === 'idle' || isRetrying) {
+                <div class="console-box">
+                  <pre><code>[ERROR] 2026-06-09T12:18:00Z: Synchronization failed.
+Host: db-replica-01.sion.local
+Exception: TimeoutException (ErrorCode: 0x80004005)
+State: Connection pool exhausted. Maximum bounds (100) exceeded.</code></pre>
+                </div>
+              }
+
+              @if (retryResult === 'success') {
+                <div class="granted-alert success">
+                  <i class="pi pi-check-circle"></i>
+                  <div>
+                    <strong>Database Synced</strong>
+                    <p>Operational metrics are updated.</p>
+                  </div>
+                </div>
+              } @else if (retryResult === 'failed') {
+                <div class="granted-alert danger">
+                  <i class="pi pi-times-circle"></i>
+                  <div>
+                    <strong>Retry Failed (Timeout)</strong>
+                    <p>Database threads are still locked. Try again.</p>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div actions class="error-state-actions">
+              <app-ui-button [disabled]="isRetrying" (click)="retrySync()">
+                {{ isRetrying ? 'Syncing threads...' : 'Retry Database Sync' }}
+              </app-ui-button>
+              <app-ui-button variant="secondary" (click)="retryResult = 'idle'">Reset Simulator</app-ui-button>
+            </div>
+          </app-empty-state-variant>
+        }
+
+        <!-- 6. ONBOARDING GUIDE -->
+        @if (activeStateId === 'onboarding') {
+          <app-empty-state-variant [showVisual]="false" wrapperClass="workspace-shell workspace-shell--wide">
+            <div content class="onboarding-content">
+              <div class="onboarding-steps-indicator">
+                @for (step of stepsList; track step.num) {
+                  <div class="step-dot-wrapper" [class.active]="onboardingStep === step.num" [class.passed]="onboardingStep > step.num">
+                    <div class="step-dot-circle">
+                      @if (onboardingStep > step.num) {
+                        <i class="pi pi-check"></i>
+                      } @else {
+                        {{ step.num }}
+                      }
+                    </div>
+                    <span class="step-dot-label">{{ step.title }}</span>
+                  </div>
+                }
+              </div>
+
+              <div class="onboarding-card">
+                <span class="step-counter">STEP {{ onboardingStep }} OF 4</span>
+                <h3>{{ stepsList[onboardingStep - 1].title }}</h3>
+                <p>{{ stepsList[onboardingStep - 1].desc }}</p>
+
+                @if (onboardingStep === 4) {
+                  <div class="onboarding-celebration">
+                    <i class="pi pi-check onboarding-success-icon"></i>
+                    <span>Setup is complete! Ready to start tracking commerce items.</span>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div actions class="onboarding-actions">
+              <app-ui-button variant="secondary" (click)="onboardingPrev()" [disabled]="onboardingStep === 1">Previous Step</app-ui-button>
+              @if (onboardingStep < 4) {
+                <app-ui-button (click)="onboardingNext()">Next Step</app-ui-button>
+              } @else {
+                <app-ui-button (click)="resetOnboarding()">Restart Guide</app-ui-button>
+              }
+            </div>
+          </app-empty-state-variant>
+        }
+      </div>
+    </div>
+  </div>
+</app-page-section>

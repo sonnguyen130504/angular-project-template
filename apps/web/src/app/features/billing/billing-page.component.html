@@ -1,0 +1,85 @@
+<app-page-section subtitle="Operations" title="Billing">
+  <div sectionActions>
+    <button type="button" class="interval-toggle" (click)="toggleInterval()">
+      {{ interval === 'monthly' ? 'Monthly billing' : 'Annual billing' }}
+    </button>
+  </div>
+
+  <section class="billing-brief" aria-label="Billing summary">
+    <div>
+      <app-ui-badge tone="info">Subscription console</app-ui-badge>
+      <h3>Growth plan renews at {{ renewalTotal | currency }}</h3>
+      <p>Billing reference for plan switching, failed-payment recovery, usage meters, invoice state, and comparison tables.</p>
+    </div>
+    <div class="payment-card">
+      <span>Payment method</span>
+      <strong>Visa 4242</strong>
+      <small>Expires 08/28</small>
+    </div>
+  </section>
+
+  @if (failedPayment) {
+    <div class="billing-warning">
+      <div>
+        <strong>Payment method needs attention</strong>
+        <span>The April invoice failed. Update the card before the next renewal.</span>
+      </div>
+      <app-ui-button variant="secondary" (click)="dismissPaymentWarning()">Dismiss warning</app-ui-button>
+    </div>
+  }
+
+  <div class="plan-grid">
+    @for (plan of plans; track plan.name) {
+      <article class="plan-card" [class.current]="plan.current">
+        <app-ui-badge [tone]="plan.current ? 'positive' : 'info'">{{ plan.current ? 'Current plan' : 'Available' }}</app-ui-badge>
+        <h3>{{ plan.name }}</h3>
+        <strong class="price">{{ price(plan) | currency }}</strong>
+        <span>{{ interval === 'monthly' ? 'per month' : 'per year' }}</span>
+        <app-ui-button [variant]="plan.current ? 'secondary' : 'primary'">
+          {{ plan.current ? 'Manage plan' : 'Switch plan' }}
+        </app-ui-button>
+      </article>
+    }
+  </div>
+
+  <div class="billing-layout">
+    <section class="usage-panel">
+      <app-ui-badge tone="info">Usage</app-ui-badge>
+      <h3>Current limits</h3>
+      @for (item of usage; track item.label) {
+        <div class="usage-row">
+          <div>
+            <strong>{{ item.label }}</strong>
+            <span>{{ item.value }}% used</span>
+          </div>
+          <div class="meter"><span [style.width.%]="item.value"></span></div>
+        </div>
+      }
+    </section>
+
+    <section class="invoice-panel">
+      <app-ui-badge>Invoices</app-ui-badge>
+      <h3>Billing history</h3>
+      @for (invoice of invoices; track invoice.id) {
+        <div class="invoice-row">
+          <strong>{{ invoice.id }}</strong>
+          <span>{{ invoice.date }}</span>
+          <b>{{ invoice.amount | currency }}</b>
+          <app-ui-badge [tone]="invoice.status === 'Paid' ? 'positive' : 'negative'">{{ invoice.status }}</app-ui-badge>
+        </div>
+      }
+    </section>
+  </div>
+
+  <section class="feature-matrix">
+    <app-ui-badge tone="positive">Plan comparison</app-ui-badge>
+    @for (row of planFeatures; track row.label) {
+      <div>
+        <strong>{{ row.label }}</strong>
+        <span>{{ row.Starter }}</span>
+        <span>{{ row.Growth }}</span>
+        <span>{{ row.Scale }}</span>
+      </div>
+    }
+  </section>
+</app-page-section>

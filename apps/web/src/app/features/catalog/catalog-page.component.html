@@ -1,0 +1,220 @@
+<app-page-section subtitle="Catalog" title="Shop listing">
+  <div sectionActions>
+    <app-ui-button variant="secondary" (click)="resetFilters()">Reset filters</app-ui-button>
+  </div>
+
+  <!-- Category Spotlight Promo Banner -->
+  <div class="catalog-spotlight-banner">
+    <div class="banner-info">
+      <app-ui-badge tone="positive">Seasonal Release</app-ui-badge>
+      <h2>The Clay & Teal Collection</h2>
+      <p>Handcrafted travel accessories and outerwear designed for active workshops and transit comfort.</p>
+    </div>
+    <div class="banner-action">
+      <button type="button" class="banner-btn" (click)="selectedCategory = 'Travel'; selectedColor = 'Teal'">Explore Travel Gear</button>
+    </div>
+  </div>
+
+  <div class="catalog-shell">
+    <!-- Filters Sidebar Panel -->
+    <aside class="filters" aria-label="Catalog filters">
+      <div class="filter-head">
+        <app-ui-badge tone="info">Filters</app-ui-badge>
+        <strong>{{ filteredProducts.length }} matches</strong>
+      </div>
+
+      <label class="search">
+        <span>Search products</span>
+        <input [(ngModel)]="search" placeholder="Search by name or category" />
+      </label>
+
+      <label>
+        <span>Category</span>
+        <p-select [options]="categories" [(ngModel)]="selectedCategory" class="full-width-select" />
+      </label>
+
+      <label>
+        <span>Availability</span>
+        <p-select [options]="stockOptions" [(ngModel)]="selectedStock" class="full-width-select" />
+      </label>
+
+      <label>
+        <span>Color family</span>
+        <p-select [options]="colorOptions" [(ngModel)]="selectedColor" class="full-width-select" />
+      </label>
+
+      <label class="range">
+        <span>Price range</span>
+        <p-slider [(ngModel)]="priceRange" [range]="true" [min]="20" [max]="220" />
+        <strong>{{ priceRange[0] | currency: 'USD' : 'symbol' : '1.0-0' }} to {{ priceRange[1] | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+      </label>
+
+      <label class="range">
+        <span>Minimum rating</span>
+        <p-slider [(ngModel)]="minimumRating" [min]="4" [max]="5" [step]="0.1" />
+        <strong>{{ minimumRating }} stars</strong>
+      </label>
+    </aside>
+
+    <!-- Results Area -->
+    <section class="results">
+      <div class="toolbar">
+        <div>
+          <h3>All products</h3>
+          <p>Filters, comparison, wishlist and quick view states for commerce pages.</p>
+        </div>
+
+        <div class="toolbar-actions">
+          <label>
+            <span>Sort</span>
+            <p-select [options]="sortOptions" [(ngModel)]="sort" />
+          </label>
+          <div class="view-switch" aria-label="View mode">
+            <button type="button" [class.is-active]="viewMode === 'grid'" (click)="setViewMode('grid')" aria-label="Grid view">
+              <i class="pi pi-th-large"></i>
+            </button>
+            <button type="button" [class.is-active]="viewMode === 'list'" (click)="setViewMode('list')" aria-label="List view">
+              <i class="pi pi-list"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Filters Summary Strip -->
+      @if (search || selectedCategory !== 'All' || selectedColor !== 'Any' || priceRange[0] !== 20 || priceRange[1] !== 220) {
+        <div class="active-filters-strip">
+          <span class="strip-label">Active filters:</span>
+          <div class="filter-pills">
+            @if (search) {
+              <span class="filter-pill">Query: "{{ search }}" <i class="pi pi-times" (click)="search = ''"></i></span>
+            }
+            @if (selectedCategory !== 'All') {
+              <span class="filter-pill">Cat: {{ selectedCategory }} <i class="pi pi-times" (click)="selectedCategory = 'All'"></i></span>
+            }
+            @if (selectedColor !== 'Any') {
+              <span class="filter-pill">Color: {{ selectedColor }} <i class="pi pi-times" (click)="selectedColor = 'Any'"></i></span>
+            }
+            @if (priceRange[0] !== 20 || priceRange[1] !== 220) {
+              <span class="filter-pill">${{ priceRange[0] }}-${{ priceRange[1] }} <i class="pi pi-times" (click)="priceRange = [20, 220]"></i></span>
+            }
+            <button type="button" class="clear-pills-btn" (click)="resetFilters()">Clear all</button>
+          </div>
+        </div>
+      }
+
+      @if (loading) {
+        <div class="products">
+          @for (item of [1, 2, 3, 4]; track item) {
+            <app-ui-card class="product-card skeleton-card">
+              <div class="skeleton-media"></div>
+              <div class="skeleton-line"></div>
+              <div class="skeleton-line short"></div>
+            </app-ui-card>
+          }
+        </div>
+      } @else {
+        <div class="products" [class.list]="viewMode === 'list'">
+          @for (product of visibleProducts; track product.name) {
+            <app-ui-card class="product-card">
+              <div class="product-media">
+                <img [src]="product.image" [alt]="product.name" class="product-img" />
+                <div class="swatch" [style.background]="product.color">
+                  <span>{{ product.tag }}</span>
+                </div>
+              </div>
+              <div class="product-copy">
+                <p class="category">{{ product.category }}</p>
+                <h3>{{ product.name }}</h3>
+                <div class="rating-row">
+                  <span class="rating-stars"><i class="pi pi-star-fill"></i> {{ product.rating }}</span>
+                  <span class="stock-lbl" [class.low-stock]="product.stock === 'Low stock'">{{ product.stock }}</span>
+                </div>
+              </div>
+              <div class="product-actions">
+                <div class="actions-row-top">
+                  <strong>{{ product.price | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+                  <div class="quick-actions">
+                    <button type="button" [class.is-active]="wishlist.has(product.name)" (click)="toggleWishlist(product.name)" aria-label="Add to wishlist">
+                      <i class="pi pi-heart"></i>
+                    </button>
+                    <button type="button" [class.is-active]="compare.has(product.name)" (click)="toggleCompare(product.name)" aria-label="Compare">
+                      <i class="pi pi-clone"></i>
+                    </button>
+                    <button type="button" (click)="openQuickView(product.name)" aria-label="Quick view">
+                      <i class="pi pi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+                <app-ui-button class="add-btn full-width">Add to cart</app-ui-button>
+              </div>
+            </app-ui-card>
+          } @empty {
+            <app-ui-card class="empty">
+              <app-ui-badge tone="warning">No results</app-ui-badge>
+              <h3>No products match these filters</h3>
+              <p>Clear one filter, lower the minimum rating, or reset the catalog.</p>
+              <app-ui-button variant="secondary" (click)="resetFilters()">Reset filters</app-ui-button>
+            </app-ui-card>
+          }
+        </div>
+      }
+
+      <div class="result-footer">
+        <div class="wishlist-status">
+          Wishlist: <strong>{{ wishlist.size }}</strong> &middot; Compare: <strong>{{ compare.size }}</strong>
+          @if (quickViewProduct) {
+            &middot; Quick view: <strong>{{ quickViewProduct }}</strong>
+          }
+        </div>
+        <p-paginator
+          [first]="first"
+          [rows]="rows"
+          [totalRecords]="filteredProducts.length"
+          [rowsPerPageOptions]="[6, 12]"
+          (onPageChange)="pageChange($event)"
+        />
+      </div>
+    </section>
+  </div>
+
+  <!-- Bottom Compare Drawer Panel -->
+  @if (compare.size > 0) {
+    <div class="compare-drawer">
+      <div class="compare-drawer-header">
+        <div class="compare-title">
+          <i class="pi pi-clone"></i>
+          <strong>Product Comparison Matrix ({{ compare.size }} selected)</strong>
+        </div>
+        <button type="button" class="compare-clear-all" (click)="clearCompare()">Clear comparison</button>
+      </div>
+
+      <div class="compare-matrix-grid">
+        @for (item of comparedProducts; track item.name) {
+          <div class="compare-card">
+            <div class="compare-card-head">
+              <img [src]="item.image" [alt]="item.name" />
+              <div>
+                <h4>{{ item.name }}</h4>
+                <small>{{ item.category }}</small>
+              </div>
+            </div>
+            <div class="compare-card-body">
+              <div class="attribute-row">
+                <span>Price:</span>
+                <strong>{{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+              </div>
+              <div class="attribute-row">
+                <span>Rating:</span>
+                <strong><i class="pi pi-star-fill"></i> {{ item.rating }}</strong>
+              </div>
+              <div class="attribute-row">
+                <span>Stock:</span>
+                <span class="stock-status" [class.low-stock]="item.stock === 'Low stock'">{{ item.stock }}</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</app-page-section>

@@ -1,0 +1,187 @@
+<app-page-section subtitle="Checkout" title="Shopping Bag">
+  <!-- Visual Checkout Progress Timeline -->
+  <div class="checkout-timeline">
+    <div class="timeline-step" [class.active]="state.activeStep >= 1" [class.completed]="state.activeStep > 1">
+      <span class="step-num">@if (state.activeStep > 1) { <i class="pi pi-check"></i> } @else { 1 }</span>
+      <span class="step-lbl">Shopping Bag</span>
+    </div>
+    <div class="timeline-line" [class.completed]="state.activeStep > 1"></div>
+    <div class="timeline-step" [class.active]="state.activeStep >= 2" [class.completed]="state.activeStep > 2">
+      <span class="step-num">@if (state.activeStep > 2) { <i class="pi pi-check"></i> } @else { 2 }</span>
+      <span class="step-lbl">Shipping</span>
+    </div>
+    <div class="timeline-line" [class.completed]="state.activeStep > 2"></div>
+    <div class="timeline-step" [class.active]="state.activeStep >= 3" [class.completed]="state.activeStep > 3">
+      <span class="step-num">@if (state.activeStep > 3) { <i class="pi pi-check"></i> } @else { 3 }</span>
+      <span class="step-lbl">Payment</span>
+    </div>
+    <div class="timeline-line" [class.completed]="state.activeStep > 3"></div>
+    <div class="timeline-step" [class.active]="state.activeStep === 4">
+      <span class="step-num">4</span>
+      <span class="step-lbl">Success</span>
+    </div>
+  </div>
+
+  <div class="cart-layout" [class.is-success-step]="state.activeStep === 4">
+    <!-- Main Content Col -->
+    <div class="cart-main">
+      
+      <!-- STEP 1: SHOPPING BAG -->
+      @if (state.activeStep === 1) {
+        <div class="cart-step-content">
+          <h3>Your Bag ({{ state.items.length }} items)</h3>
+          
+          <app-cart-item-list></app-cart-item-list>
+        </div>
+      }
+
+      <!-- STEP 2: SHIPPING DETAILS -->
+      @if (state.activeStep === 2) {
+        <div class="cart-step-content">
+          <h3>Shipping Information</h3>
+          
+          <app-ui-card class="form-card">
+            <form class="checkout-form">
+              <div class="form-row">
+                <label>
+                  <span>Full name</span>
+                  <input type="text" [(ngModel)]="state.shippingAddress.fullName" name="fullName" required />
+                </label>
+                <label>
+                  <span>Email address</span>
+                  <input type="email" [(ngModel)]="state.shippingAddress.email" name="email" required />
+                </label>
+              </div>
+              <label>
+                <span>Street address</span>
+                <input type="text" [(ngModel)]="state.shippingAddress.street" name="street" required />
+              </label>
+              <div class="form-row">
+                <label>
+                  <span>City</span>
+                  <input type="text" [(ngModel)]="state.shippingAddress.city" name="city" required />
+                </label>
+                <label>
+                  <span>Zip code</span>
+                  <input type="text" [(ngModel)]="state.shippingAddress.zipCode" name="zipCode" required />
+                </label>
+              </div>
+            </form>
+          </app-ui-card>
+
+          <h3 class="methods-heading">Shipping Method</h3>
+          <div class="shipping-methods">
+            @for (method of state.shippingMethods; track method.id) {
+              <app-ui-card 
+                class="method-card" 
+                [class.active]="state.selectedShipping === method.id"
+                (click)="state.selectedShipping = method.id"
+              >
+                <div class="method-body">
+                  <div class="radio-col">
+                    <input type="radio" name="shipping" [value]="method.id" [checked]="state.selectedShipping === method.id" />
+                    <div class="method-meta">
+                      <strong>{{ method.label }}</strong>
+                      <span>Estimated: {{ method.note }}</span>
+                    </div>
+                  </div>
+                  <strong class="method-price">
+                    {{ method.price === 0 ? 'Free' : (method.price | currency: 'USD' : 'symbol' : '1.0-0') }}
+                  </strong>
+                </div>
+              </app-ui-card>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- STEP 3: PAYMENT DETAILS -->
+      @if (state.activeStep === 3) {
+        <div class="cart-step-content">
+          <h3>Payment Method</h3>
+          
+          <div class="payment-methods-tabs">
+            <button 
+              type="button" 
+              [class.active]="state.selectedPayment === 'card'" 
+              (click)="state.selectedPayment = 'card'"
+            >
+              <i class="pi pi-credit-card"></i> Credit Card
+            </button>
+            <button 
+              type="button" 
+              [class.active]="state.selectedPayment === 'paypal'" 
+              (click)="state.selectedPayment = 'paypal'"
+            >
+              <i class="pi pi-paypal"></i> PayPal
+            </button>
+          </div>
+
+          @if (state.selectedPayment === 'card') {
+            <app-ui-card class="form-card">
+              <form class="checkout-form">
+                <label>
+                  <span>Card number</span>
+                  <input type="text" [(ngModel)]="state.paymentInfo.cardNumber" name="cardNumber" required />
+                </label>
+                <div class="form-row">
+                  <label>
+                    <span>Expiration date</span>
+                    <input type="text" [(ngModel)]="state.paymentInfo.expiry" name="expiry" placeholder="MM/YY" required />
+                  </label>
+                  <label>
+                    <span>Security code (CVV)</span>
+                    <input type="password" [(ngModel)]="state.paymentInfo.cvv" name="cvv" required />
+                  </label>
+                </div>
+              </form>
+            </app-ui-card>
+          } @else {
+            <app-ui-card class="paypal-card">
+              <i class="pi pi-paypal paypal-big-icon"></i>
+              <p>You will be redirected to PayPal to complete your purchase securely.</p>
+            </app-ui-card>
+          }
+
+          <h3 class="billing-heading">Review Shipping Address</h3>
+          <app-ui-card class="review-address-card">
+            <div class="address-details">
+              <strong>{{ state.shippingAddress.fullName }}</strong>
+              <p>{{ state.shippingAddress.street }}</p>
+              <p>{{ state.shippingAddress.city }}, {{ state.shippingAddress.zipCode }}</p>
+              <p>{{ state.shippingAddress.email }}</p>
+            </div>
+            <button type="button" class="change-btn" (click)="state.activeStep = 2">Change</button>
+          </app-ui-card>
+        </div>
+      }
+
+      <!-- STEP 4: ORDER SUCCESS -->
+      @if (state.activeStep === 4) {
+        <div class="cart-step-content success-step">
+          <div class="success-icon-badge"><i class="pi pi-check-circle"></i></div>
+          <h2>Thank you for your order!</h2>
+          <p class="success-sub">Order number: <strong>#ORD-2026-9284</strong></p>
+          <p class="success-body">
+            We have sent a confirmation email to <strong>{{ state.shippingAddress.email }}</strong> with invoice details and shipment tracking codes.
+          </p>
+          <app-ui-card class="order-summary-card">
+            <h4>Shipment Details</h4>
+            <p>Standard shipping to: <strong>{{ state.shippingAddress.fullName }}</strong></p>
+            <p>Expected delivery: <strong>June 14-17</strong></p>
+          </app-ui-card>
+          
+          <div class="success-actions">
+            <app-ui-button variant="primary" routerLink="/catalog">Continue Shopping</app-ui-button>
+            <app-ui-button variant="secondary" routerLink="/">Back to Home</app-ui-button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Right Summary Col -->
+    <aside class="cart-summary-aside" [class.hidden]="state.activeStep === 4">
+      <app-cart-order-summary></app-cart-order-summary>
+    </aside>
+  </div>
+</app-page-section>

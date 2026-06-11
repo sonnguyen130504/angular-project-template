@@ -1,0 +1,116 @@
+<div id="panel-physics" role="tabpanel" aria-labelledby="tab-physics" class="tab-panel active">
+  <div class="lab-grid">
+    <!-- Part 1: Spring Solver -->
+    <app-ui-card class="lab-card span-2">
+      <div class="card-header-row">
+        <div>
+          <app-ui-badge tone="info">Solver Sandbox</app-ui-badge>
+          <h3 class="lab-section-title">Spring Parameters Configurator</h3>
+          <p class="lab-section-desc">Drag the handle or trigger an impact force to observe the wave oscillations calculated in real time.</p>
+        </div>
+        <app-ui-button variant="secondary" (click)="triggerImpact()" id="btn-trigger-impact">Trigger Impact Force</app-ui-button>
+      </div>
+
+      <div class="spring-sandbox-grid">
+        <!-- Interactive Canvas Area -->
+        <div class="physics-canvas">
+          <div class="anchor-point" aria-hidden="true"></div>
+          <div
+            class="interactive-handle"
+            [ngClass]="{'dragging': isDragging}"
+            [style.transform]="'translate(calc(-50% + ' + handleX + 'px), calc(-50% + ' + handleY + 'px))'"
+            (mousedown)="onDragStart($event)"
+            (touchstart)="onDragStart($event)"
+            role="slider"
+            aria-label="Spring handle slider"
+            [attr.aria-valuenow]="handleX"
+            tabindex="0"
+          >
+            <div class="handle-inner"></div>
+          </div>
+          <div class="canvas-grid-lines" aria-hidden="true"></div>
+        </div>
+
+        <!-- Plot history Panel -->
+        <div class="plot-panel">
+          <div class="plot-header">
+            <span>Displacement History Wave</span>
+            <span class="mono-values">X: {{ handleX | number:'1.0-0' }}px, Y: {{ handleY | number:'1.0-0' }}px</span>
+          </div>
+          <div class="svg-plot-container">
+            <svg viewBox="0 0 200 100" preserveAspectRatio="none" class="plot-svg">
+              <line x1="0" y1="50" x2="200" y2="50" stroke="var(--line)" stroke-dasharray="3,3"></line>
+              <path [attr.d]="springCurvePath" fill="none" stroke="var(--accent)" stroke-width="1.5"></path>
+            </svg>
+          </div>
+          <div class="plot-footer-info">
+            <span>0ms</span>
+            <span>Current Position</span>
+          </div>
+        </div>
+
+        <!-- Tuner Sliders -->
+        <div class="sliders-controls">
+          <div class="slider-control-group">
+            <div class="control-label-row">
+              <label for="stiffness-slider">Stiffness (k)</label>
+              <span class="value-badge">{{ stiffness }}</span>
+            </div>
+            <p-slider id="stiffness-slider" [(ngModel)]="stiffness" [min]="20" [max]="400"></p-slider>
+          </div>
+
+          <div class="slider-control-group">
+            <div class="control-label-row">
+              <label for="damping-slider">Damping (c)</label>
+              <span class="value-badge">{{ damping }}</span>
+            </div>
+            <p-slider id="damping-slider" [(ngModel)]="damping" [min]="2" [max]="50"></p-slider>
+          </div>
+
+          <div class="slider-control-group">
+            <div class="control-label-row">
+              <label for="mass-slider">Mass (m)</label>
+              <span class="value-badge">{{ mass | number:'1.1-1' }}</span>
+            </div>
+            <p-slider id="mass-slider" [(ngModel)]="mass" [min]="0.2" [max]="3" [step]="0.1"></p-slider>
+          </div>
+
+          <div class="formula-readout">
+            <code>F = -{{stiffness}}x - {{damping}}v</code>
+          </div>
+        </div>
+      </div>
+    </app-ui-card>
+
+    <!-- Part 2: Magnetic Hover -->
+    <app-ui-card class="lab-card">
+      <div class="card-header-row">
+        <div>
+          <app-ui-badge tone="positive">Magnetic Space</app-ui-badge>
+          <h3 class="lab-section-title">Magnetic Button Sandbox</h3>
+          <p class="lab-section-desc">Move your cursor near the button container. The button will warp and follow the pointer using spring calculations, snapping back on leave.</p>
+        </div>
+      </div>
+
+      <div
+        class="magnetic-attraction-area"
+        #magneticContainer
+        (mousemove)="onMagneticMouseMove($event)"
+        (mouseleave)="onMagneticMouseLeave()"
+        [class.no-motion]="simulateReducedMotion()"
+      >
+        <button
+          type="button"
+          class="magnetic-action-button"
+          #magneticButton
+          id="btn-magnetic-action"
+        >
+          <span class="btn-text">Interact</span>
+          <i class="pi pi-arrow-right" aria-hidden="true"></i>
+        </button>
+        <div class="magnetic-trail-dot" #magneticTrail aria-hidden="true"></div>
+        <div class="proximity-indicator" [class.active]="isHoveringMagnetic"></div>
+      </div>
+    </app-ui-card>
+  </div>
+</div>

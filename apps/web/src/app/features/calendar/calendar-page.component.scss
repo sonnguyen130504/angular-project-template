@@ -1,0 +1,206 @@
+.date-input {
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink);
+  padding: 0 14px;
+  font: inherit;
+  font-weight: 800;
+}
+
+.calendar-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+  gap: 16px;
+}
+
+.calendar-brief,
+.schedule-grid,
+.event-panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  padding: 16px;
+}
+
+.calendar-brief {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: end;
+  margin-bottom: 16px;
+  padding: 18px;
+}
+
+.calendar-brief h3,
+.availability-card strong,
+.selected-event strong,
+.room-load strong {
+  color: var(--ink);
+}
+
+.calendar-brief h3 {
+  margin: 10px 0 6px;
+  font-size: clamp(1.3rem, 2vw, 1.9rem);
+  letter-spacing: -0.03em;
+}
+
+.calendar-brief p,
+.availability-card span,
+.availability-card small {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.availability-card {
+  min-width: 180px;
+  border-radius: var(--radius-md);
+  background: var(--selected);
+  padding: 14px;
+  display: grid;
+  gap: 3px;
+}
+
+.availability-card strong {
+  font-size: 1.7rem;
+  letter-spacing: -0.035em;
+}
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: 72px repeat(5, minmax(90px, 1fr));
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.day-head,
+.slot {
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.schedule-cell {
+  min-height: 86px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--ink);
+  padding: 10px;
+  text-align: left;
+}
+
+.schedule-cell.has-event {
+  background: var(--selected);
+  border-color: color-mix(in srgb, var(--control) 30%, var(--line));
+}
+
+.schedule-cell.conflict {
+  background: color-mix(in srgb, var(--warning) 10%, var(--surface));
+  border-color: color-mix(in srgb, var(--warning) 32%, var(--line));
+}
+
+.schedule-cell span,
+.event-row strong,
+.panel-head h3,
+.empty-agenda strong,
+.conflict-box strong,
+.room-load span,
+.room-load small {
+  display: block;
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.schedule-cell small,
+.event-row small,
+.empty-agenda span,
+.conflict-box span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.event-panel,
+.event-list {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.panel-head h3 {
+  margin: 10px 0 0;
+}
+
+.event-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--ink);
+  padding: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.event-row.selected {
+  background: var(--selected);
+}
+
+.event-row b {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--warning) 12%, var(--surface));
+  color: var(--warning);
+  padding: 3px 8px;
+}
+
+.empty-agenda,
+.conflict-box,
+.selected-event,
+.room-load {
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  padding: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.selected-event span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.room-load div {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.room-load i {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.room-load b {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--control);
+}
+
+@media (max-width: 980px) {
+  .calendar-brief,
+  .calendar-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .calendar-brief {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

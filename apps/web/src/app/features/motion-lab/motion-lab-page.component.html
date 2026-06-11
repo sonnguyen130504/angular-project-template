@@ -1,0 +1,154 @@
+<app-page-section title="Motion Lab & Animation Showcase" subtitle="Sion Studio UI Reference">
+  <div class="playground-header-row">
+    <div class="intro-block">
+      <p class="intro-text">
+        A workbench showcasing physics solvers, micro-interactions, layout morphs, and scroll choreography. Built with performance and accessibility at the core.
+      </p>
+    </div>
+    
+    <!-- Global Control Center -->
+    <div class="global-settings-panel">
+      <div class="setting-item">
+        <label for="intensity-slider">Global Motion Intensity</label>
+        <div class="slider-val-row">
+          <p-slider id="intensity-slider" [(ngModel)]="motionIntensity" [min]="1" [max]="10"></p-slider>
+          <span class="val-indicator">{{ motionIntensity }}/10</span>
+        </div>
+      </div>
+      <div class="setting-item flex-row">
+        <label class="toggle-control" for="a11y-motion-toggle">
+          <input type="checkbox" id="a11y-motion-toggle" [(ngModel)]="simulateReducedMotion" />
+          <span class="toggle-indicator"></span>
+          <span>Simulate <code>reduced-motion</code></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabbed Interface -->
+  <div class="local-tabs" role="tablist" aria-label="Animation categories">
+    <button
+      type="button"
+      role="tab"
+      id="tab-physics"
+      [class.is-active]="activeTab === 'physics'"
+      [attr.aria-selected]="activeTab === 'physics'"
+      aria-controls="panel-physics"
+      (click)="switchTab('physics')"
+    >
+      Physics & Springs
+    </button>
+    <button
+      type="button"
+      role="tab"
+      id="tab-interactions"
+      [class.is-active]="activeTab === 'interactions'"
+      [attr.aria-selected]="activeTab === 'interactions'"
+      aria-controls="panel-interactions"
+      (click)="switchTab('interactions')"
+    >
+      Micro-Interactions
+    </button>
+    <button
+      type="button"
+      role="tab"
+      id="tab-flip"
+      [class.is-active]="activeTab === 'flip'"
+      [attr.aria-selected]="activeTab === 'flip'"
+      aria-controls="panel-flip"
+      (click)="switchTab('flip')"
+    >
+      FLIP Layouts
+    </button>
+    <button
+      type="button"
+      role="tab"
+      id="tab-scroll"
+      [class.is-active]="activeTab === 'scroll'"
+      [attr.aria-selected]="activeTab === 'scroll'"
+      aria-controls="panel-scroll"
+      (click)="switchTab('scroll')"
+    >
+      Scroll & Stagger
+    </button>
+    <button
+      type="button"
+      role="tab"
+      id="tab-typography"
+      [class.is-active]="activeTab === 'typography'"
+      [attr.aria-selected]="activeTab === 'typography'"
+      aria-controls="panel-typography"
+      (click)="switchTab('typography')"
+    >
+      Kinetic Typography
+    </button>
+    <button
+      type="button"
+      role="tab"
+      id="tab-canvas"
+      [class.is-active]="activeTab === 'canvas'"
+      [attr.aria-selected]="activeTab === 'canvas'"
+      aria-controls="panel-canvas"
+      (click)="switchTab('canvas')"
+    >
+      Canvas & SVG Physics
+    </button>
+    <button
+      type="button"
+      role="tab"
+      id="tab-advanced"
+      [class.is-active]="activeTab === 'advanced'"
+      [attr.aria-selected]="activeTab === 'advanced'"
+      aria-controls="panel-advanced"
+      (click)="switchTab('advanced')"
+    >
+      3D & Advanced Effects
+    </button>
+  </div>
+
+  <div class="tab-panel-container">
+    @switch (activeTab) {
+      @case ('physics') {
+        <app-spring-physics-panel
+          [motionIntensity]="motionIntensity"
+          [simulateReducedMotion]="simulateReducedMotion"
+        ></app-spring-physics-panel>
+      }
+      @case ('interactions') {
+        <app-micro-interactions-panel
+          [simulateReducedMotion]="simulateReducedMotion"
+        ></app-micro-interactions-panel>
+      }
+      @case ('flip') {
+        <app-flip-layouts-panel
+          [motionIntensity]="motionIntensity"
+          [simulateReducedMotion]="simulateReducedMotion"
+        ></app-flip-layouts-panel>
+      }
+      @case ('scroll') {
+        <app-scroll-stagger-panel
+          [motionIntensity]="motionIntensity"
+          [simulateReducedMotion]="simulateReducedMotion"
+        ></app-scroll-stagger-panel>
+      }
+      @case ('typography') {
+        <app-kinetic-typography-panel
+          [motionIntensity]="motionIntensity"
+          [simulateReducedMotion]="simulateReducedMotion"
+        ></app-kinetic-typography-panel>
+      }
+      @case ('canvas') {
+        <app-canvas-svg-physics-panel
+          [motionIntensity]="motionIntensity"
+          [simulateReducedMotion]="simulateReducedMotion"
+        ></app-canvas-svg-physics-panel>
+      }
+      @case ('advanced') {
+        <app-tilt-card-panel
+          [motionIntensity]="motionIntensity"
+          [simulateReducedMotion]="simulateReducedMotion"
+        ></app-tilt-card-panel>
+      }
+    }
+  </div>
+</app-page-section>

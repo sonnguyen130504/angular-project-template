@@ -1,0 +1,84 @@
+<app-page-section subtitle="Workspace" title="Team">
+  <div sectionActions class="team-actions">
+    <select [(ngModel)]="roleFilter" aria-label="Role filter">
+      @for (role of ['All', 'Owner', 'Admin', 'Editor', 'Viewer']; track role) {
+        <option>{{ role }}</option>
+      }
+    </select>
+  </div>
+
+  <section class="team-brief" aria-label="Team health">
+    <div>
+      <app-ui-badge tone="info">Access control</app-ui-badge>
+      <h3>{{ members.length }} teammates, {{ pendingInvites }} pending invite</h3>
+      <p>Team reference for role filters, owner-locked actions, pending invites, invite validation, and permission matrices.</p>
+    </div>
+    <div class="role-strip">
+      <span>Owner {{ countRole('Owner') }}</span>
+      <span>Admin {{ countRole('Admin') }}</span>
+      <span>Editor {{ countRole('Editor') }}</span>
+      <span>Viewer {{ countRole('Viewer') }}</span>
+    </div>
+  </section>
+
+  <div class="team-layout">
+    <section class="members-panel">
+      <div class="panel-title">
+        <app-ui-badge tone="info">{{ visibleMembers.length }} members</app-ui-badge>
+        <h3>Member directory</h3>
+      </div>
+      <div class="member-table">
+        @for (member of visibleMembers; track member.email) {
+          <div class="member-row">
+            <div class="avatar">{{ member.name.slice(0, 1) }}</div>
+            <div>
+              <strong>{{ member.name }}</strong>
+              <span>{{ member.email }}</span>
+            </div>
+            <app-ui-badge [tone]="member.status === 'Active' ? 'positive' : 'warning'">{{ member.role }}</app-ui-badge>
+            <button type="button" [disabled]="member.role === 'Owner'">Change role</button>
+          </div>
+        }
+      </div>
+    </section>
+
+    <aside class="invite-panel">
+      <app-ui-badge>Invite</app-ui-badge>
+      <h3>Add teammate</h3>
+      <input [(ngModel)]="inviteEmail" type="email" placeholder="teammate@example.com" aria-label="Invite email" />
+      <app-ui-button (click)="sendInvite()">Send invite</app-ui-button>
+      <p>{{ inviteState }}</p>
+      <div class="review-card">
+        <strong>Invite defaults</strong>
+        <span>New teammates start as Viewer until an admin confirms their role.</span>
+      </div>
+    </aside>
+
+    <section class="permissions-panel">
+      <div class="panel-title">
+        <app-ui-badge tone="positive">Permissions</app-ui-badge>
+        <h3>Role matrix</h3>
+      </div>
+      @for (row of permissions; track row.label) {
+        <div class="permission-row">
+          <strong>{{ row.label }}</strong>
+          <span [class.enabled]="row.Owner">Owner</span>
+          <span [class.enabled]="row.Admin">Admin</span>
+          <span [class.enabled]="row.Editor">Editor</span>
+          <span [class.enabled]="row.Viewer">Viewer</span>
+        </div>
+      }
+    </section>
+
+    <aside class="access-review">
+      <app-ui-badge tone="warning">Review</app-ui-badge>
+      <h3>Access checks</h3>
+      @for (item of accessReviews; track item.label) {
+        <div>
+          <strong>{{ item.label }}</strong>
+          <span>{{ item.detail }}</span>
+        </div>
+      }
+    </aside>
+  </div>
+</app-page-section>

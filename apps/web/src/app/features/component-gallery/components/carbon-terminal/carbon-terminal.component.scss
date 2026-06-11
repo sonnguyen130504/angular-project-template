@@ -1,0 +1,129 @@
+/* CARBON TERMINAL WINDOW STYLING */
+.carbon-terminal-window {
+  background: #14171a;
+  border: 1px solid #2d3136;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+}
+
+.terminal-header {
+  background: #1e2227;
+  border-bottom: 1px solid #2d3136;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.window-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.window-controls .control {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.window-controls .dot-close { background: #ff5f56; }
+.window-controls .dot-minimize { background: #ffbd2e; }
+.window-controls .dot-maximize { background: #27c93f; }
+
+.terminal-title {
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #8a939e;
+  user-select: none;
+}
+
+.terminal-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.terminal-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #2b3036;
+  border: 1px solid #3e444d;
+  color: #abb2bf;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 180ms ease;
+  outline: none;
+  
+  i { font-size: 0.8rem; }
+  
+  &:hover {
+    background: #353b45;
+    color: #ffffff;
+  }
+  
+  &.copied {
+    background: var(--success);
+    color: #ffffff;
+    border-color: var(--success);
+  }
+}
+
+.terminal-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: #2d3136;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.terminal-body .code-pane {
+  background: #14171a;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.terminal-body .pane-header {
+  background: #191c20;
+  padding: 6px 16px;
+  border-bottom: 1px solid #22262b;
+}
+
+.terminal-body .file-name {
+  font-family: monospace;
+  font-size: 0.72rem;
+  color: #61afef;
+  font-weight: 700;
+}
+
+.terminal-body .code-block {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 16px;
+  margin: 0;
+  max-height: 280px;
+  min-height: 140px;
+  overflow: auto;
+  
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    color: #abb2bf;
+    font-size: 0.8rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 1.5;
+  }
+}

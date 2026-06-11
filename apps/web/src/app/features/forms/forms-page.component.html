@@ -1,0 +1,255 @@
+<app-page-section subtitle="Interactive Forms Showroom" title="Form Wizard & Validation playground">
+  <!-- Stepper Indicators -->
+  <div class="stepper-indicator-row">
+    <div class="stepper-step" [class.active]="currentFormStep === 1" [class.passed]="currentFormStep > 1">
+      <div class="step-num-circle">
+        @if (currentFormStep > 1) { <i class="pi pi-check"></i> } @else { 1 }
+      </div>
+      <span>Account details</span>
+    </div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step" [class.active]="currentFormStep === 2" [class.passed]="currentFormStep > 2">
+      <div class="step-num-circle">
+        @if (currentFormStep > 2) { <i class="pi pi-check"></i> } @else { 2 }
+      </div>
+      <span>Profile Info</span>
+    </div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step" [class.active]="currentFormStep === 3" [class.passed]="currentFormStep > 3">
+      <div class="step-num-circle">
+        @if (currentFormStep > 3) { <i class="pi pi-check"></i> } @else { 3 }
+      </div>
+      <span>Launch Settings</span>
+    </div>
+  </div>
+
+  <div class="wizard-workspace-grid">
+    <!-- Left panel: Form Wizard Card -->
+    <app-ui-card class="wizard-form-card">
+      <!-- STEP 1: Account -->
+      @if (currentFormStep === 1) {
+        <div class="form-step-content">
+          <div class="step-header">
+            <app-ui-badge>Step 1 / 3</app-ui-badge>
+            <h3>Account Access Credentials</h3>
+            <p>Setup secure access keys. All fields require valid validation bounds to proceed.</p>
+          </div>
+
+          <label class="wizard-field" [class.has-error]="emailHasError">
+            <span class="field-label">
+              <span>Email Address</span>
+              @if (email && !emailHasError) { <i class="pi pi-check-circle success-tick"></i> }
+            </span>
+            <input type="email" [(ngModel)]="email" placeholder="you@example.com" class="wizard-input" />
+            @if (emailHasError) {
+              <small class="field-error-msg"><i class="pi pi-exclamation-circle"></i> Use a valid email address containing '&#64;'.</small>
+            }
+          </label>
+
+          <label class="wizard-field" [class.has-error]="passwordHasError">
+            <span class="field-label">
+              <span>Secure Password</span>
+              @if (password.length > 0 && !passwordHasError) { <i class="pi pi-check-circle success-tick"></i> }
+            </span>
+            <input type="password" [(ngModel)]="password" placeholder="At least 8 characters" class="wizard-input" />
+            @if (passwordHasError) {
+              <small class="field-error-msg"><i class="pi pi-exclamation-circle"></i> Password is too short (minimum 8 characters).</small>
+            }
+          </label>
+
+          <!-- Password strength indicators -->
+          @if (password) {
+            <div class="password-strength-container">
+              <div class="strength-label-row">
+                <span>Password Strength:</span>
+                <strong [style.color]="passwordStrengthColor">{{ passwordStrengthLabel }}</strong>
+              </div>
+              <div class="strength-meter">
+                <div class="meter-bar" [style.background-color]="passwordStrengthColor" [style.width.%]="passwordStrengthScore * 25"></div>
+              </div>
+              <ul class="strength-checklist">
+                <li [class.met]="password.length >= 8"><i class="pi pi-circle-fill"></i> At least 8 characters</li>
+                <li [class.met]="hasUppercase"><i class="pi pi-circle-fill"></i> Contains uppercase letter</li>
+                <li [class.met]="hasNumber"><i class="pi pi-circle-fill"></i> Contains a number</li>
+                <li [class.met]="hasSpecial"><i class="pi pi-circle-fill"></i> Contains special symbol</li>
+              </ul>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- STEP 2: Profile -->
+      @if (currentFormStep === 2) {
+        <div class="form-step-content">
+          <div class="step-header">
+            <app-ui-badge>Step 2 / 3</app-ui-badge>
+            <h3>Profile Specifications</h3>
+            <p>Define operational handles and preferred communication tones.</p>
+          </div>
+
+          <label class="wizard-field" [class.has-error]="fullName.length > 0 && !step2IsValid">
+            <span class="field-label">
+              <span>Full Name</span>
+              @if (step2IsValid) { <i class="pi pi-check-circle success-tick"></i> }
+            </span>
+            <input type="text" [(ngModel)]="fullName" placeholder="e.g. Samuel Sion" class="wizard-input" />
+            @if (fullName.length > 0 && !step2IsValid) {
+              <small class="field-error-msg"><i class="pi pi-exclamation-circle"></i> Name must be at least 2 characters.</small>
+            }
+          </label>
+
+          <label class="wizard-field">
+            <span class="field-label">Preferred Communication Tone</span>
+            <p-select [options]="toneOptions" [(ngModel)]="tone" class="wizard-select" />
+          </label>
+
+          <label class="wizard-field">
+            <span class="field-label">Notes / Extra Context</span>
+            <textarea [(ngModel)]="notes" placeholder="Tell us about your project..." class="wizard-textarea" rows="3"></textarea>
+          </label>
+        </div>
+      }
+
+      <!-- STEP 3: Settings -->
+      @if (currentFormStep === 3) {
+        <div class="form-step-content">
+          <div class="step-header">
+            <app-ui-badge>Step 3 / 3</app-ui-badge>
+            <h3>Launch Parameters</h3>
+            <p>Select timeframes and toggle synchronization updates options.</p>
+          </div>
+
+          <label class="wizard-field">
+            <span class="field-label">Target Launch Date</span>
+            <p-datepicker [(ngModel)]="launchDate" dateFormat="M d, yy" class="wizard-datepicker" />
+          </label>
+
+          <label class="wizard-field">
+            <span class="field-label">
+              <span>Priority Allocation</span>
+              <span class="badge-value">{{ priority }}%</span>
+            </span>
+            <p-slider [(ngModel)]="priority" class="wizard-slider" />
+          </label>
+
+          <div class="settings-toggle-box">
+            <label class="wizard-switch-row">
+              <span class="switch-texts">
+                <strong>Enable notifications</strong>
+                <small>Send instant slack alerts on sync thresholds.</small>
+              </span>
+              <input type="checkbox" [(ngModel)]="notify" />
+              <i class="switch-visual" aria-hidden="true"></i>
+            </label>
+
+            <label class="wizard-switch-row">
+              <span class="switch-texts">
+                <strong>Compact layout presets</strong>
+                <small>Apply tighter tables grid sizes in dashboard views.</small>
+              </span>
+              <input type="checkbox" [(ngModel)]="compact" />
+              <i class="switch-visual" aria-hidden="true"></i>
+            </label>
+          </div>
+        </div>
+      }
+
+      <!-- STEP 4: Success Screen -->
+      @if (currentFormStep === 4) {
+        <div class="form-step-content text-center">
+          <div class="success-icon-badge"><i class="pi pi-check"></i></div>
+          <h3>Wizard Submitted Successfully</h3>
+          <p>Your workspace data was serialized and pushed to database clusters.</p>
+
+          <div class="final-summary-card">
+            <h4>Pushed Configuration Parameters:</h4>
+            <ul class="summary-list-items">
+              <li><strong>Operator Name:</strong> {{ fullName }}</li>
+              <li><strong>Access Email:</strong> {{ email }}</li>
+              <li><strong>Brand Tone:</strong> {{ tone }}</li>
+              <li><strong>Priority Ratio:</strong> {{ priority }}%</li>
+              <li><strong>Launch Target:</strong> {{ launchDate | date:'mediumDate' }}</li>
+              <li><strong>Slack Alerts:</strong> {{ notify ? 'Enabled' : 'Disabled' }}</li>
+            </ul>
+          </div>
+
+          <app-ui-button (click)="resetWizard()">Restart Setup Wizard</app-ui-button>
+        </div>
+      }
+
+      <!-- Actions Buttons Bar -->
+      @if (currentFormStep < 4) {
+        <div class="wizard-actions-bar">
+          <app-ui-button variant="secondary" (click)="prevStep()" [disabled]="currentFormStep === 1">
+            Back
+          </app-ui-button>
+
+          @if (currentFormStep < 3) {
+            <app-ui-button (click)="nextStep()" [disabled]="(currentFormStep === 1 && !step1IsValid) || (currentFormStep === 2 && !step2IsValid)">
+              Continue
+            </app-ui-button>
+          } @else {
+            <app-ui-button [disabled]="isSubmitting || !step3IsValid" (click)="submitForm()">
+              {{ isSubmitting ? 'Submitting...' : 'Submit Wizard Setup' }}
+            </app-ui-button>
+          }
+        </div>
+      }
+    </app-ui-card>
+
+    <!-- Right panel: Live Review Card -->
+    <div class="summary-panel-wrapper">
+      <span class="summary-panel-tag">Live Review Summary</span>
+      <app-ui-card class="review-details-card">
+        <app-ui-badge tone="info">Draft Metadata</app-ui-badge>
+        
+        <div class="summary-fields-stack">
+          <div class="summary-row">
+            <span class="summary-label">Access Email</span>
+            <span class="summary-value" [class.placeholder]="!email">{{ email || 'you@example.com' }}</span>
+          </div>
+
+          <div class="summary-row">
+            <span class="summary-label">Operator Name</span>
+            <span class="summary-value" [class.placeholder]="!fullName">{{ fullName || 'Not set' }}</span>
+          </div>
+
+          <div class="summary-row">
+            <span class="summary-label">Preferred Tone</span>
+            <span class="summary-value">{{ tone }}</span>
+          </div>
+
+          <div class="summary-row">
+            <span class="summary-label">Priority Ratio</span>
+            <span class="summary-value">{{ priority }}%</span>
+          </div>
+
+          <div class="summary-row">
+            <span class="summary-label">Launch Date</span>
+            <span class="summary-value">{{ launchDate | date:'mediumDate' }}</span>
+          </div>
+
+          <div class="summary-row">
+            <span class="summary-label">Slack Sync</span>
+            <span class="summary-value">{{ notify ? 'Active' : 'Muted' }}</span>
+          </div>
+        </div>
+
+        <div class="validation-status-footer" [ngClass]="{'valid': step1IsValid && step2IsValid && step3IsValid}">
+          <i class="pi" [class.pi-check-circle]="step1IsValid && step2IsValid && step3IsValid" [class.pi-info-circle]="!(step1IsValid && step2IsValid && step3IsValid)"></i>
+          <span>
+            {{ (step1IsValid && step2IsValid && step3IsValid) ? 'Form variables are complete & ready.' : 'Pending missing fields...' }}
+          </span>
+        </div>
+      </app-ui-card>
+    </div>
+  </div>
+
+  <!-- Dynamic Toast Banner -->
+  @if (showSuccessToast) {
+    <div class="success-toast-banner" role="alert" aria-live="assertive">
+      <i class="pi pi-check-circle"></i>
+      <span>Form configuration saved successfully!</span>
+    </div>
+  }
+</app-page-section>

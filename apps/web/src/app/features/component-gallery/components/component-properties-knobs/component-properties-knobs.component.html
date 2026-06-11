@@ -1,0 +1,221 @@
+      <div class="knobs-card">
+        <h4 class="knobs-title">Properties Knobs</h4>
+
+        <!-- Button Knobs -->
+        @if (state.activeExplorerTab === 'button') {
+          <div class="knob-group">
+            <label class="knob-label">Variant</label>
+            <div class="segmented-control">
+              <button type="button" [class.active]="state.btnVariant === 'primary'" (click)="state.btnVariant = 'primary'">Primary</button>
+              <button type="button" [class.active]="state.btnVariant === 'secondary'" (click)="state.btnVariant = 'secondary'">Secondary</button>
+            </div>
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label">Size</label>
+            <div class="segmented-control">
+              <button type="button" [class.active]="state.btnSize === 'sm'" (click)="state.btnSize = 'sm'">Small</button>
+              <button type="button" [class.active]="state.btnSize === 'md'" (click)="state.btnSize = 'md'">Medium</button>
+              <button type="button" [class.active]="state.btnSize === 'lg'" (click)="state.btnSize = 'lg'">Large</button>
+            </div>
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label">Icon Placement</label>
+            <div class="segmented-control">
+              <button type="button" [class.active]="state.btnIcon === 'none'" (click)="state.btnIcon = 'none'">None</button>
+              <button type="button" [class.active]="state.btnIcon === 'left'" (click)="state.btnIcon = 'left'">Left</button>
+              <button type="button" [class.active]="state.btnIcon === 'right'" (click)="state.btnIcon = 'right'">Right</button>
+            </div>
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label" for="btn-label-input">Label Text</label>
+            <input id="btn-label-input" type="text" [(ngModel)]="state.btnLabel" class="knob-input" />
+          </div>
+
+          <div class="knob-row">
+            <label class="checkbox-control">
+              <input type="checkbox" [(ngModel)]="state.btnDisabled" />
+              <span class="checkbox-indicator"></span>
+              <span>Disabled State</span>
+            </label>
+          </div>
+
+          <div class="knob-row">
+            <label class="checkbox-control">
+              <input type="checkbox" [(ngModel)]="state.btnLoading" />
+              <span class="checkbox-indicator"></span>
+              <span>Loading State</span>
+            </label>
+          </div>
+        }
+
+        <!-- Badge Knobs -->
+        @if (state.activeExplorerTab === 'badge') {
+          <div class="knob-group">
+            <label class="knob-label" for="badge-tone-select">Semantic Tone</label>
+            <select id="badge-tone-select" [(ngModel)]="state.badgeTone" class="knob-select">
+              <option value="neutral">Neutral</option>
+              <option value="positive">Positive (Success)</option>
+              <option value="warning">Warning</option>
+              <option value="negative">Negative (Danger)</option>
+              <option value="info">Info</option>
+            </select>
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label">Visual Variant</label>
+            <div class="segmented-control">
+              <button type="button" [class.active]="state.badgeVariant === 'filled'" (click)="state.badgeVariant = 'filled'">Filled</button>
+              <button type="button" [class.active]="state.badgeVariant === 'subtle'" (click)="state.badgeVariant = 'subtle'">Subtle</button>
+              <button type="button" [class.active]="state.badgeVariant === 'outline'" (click)="state.badgeVariant = 'outline'">Outline</button>
+            </div>
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label" for="badge-label-input">Badge Label</label>
+            <input id="badge-label-input" type="text" [(ngModel)]="state.badgeLabel" class="knob-input" />
+          </div>
+        }
+
+        <!-- Card Knobs -->
+        @if (state.activeExplorerTab === 'card') {
+          <div class="knob-group">
+            <label class="knob-label">Accent Highlight</label>
+            <div class="segmented-control">
+              <button type="button" [class.active]="state.cardAccent === 'none'" (click)="state.cardAccent = 'none'">None</button>
+              <button type="button" [class.active]="state.cardAccent === 'primary'" (click)="state.cardAccent = 'primary'">Clay</button>
+              <button type="button" [class.active]="state.cardAccent === 'teal'" (click)="state.cardAccent = 'teal'">Teal</button>
+            </div>
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label">Shadow Elevation</label>
+            <div class="segmented-control">
+              <button type="button" [class.active]="state.cardShadow === 'none'" (click)="state.cardShadow = 'none'">None</button>
+              <button type="button" [class.active]="state.cardShadow === 'soft'" (click)="state.cardShadow = 'soft'">Soft</button>
+              <button type="button" [class.active]="state.cardShadow === 'deep'" (click)="state.cardShadow = 'deep'">Deep</button>
+            </div>
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label">Internal Padding</label>
+            <div class="segmented-control">
+              <button type="button" [class.active]="state.cardPadding === 'sm'" (click)="state.cardPadding = 'sm'">Small</button>
+              <button type="button" [class.active]="state.cardPadding === 'md'" (click)="state.cardPadding = 'md'">Medium</button>
+              <button type="button" [class.active]="state.cardPadding === 'lg'" (click)="state.cardPadding = 'lg'">Large</button>
+            </div>
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label" for="card-title-input">Card Title</label>
+            <input id="card-title-input" type="text" [(ngModel)]="state.cardTitle" class="knob-input" />
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label" for="card-body-input">Body Paragraph</label>
+            <textarea id="card-body-input" [(ngModel)]="state.cardBody" class="knob-textarea" rows="3"></textarea>
+          </div>
+        }
+
+        <!-- Dialog Knobs -->
+        @if (state.activeExplorerTab === 'dialog') {
+          <div class="knob-group">
+            <label class="knob-label">Modal Size Width</label>
+            <div class="segmented-control">
+              <button type="button" [class.active]="state.dialogSize === 'small'" (click)="state.dialogSize = 'small'">Small (420px)</button>
+              <button type="button" [class.active]="state.dialogSize === 'medium'" (click)="state.dialogSize = 'medium'">Medium (640px)</button>
+            </div>
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label">Footer Actions</label>
+            <div class="segmented-control">
+              <button type="button" [class.active]="state.dialogActionCount === 1" (click)="state.dialogActionCount = 1">1 Button</button>
+              <button type="button" [class.active]="state.dialogActionCount === 2" (click)="state.dialogActionCount = 2">2 Buttons</button>
+            </div>
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label" for="dialog-title-input">Dialog Title</label>
+            <input id="dialog-title-input" type="text" [(ngModel)]="state.dialogTitle" class="knob-input" />
+          </div>
+
+          <div class="trigger-row" style="margin-top: 20px;">
+            <app-ui-button (click)="state.dialogVisible = true" style="width: 100%;">Open Modal Preview</app-ui-button>
+          </div>
+        }
+
+        <!-- Toggle Knobs -->
+        @if (state.activeExplorerTab === 'toggle') {
+          <div class="knob-group">
+            <label class="knob-label">Toggle Size</label>
+            <div class="segmented-control">
+              <button type="button" [class.active]="state.toggleSize === 'sm'" (click)="state.toggleSize = 'sm'">Small</button>
+              <button type="button" [class.active]="state.toggleSize === 'md'" (click)="state.toggleSize = 'md'">Medium</button>
+            </div>
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label" for="toggle-label-input">Label Text</label>
+            <input id="toggle-label-input" type="text" [(ngModel)]="state.toggleLabel" class="knob-input" />
+          </div>
+
+          <div class="knob-row">
+            <label class="checkbox-control">
+              <input type="checkbox" [(ngModel)]="state.toggleChecked" />
+              <span class="checkbox-indicator"></span>
+              <span>Checked State</span>
+            </label>
+          </div>
+        }
+
+        <!-- Float Input Knobs -->
+        @if (state.activeExplorerTab === 'input') {
+          <div class="knob-group">
+            <label class="knob-label" for="input-placeholder-input">Placeholder (Floating Label)</label>
+            <input id="input-placeholder-input" type="text" [(ngModel)]="state.inputPlaceholder" class="knob-input" />
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label" for="input-value-input">Input Value</label>
+            <input id="input-value-input" type="text" [(ngModel)]="state.inputValue" class="knob-input" />
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label" for="input-status-select">Status Mode</label>
+            <select id="input-status-select" [(ngModel)]="state.inputStatus" class="knob-select">
+              <option value="none">Default (None)</option>
+              <option value="success">Success</option>
+              <option value="error">Error</option>
+            </select>
+          </div>
+        }
+
+        <!-- Toast Alert Knobs -->
+        @if (state.activeExplorerTab === 'toast') {
+          <div class="knob-group">
+            <label class="knob-label" for="toast-tone-select">Semantic Tone</label>
+            <select id="toast-tone-select" [(ngModel)]="state.toastTone" class="knob-select">
+              <option value="success">Success (Positive)</option>
+              <option value="info">Info</option>
+              <option value="danger">Danger (Negative)</option>
+            </select>
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label" for="toast-title-input">Toast Title</label>
+            <input id="toast-title-input" type="text" [(ngModel)]="state.toastTitle" class="knob-input" />
+          </div>
+
+          <div class="knob-group">
+            <label class="knob-label" for="toast-message-input">Toast Message</label>
+            <input id="toast-message-input" type="text" [(ngModel)]="state.toastMessage" class="knob-input" />
+          </div>
+
+          <div class="trigger-row" style="margin-top: 20px;">
+            <app-ui-button (click)="state.triggerToast()" style="width: 100%;">Trigger Toast Alert</app-ui-button>
+          </div>
+        }
+      </div>

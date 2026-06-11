@@ -1,0 +1,242 @@
+<app-page-section subtitle="A complete account area with tabs, toggles, and guardrail states." title="Settings">
+  <div class="settings-layout">
+    <!-- Sidebar Tabs Navigation -->
+    <div class="settings-sidebar">
+      <div class="sidebar-header">
+        <app-ui-stat label="Workspace">Sion Studio</app-ui-stat>
+        <app-ui-stat label="Plan">Growth</app-ui-stat>
+      </div>
+      <div class="vertical-tabs" role="tablist" aria-label="Settings categories">
+        <button type="button" class="tab-btn" [class.is-active]="activeTab === 'general'" (click)="activeTab = 'general'">
+          <i class="pi pi-cog"></i> General
+        </button>
+        <button type="button" class="tab-btn" [class.is-active]="activeTab === 'notifications'" (click)="activeTab = 'notifications'">
+          <i class="pi pi-bell"></i> Notifications
+        </button>
+        <button type="button" class="tab-btn" [class.is-active]="activeTab === 'security'" (click)="activeTab = 'security'">
+          <i class="pi pi-shield"></i> Security
+        </button>
+        <button type="button" class="tab-btn" [class.is-active]="activeTab === 'billing'" (click)="activeTab = 'billing'">
+          <i class="pi pi-credit-card"></i> Billing
+        </button>
+        <button type="button" class="tab-btn" [class.is-active]="activeTab === 'integrations'" (click)="activeTab = 'integrations'">
+          <i class="pi pi-share-alt"></i> Integrations
+        </button>
+        <button type="button" class="tab-btn danger-tab" [class.is-active]="activeTab === 'danger'" (click)="activeTab = 'danger'">
+          <i class="pi pi-exclamation-triangle"></i> Danger Zone
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Tab Panel Content -->
+    <div class="settings-content">
+      <!-- General Tab -->
+      @if (activeTab === 'general') {
+        <div class="settings-panel">
+          <div class="panel-header">
+            <app-ui-badge>Brand and theme</app-ui-badge>
+            <h3>Workspace Details</h3>
+            <p>Manage the visual presentation and contact information for your store workspace.</p>
+          </div>
+          
+          <form (submit)="saveSettings(); $event.preventDefault()" class="settings-form">
+            <label class="input-field">
+              <span>Store Name</span>
+              <input [(ngModel)]="storeName" name="storeName" required />
+            </label>
+            <label class="input-field">
+              <span>Support Email Address</span>
+              <input [(ngModel)]="supportEmail" name="supportEmail" type="email" required />
+            </label>
+
+            <div class="toggle-control-card">
+              <label class="switch-row">
+                <span class="label-desc">
+                  <strong>Compact Workspace Layout</strong>
+                  <small>Adjust data density of tables and charts automatically.</small>
+                </span>
+                <input type="checkbox" [(ngModel)]="compactMode" name="compactMode" />
+                <i class="switch-ui" aria-hidden="true"></i>
+              </label>
+            </div>
+
+            <div class="form-actions">
+              <app-ui-button (click)="saveSettings()">Save settings</app-ui-button>
+              @if (savedMessage && savedMessage !== 'No unsaved changes') {
+                <span class="success-message"><i class="pi pi-check-circle"></i> {{ savedMessage }}</span>
+              }
+            </div>
+          </form>
+
+          <!-- Store Preview Card -->
+          <div class="preview-card-wrap">
+            <span class="preview-title-tag">Live Layout Preview</span>
+            <div class="preview-box" [class.is-compact]="compactMode">
+              <div class="preview-avatar">S</div>
+              <div class="preview-meta">
+                <strong>{{ storeName }}</strong>
+                <span>{{ supportEmail }}</span>
+                <span>{{ compactMode ? 'Compact mode enabled' : 'Comfortable mode enabled' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Notifications Tab -->
+      @if (activeTab === 'notifications') {
+        <div class="settings-panel">
+          <div class="panel-header">
+            <app-ui-badge tone="warning">Alert Rules</app-ui-badge>
+            <h3>Notification Subscriptions</h3>
+            <p>Define which system alerts trigger workspace-wide dispatch.</p>
+          </div>
+
+          <div class="toggle-list">
+            <label class="switch-row border-card">
+              <span class="label-desc">
+                <strong>Order Alerts</strong>
+                <small>Notify operations team when a new transaction is processed.</small>
+              </span>
+              <input type="checkbox" [(ngModel)]="orderAlerts" name="orderAlerts" />
+              <i class="switch-ui" aria-hidden="true"></i>
+            </label>
+
+            <label class="switch-row border-card">
+              <span class="label-desc">
+                <strong>Inventory Warning Alerts</strong>
+                <small>Send alerts to product team when catalog counts run low.</small>
+              </span>
+              <input type="checkbox" [(ngModel)]="productAlerts" name="productAlerts" />
+              <i class="switch-ui" aria-hidden="true"></i>
+            </label>
+          </div>
+        </div>
+      }
+
+      <!-- Security Tab -->
+      @if (activeTab === 'security') {
+        <div class="settings-panel">
+          <div class="panel-header">
+            <app-ui-badge tone="positive">Security & Authorization</app-ui-badge>
+            <h3>Account Protection</h3>
+            <p>Manage security protocols, recovery keys, and multi-factor configuration.</p>
+          </div>
+
+          <div class="toggle-list">
+            <label class="switch-row border-card">
+              <span class="label-desc">
+                <strong>Two-Factor Authentication (2FA)</strong>
+                <small>Require physical security keys or authenticator codes on login.</small>
+              </span>
+              <input type="checkbox" [(ngModel)]="twoFactor" name="twoFactor" />
+              <i class="switch-ui" aria-hidden="true"></i>
+            </label>
+          </div>
+
+          <div class="extra-actions">
+            <app-ui-button variant="secondary">Rotate Backup Recovery Codes</app-ui-button>
+          </div>
+        </div>
+      }
+
+      <!-- Billing Tab -->
+      @if (activeTab === 'billing') {
+        <div class="settings-panel">
+          <div class="panel-header">
+            <app-ui-badge tone="info">Subscription Preferences</app-ui-badge>
+            <h3>Billing & Invoices</h3>
+            <p>Manage receipts and view plan quotas for Sion Studio.</p>
+          </div>
+
+          <div class="toggle-list">
+            <label class="switch-row border-card">
+              <span class="label-desc">
+                <strong>Automatic Invoice Delivery</strong>
+                <small>Deliver electronic invoices to accounting admins upon renewal.</small>
+              </span>
+              <input type="checkbox" [(ngModel)]="invoiceEmails" name="invoiceEmails" />
+              <i class="switch-ui" aria-hidden="true"></i>
+            </label>
+          </div>
+
+          <div class="grid-2col">
+            <div class="stat-card">
+              <span>Usage Guardrail</span>
+              <h3>Seat invite warning</h3>
+              <p>Triggers notification thresholds before active limits are hit.</p>
+            </div>
+            <div class="stat-card action-card">
+              <span>Upgrade / Manage Plan</span>
+              <p>Navigate to complete billing details dashboard.</p>
+              <app-ui-button routerLink="/billing">Open billing page</app-ui-button>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Integrations Tab -->
+      @if (activeTab === 'integrations') {
+        <div class="settings-panel">
+          <div class="panel-header">
+            <app-ui-badge tone="info">Workspace Integrations</app-ui-badge>
+            <h3>Connected Applications</h3>
+            <p>Sync operations with external messaging channels and development services.</p>
+          </div>
+
+          <div class="toggle-list">
+            <label class="switch-row border-card">
+              <span class="label-desc">
+                <strong>Slack Synchronization</strong>
+                <small>Push orders and status details to workspace channels.</small>
+              </span>
+              <input type="checkbox" [(ngModel)]="slackSync" name="slackSync" />
+              <i class="switch-ui" aria-hidden="true"></i>
+            </label>
+
+            <label class="switch-row border-card">
+              <span class="label-desc">
+                <strong>GitHub Synchronization</strong>
+                <small>Auto-create repository issues when system logs trace warnings.</small>
+              </span>
+              <input type="checkbox" [(ngModel)]="githubSync" name="githubSync" />
+              <i class="switch-ui" aria-hidden="true"></i>
+            </label>
+          </div>
+        </div>
+      }
+
+      <!-- Danger Zone Tab -->
+      @if (activeTab === 'danger') {
+        <div class="settings-panel danger-panel">
+          <div class="panel-header">
+            <app-ui-badge tone="negative">Destructive Action Zone</app-ui-badge>
+            <h3>Delete Workspace</h3>
+            <p>Permanently remove the Sion Studio store workspace, billing profile, and assets.</p>
+          </div>
+
+          <div class="danger-block">
+            <p class="warning-text">
+              Warning: Deleting a workspace deletes all databases, templates, and logs. This process is irreversible.
+            </p>
+
+            <label class="switch-row border-card danger-card">
+              <span class="label-desc">
+                <strong>Arm Deletion Mechanism</strong>
+                <small>Acknowledge policy constraints to enable the destructive request trigger.</small>
+              </span>
+              <input type="checkbox" [(ngModel)]="deletionArmed" name="deletionArmed" />
+              <i class="switch-ui" aria-hidden="true"></i>
+            </label>
+
+            <div class="action-row">
+              <button type="button" class="destructive-btn" [disabled]="!deletionArmed">
+                <i class="pi pi-trash"></i> Delete Workspace Permanently
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</app-page-section>

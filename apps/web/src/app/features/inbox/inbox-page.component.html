@@ -1,0 +1,83 @@
+<app-page-section subtitle="Workspace" title="Inbox">
+  <div sectionActions class="inbox-actions">
+    <input [(ngModel)]="query" type="search" placeholder="Search threads" aria-label="Search inbox threads" />
+  </div>
+
+  <section class="inbox-brief" aria-label="Inbox health">
+    <div>
+      <app-ui-badge tone="info">Triage queue</app-ui-badge>
+      <h3>{{ counts.Unread }} unread, {{ highPriorityCount }} urgent thread</h3>
+      <p>Inbox reference for agent queues, message selection, SLA pressure, macros, empty search, and non-modal reply context.</p>
+    </div>
+    <div class="sla-strip">
+      <span>Median first reply</span>
+      <strong>12m</strong>
+      <small>Target 20m</small>
+    </div>
+  </section>
+
+  <div class="inbox-layout">
+    <aside class="inbox-sidebar" aria-label="Inbox filters">
+      @for (item of ['All', 'Unread', 'Waiting', 'Archived']; track item) {
+        <button type="button" [class.active]="filter === item" (click)="setFilter($any(item))">
+          <span>{{ item }}</span>
+          <strong>{{ counts[$any(item)] }}</strong>
+        </button>
+      }
+    </aside>
+
+    <section class="thread-list" aria-label="Message threads">
+      @if (filteredThreads.length) {
+        @for (thread of filteredThreads; track thread.id) {
+          <button type="button" class="thread-row" [class.selected]="selectedThread?.id === thread.id" (click)="selectThread(thread)">
+            <div>
+              <strong>{{ thread.subject }}</strong>
+              <span>{{ thread.from }} · {{ thread.preview }}</span>
+              <small>{{ thread.channel }} · {{ thread.assignee }} · {{ thread.sla }}</small>
+            </div>
+            <em>{{ thread.time }}</em>
+            <app-ui-badge [tone]="thread.priority === 'High' ? 'negative' : 'info'">{{ thread.status }}</app-ui-badge>
+          </button>
+        }
+      } @else {
+        <div class="empty-panel">
+          <i class="pi pi-inbox"></i>
+          <strong>No threads match this view</strong>
+          <span>Clear search or switch filters to continue triage.</span>
+        </div>
+      }
+    </section>
+
+    <section class="conversation-panel" aria-label="Selected conversation">
+      @if (selectedThread) {
+        <div class="conversation-head">
+          <app-ui-badge [tone]="selectedThread.priority === 'High' ? 'negative' : 'positive'">{{ selectedThread.priority }}</app-ui-badge>
+          <h3>{{ selectedThread.subject }}</h3>
+          <p>{{ selectedThread.from }} · {{ selectedThread.channel }} · {{ selectedThread.sla }}</p>
+        </div>
+        <div class="message-card">
+          <p>{{ selectedThread.preview }}</p>
+          <div class="tag-row">
+            @for (tag of selectedThread.tags; track tag) {
+              <span>{{ tag }}</span>
+            }
+          </div>
+        </div>
+        <div class="reply-box">
+          <strong>Reply composer</strong>
+          <textarea rows="4" aria-label="Reply body">Thanks for the details. I can help with this request and will keep the order timeline visible.</textarea>
+        </div>
+        <div class="macro-list">
+          <strong>Response macros</strong>
+          @for (macro of macros; track macro) {
+            <button type="button">{{ macro }}</button>
+          }
+        </div>
+        <div class="conversation-actions">
+          <app-ui-button (click)="markRead()">Mark waiting</app-ui-button>
+          <app-ui-button variant="secondary" (click)="archiveSelected()">Archive thread</app-ui-button>
+        </div>
+      }
+    </section>
+  </div>
+</app-page-section>

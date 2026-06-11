@@ -1,0 +1,47 @@
+<div class="carbon-terminal-window">
+  <div class="terminal-header">
+    <div class="window-controls">
+      <span class="control dot-close"></span>
+      <span class="control dot-minimize"></span>
+      <span class="control dot-maximize"></span>
+    </div>
+    <span class="terminal-title">workspace-cli - code-exporter</span>
+    <div class="terminal-actions">
+      <button
+        type="button"
+        class="terminal-action-btn"
+        [class.copied]="showCopyToast && copiedText === htmlSnippet()"
+        (click)="copySnippet(htmlSnippet())"
+        aria-label="Copy HTML template snippet"
+      >
+        <i class="pi" [class.pi-copy]="copiedText !== htmlSnippet() || !showCopyToast" [class.pi-check]="copiedText === htmlSnippet() && showCopyToast"></i>
+        <span>{{ copiedText === htmlSnippet() && showCopyToast ? 'Copied HTML' : 'Copy HTML' }}</span>
+      </button>
+      <button
+        type="button"
+        class="terminal-action-btn secondary-action"
+        [class.copied]="showCopyToast && copiedText === tsSnippet()"
+        (click)="copySnippet(tsSnippet())"
+        aria-label="Copy TS component snippet"
+      >
+        <i class="pi" [class.pi-copy]="copiedText !== tsSnippet() || !showCopyToast" [class.pi-check]="copiedText === tsSnippet() && showCopyToast"></i>
+        <span>{{ copiedText === tsSnippet() && showCopyToast ? 'Copied TS' : 'Copy TS' }}</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="terminal-body">
+    <div class="code-pane">
+      <div class="pane-header">
+        <span class="file-name">template.component.html</span>
+      </div>
+      <pre class="code-block"><code>{{ htmlSnippet() }}</code></pre>
+    </div>
+    <div class="code-pane">
+      <div class="pane-header">
+        <span class="file-name">template.component.ts</span>
+      </div>
+      <pre class="code-block"><code>{{ tsSnippet() }}</code></pre>
+    </div>
+  </div>
+</div>

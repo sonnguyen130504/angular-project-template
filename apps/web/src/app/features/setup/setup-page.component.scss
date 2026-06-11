@@ -1,0 +1,155 @@
+.setup-hero,
+.step-list,
+.step-panel,
+.health-panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  padding: 18px;
+}
+
+.setup-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.setup-hero h3,
+.step-panel h3,
+.health-panel h3,
+.health-panel strong,
+.step-list strong,
+.state-preview strong,
+.progress-ring strong,
+dt,
+dd {
+  color: var(--ink);
+}
+
+.setup-hero p,
+.step-panel p,
+.step-list small,
+.state-preview span,
+.progress-ring span,
+.health-panel span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.progress-ring {
+  width: 118px;
+  height: 118px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at center, var(--surface) 56%, transparent 57%),
+    conic-gradient(var(--control) calc(var(--progress) * 1%), var(--surface-3) 0);
+}
+
+.setup-layout {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.32fr) minmax(0, 1fr) minmax(250px, 0.34fr);
+  gap: 16px;
+}
+
+.step-list {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.step-list button {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  padding: 12px;
+  text-align: left;
+}
+
+.step-list button.active,
+.step-list button.done {
+  background: var(--selected);
+}
+
+.step-list span {
+  grid-row: span 2;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--control-soft);
+  color: var(--control);
+  font-weight: 900;
+}
+
+.step-panel {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+.state-preview {
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  padding: 16px;
+  display: grid;
+  gap: 4px;
+}
+
+.step-panel dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.step-panel dl div,
+.health-panel div {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  padding: 12px;
+}
+
+.step-panel dt,
+.step-panel dd {
+  margin: 0;
+}
+
+.health-panel {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.health-panel div.ok {
+  background: var(--selected);
+}
+
+.setup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 820px) {
+  .setup-hero,
+  .setup-layout,
+  .step-panel dl {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

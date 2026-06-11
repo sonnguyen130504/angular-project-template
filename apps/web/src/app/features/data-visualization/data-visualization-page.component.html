@@ -1,0 +1,178 @@
+<app-page-section subtitle="Data Visualization" title="Analytics reference">
+  <div sectionActions>
+    <div class="viz-actions">
+      <select [(ngModel)]="selectedRange" aria-label="Date range">
+        @for (range of rangeOptions; track range) {
+          <option>{{ range }}</option>
+        }
+      </select>
+      <div class="state-switcher" aria-label="Chart states">
+        <button type="button" [class.is-active]="chartState === 'ready'" (click)="setChartState('ready')">Ready</button>
+        <button type="button" [class.is-active]="chartState === 'loading'" (click)="setChartState('loading')">Loading</button>
+        <button type="button" [class.is-active]="chartState === 'empty'" (click)="setChartState('empty')">Empty</button>
+        <button type="button" [class.is-active]="chartState === 'error'" (click)="setChartState('error')">Error</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="kpi-strip">
+    <div class="kpi-cell">
+      <div class="kpi-label">Total Revenue</div>
+      <div class="kpi-num">$42k</div>
+      <span class="kpi-badge is-up"><i class="pi pi-arrow-up-right"></i> +18%</span>
+    </div>
+    <div class="kpi-divider"></div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Gross Margin</div>
+      <div class="kpi-num">51%</div>
+      <span class="kpi-badge is-up"><i class="pi pi-arrow-up-right"></i> +3.2%</span>
+    </div>
+    <div class="kpi-divider"></div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Repeat Rate</div>
+      <div class="kpi-num">38%</div>
+      <span class="kpi-badge is-flat"><i class="pi pi-minus"></i> Stable</span>
+    </div>
+    <div class="kpi-divider"></div>
+    <div class="kpi-cell">
+      <div class="kpi-label">Avg. Order</div>
+      <div class="kpi-num">$109</div>
+      <span class="kpi-badge is-down"><i class="pi pi-arrow-down-right"></i> -1.4%</span>
+    </div>
+  </div>
+
+  <div class="viz-grid">
+    <div class="chart-card wide">
+      <div class="chart-card-head">
+        <div>
+          <app-ui-badge tone="info">Trend</app-ui-badge>
+          <h3>Revenue by channel</h3>
+          <p>Line chart with channel comparison and accessible state controls.</p>
+        </div>
+        <div class="chart-legend">
+          <span class="legend-dot" style="background: #235565"></span> Online
+          <span class="legend-dot" style="background: #2f6f4e; margin-left: 12px"></span> Retail
+        </div>
+      </div>
+
+      @if (chartState === 'ready') {
+        <p-chart type="line" [data]="revenueLineChart" [options]="chartOptions" height="320px" />
+      } @else if (chartState === 'loading') {
+        <div class="chart-state loading-state">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      } @else if (chartState === 'empty') {
+        <div class="chart-state">
+          <i class="pi pi-chart-line"></i>
+          <strong>No chart data yet</strong>
+          <p>Pick a longer date range or connect a data source.</p>
+        </div>
+      } @else {
+        <div class="chart-state error-state">
+          <i class="pi pi-exclamation-triangle"></i>
+          <strong>Chart failed to load</strong>
+          <p>Retry the request or inspect the analytics connector.</p>
+        </div>
+      }
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-card-head">
+        <div>
+          <app-ui-badge>Category Mix</app-ui-badge>
+          <h3>Category share</h3>
+          <p>Donut with explicit values, not color alone.</p>
+        </div>
+      </div>
+      <p-chart type="doughnut" [data]="mixChart" [options]="chartOptions" height="240px" />
+      <ul class="donut-legend">
+        @for (label of mixChart.labels; track label; let i = $index) {
+          <li>
+            <span class="dl-dot" [style.background]="mixChart.datasets[0].backgroundColor[i]"></span>
+            <span class="dl-label">{{ label }}</span>
+            <span class="dl-pct">{{ mixChart.datasets[0].data[i] }}%</span>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="chart-card wide">
+      <div class="chart-card-head">
+        <div>
+          <app-ui-badge tone="positive">Stacked</app-ui-badge>
+          <h3>Customer mix by category</h3>
+          <p>Stacked bar chart for new vs returning customer behavior.</p>
+        </div>
+      </div>
+      <p-chart type="bar" [data]="stackedChart" [options]="stackedOptions" height="300px" />
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-card-head">
+        <div>
+          <app-ui-badge tone="warning">Anomalies</app-ui-badge>
+          <h3>Signal queue</h3>
+          <p>Analytics pages need callouts that tell teams what to inspect.</p>
+        </div>
+      </div>
+      <div class="anomaly-list">
+        @for (item of anomalies; track item.label) {
+          <div class="anomaly-row">
+            <div>
+              <strong>{{ item.label }}</strong>
+              <span>{{ item.level }}</span>
+            </div>
+            <b>{{ item.value }}</b>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="segment-panel">
+    <div class="segment-head">
+      <div>
+        <app-ui-badge tone="positive">Segment table</app-ui-badge>
+        <h3>Segment performance</h3>
+      </div>
+      <p>{{ selectedRange }} · revenue, share, health, and trend deltas.</p>
+    </div>
+
+    <div class="segment-table-wrap">
+      <table class="segment-table">
+        <thead>
+          <tr>
+            <th>Segment</th>
+            <th>Revenue</th>
+            <th>Change</th>
+            <th>Share</th>
+            <th>Health</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of rows; track row.segment) {
+            <tr>
+              <td class="seg-name">{{ row.segment }}</td>
+              <td class="seg-rev">{{ row.revenue }}</td>
+              <td>
+                <span class="seg-change" [class.is-pos]="row.change.startsWith('+')" [class.is-neg]="row.change.startsWith('-')">
+                  {{ row.change }}
+                </span>
+              </td>
+              <td>
+                <div class="seg-bar-wrap">
+                  <div class="seg-bar" [style.width]="row.share"></div>
+                </div>
+              </td>
+              <td>
+                <span class="health-badge" [class]="'health-' + row.healthTone">{{ row.health }}</span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</app-page-section>

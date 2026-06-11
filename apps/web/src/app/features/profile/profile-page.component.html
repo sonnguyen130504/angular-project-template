@@ -1,0 +1,190 @@
+<app-page-section subtitle="Account" title="Profile">
+  <div class="profile-layout">
+    <!-- Left Column: Summary Card -->
+    <div class="profile-sidebar">
+      <div class="sidebar-card">
+        <div class="profile-head">
+          <div class="avatar">MT</div>
+          <div class="head-info">
+            <app-ui-badge tone="positive">Verified Customer</app-ui-badge>
+            <h3>Mina Tran</h3>
+            <p class="email">mina.tran&#64;example.com</p>
+            <p class="meta">Gold member · Since 2024</p>
+          </div>
+        </div>
+
+        <div class="loyalty-strip">
+          <div class="loyalty-header">
+            <strong>Gold Loyalty Tier</strong>
+            <span>420 pts to Platinum</span>
+          </div>
+          <div class="progress-bar">
+            <span class="progress-fill" style="width: 68%"></span>
+          </div>
+        </div>
+
+        <div class="profile-stats">
+          <app-ui-stat label="Orders">18</app-ui-stat>
+          <app-ui-stat label="Saved items">9</app-ui-stat>
+          <app-ui-stat label="Addresses">2</app-ui-stat>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Sections Panel -->
+    <div class="profile-details-content">
+      <!-- Edit Details -->
+      <div class="content-block">
+        <div class="block-header">
+          <h3>Editable details</h3>
+          <p>Update your personal information and contact details.</p>
+        </div>
+        <form (submit)="saveProfile(); $event.preventDefault()" class="details-form">
+          <div class="form-grid">
+            <label class="form-field">
+              <span>Full Name</span>
+              <input type="text" value="Mina Tran" required />
+            </label>
+            <label class="form-field">
+              <span>Email Address</span>
+              <input type="email" value="mina.tran@example.com" required />
+            </label>
+            <label class="form-field">
+              <span>Phone Number</span>
+              <input type="tel" value="+1 555 0104" required />
+            </label>
+          </div>
+          <div class="form-actions">
+            <app-ui-button type="submit">Save changes</app-ui-button>
+            @if (savedMessage) {
+              <span class="success-message"><i class="pi pi-check-circle"></i> {{ savedMessage }}</span>
+            }
+          </div>
+        </form>
+      </div>
+
+      <!-- Order History -->
+      <div class="content-block">
+        <div class="block-header">
+          <h3>Order History</h3>
+          <p>Manage and track your recent studio orders.</p>
+        </div>
+        <div class="orders-list">
+          @for (order of orders; track order.id) {
+            <div class="order-row">
+              <div class="order-meta">
+                <span class="order-id">{{ order.id }}</span>
+                <span class="order-item">{{ order.item }}</span>
+              </div>
+              <div class="order-pricing">
+                <strong>{{ order.total }}</strong>
+                <span class="order-status-badge" [class]="order.status.toLowerCase().replace(' ', '-')">{{ order.status }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Wishlist -->
+      <div class="content-block">
+        <div class="block-header">
+          <h3>My Wishlist</h3>
+          <p>Items saved for later purchase.</p>
+        </div>
+        <div class="wish-list">
+          @for (item of wishlist; track item) {
+            <div class="list-item-row">
+              <span>{{ item }}</span>
+              <button type="button" class="action-btn">Move to cart</button>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Address & Payments Grid -->
+      <div class="half-grid">
+        <div class="content-block">
+          <div class="block-header">
+            <h3>Address Book</h3>
+          </div>
+          <div class="small-list">
+            @for (address of addresses; track address) {
+              <div class="list-item-row">
+                <span class="address-text">{{ address }}</span>
+                <button type="button" class="text-action-btn">Edit</button>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="content-block">
+          <div class="block-header">
+            <h3>Saved Payments</h3>
+          </div>
+          <div class="small-list">
+            @for (payment of payments; track payment) {
+              <div class="list-item-row">
+                <span>{{ payment }}</span>
+                <button type="button" class="text-action-btn">Manage</button>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Preferences -->
+      <div class="content-block">
+        <div class="block-header">
+          <h3>Preferences</h3>
+          <p>Manage how Sion Studio communicates with you.</p>
+        </div>
+        <div class="preferences-toggles">
+          <label class="toggle-row">
+            <span class="toggle-label-wrap">
+              <strong>Marketing Emails</strong>
+              <small>Receive updates on new collections and special promotions.</small>
+            </span>
+            <input type="checkbox" [(ngModel)]="marketingEmails" />
+            <i class="switch-ui" aria-hidden="true"></i>
+          </label>
+          <label class="toggle-row">
+            <span class="toggle-label-wrap">
+              <strong>SMS Notifications</strong>
+              <small>Receive instant delivery updates directly on your phone.</small>
+            </span>
+            <input type="checkbox" [(ngModel)]="orderSms" />
+            <i class="switch-ui" aria-hidden="true"></i>
+          </label>
+        </div>
+      </div>
+
+      <!-- Active Sessions -->
+      <div class="content-block">
+        <div class="block-header">
+          <h3>Active Sessions</h3>
+          <p>Manage and sign out of active devices currently using your account.</p>
+        </div>
+        <div class="sessions-list">
+          @for (session of sessions; track session.device) {
+            <div class="session-row">
+              <div class="session-info">
+                <i class="pi pi-desktop"></i>
+                <div class="session-text">
+                  <strong>{{ session.device }}</strong>
+                  <span>{{ session.location }}</span>
+                </div>
+              </div>
+              <div class="session-action">
+                @if (session.current) {
+                  <span class="active-pill">Current Session</span>
+                } @else {
+                  <button type="button" class="revoke-btn" (click)="revokeSession(session.device)">Revoke</button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</app-page-section>

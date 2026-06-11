@@ -1,0 +1,68 @@
+<app-page-section subtitle="Operations" title="Activity log">
+  <div sectionActions class="log-actions">
+    <select [(ngModel)]="actorFilter" aria-label="Actor filter">
+      @for (actor of actors; track actor) {
+        <option>{{ actor }}</option>
+      }
+    </select>
+    <app-ui-button (click)="exportLog()">Export events</app-ui-button>
+  </div>
+
+  <section class="log-brief" aria-label="Audit log summary">
+    <div>
+      <app-ui-badge tone="info">Audit console</app-ui-badge>
+      <h3>{{ visibleEntries.length }} filtered events</h3>
+      <p>Activity reference for actor filters, severity chips, event detail, no-result states, and export readiness.</p>
+    </div>
+    <div class="severity-strip">
+      <span>Critical {{ severityCounts.Critical }}</span>
+      <span>Warnings {{ severityCounts.Warning }}</span>
+      <span>Info {{ severityCounts.Info }}</span>
+    </div>
+  </section>
+
+  <div class="log-layout">
+    <section class="timeline-panel">
+      <div class="panel-head">
+        <app-ui-badge tone="info">{{ visibleEntries.length }} events</app-ui-badge>
+        <h3>Audit trail</h3>
+      </div>
+      @if (visibleEntries.length) {
+        <ol class="timeline">
+          @for (entry of visibleEntries; track entry.action + entry.time) {
+            <li [class.critical]="entry.severity === 'Critical'">
+              <span class="dot"></span>
+              <div>
+                <strong>{{ entry.action }}</strong>
+                <p>{{ entry.actor }} changed {{ entry.target }} · {{ entry.source }} · {{ entry.time }}</p>
+                <span>{{ entry.detail }}</span>
+              </div>
+              <app-ui-badge [tone]="entry.severity === 'Critical' ? 'negative' : entry.severity === 'Warning' ? 'warning' : 'positive'">
+                {{ entry.severity }}
+              </app-ui-badge>
+            </li>
+          }
+        </ol>
+      } @else {
+        <div class="empty-log">
+          <i class="pi pi-history"></i>
+          <strong>No events for this actor</strong>
+          <span>Use this state when audit filters are too narrow.</span>
+        </div>
+      }
+    </section>
+
+    <aside class="summary-panel">
+      <app-ui-badge>Export</app-ui-badge>
+      <h3>Compliance summary</h3>
+      <p>{{ exportState }}</p>
+      <div class="summary-row"><span>Critical</span><strong>{{ severityCounts.Critical }}</strong></div>
+      <div class="summary-row"><span>Warnings</span><strong>{{ severityCounts.Warning }}</strong></div>
+      <div class="summary-row"><span>Info</span><strong>{{ severityCounts.Info }}</strong></div>
+      <div class="retention-card">
+        <strong>Retention</strong>
+        <span>Keep security and billing events for 180 days.</span>
+      </div>
+    </aside>
+  </div>
+</app-page-section>

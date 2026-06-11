@@ -1,0 +1,83 @@
+      <app-ui-card class="summary-card">
+        <h3>Order Summary</h3>
+        
+        <div class="summary-details">
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <strong>{{ state.subtotal | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+          </div>
+          @if (state.discount > 0) {
+            <div class="summary-row discount">
+              <span>Promo discount (10%)</span>
+              <strong>-{{ state.discount | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+            </div>
+          }
+          <div class="summary-row">
+            <span>Shipping</span>
+            <strong>{{ state.selectedShippingCost === 0 ? 'Free' : (state.selectedShippingCost | currency: 'USD' : 'symbol' : '1.0-0') }}</strong>
+          </div>
+          <div class="summary-row">
+            <span>Est. taxes (8%)</span>
+            <strong>{{ state.tax | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+          </div>
+          <div class="summary-row total">
+            <span>Grand total</span>
+            <strong>{{ state.total | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+          </div>
+        </div>
+
+        <!-- Promo Code Input -->
+        <div class="promo-box">
+          <label for="promo-input" class="sr-only">Promo Code</label>
+          <div class="promo-input-row">
+            <input 
+              type="text" 
+              id="promo-input" 
+              placeholder="Promo code" 
+              [(ngModel)]="state.promoCode" 
+            />
+            <button type="button" (click)="state.applyPromo()">Apply</button>
+          </div>
+          @if (state.promoMessage) {
+            <p class="promo-msg" [class.success]="state.promoMessage.includes('applied')">{{ state.promoMessage }}</p>
+          }
+        </div>
+
+        <!-- Checkout CTAs -->
+        <div class="summary-actions">
+          @if (state.activeStep === 1) {
+            <button 
+              class="primary-checkout-btn" 
+              [disabled]="state.items.length === 0" 
+              (click)="state.nextStep()"
+            >Proceed to Shipping</button>
+          }
+          @if (state.activeStep === 2) {
+            <button class="primary-checkout-btn" (click)="state.nextStep()">Proceed to Payment</button>
+            <button class="secondary-checkout-btn" (click)="state.prevStep()">Back to Bag</button>
+          }
+          @if (state.activeStep === 3) {
+            <button class="primary-checkout-btn confirm-btn" (click)="state.nextStep()">Place Order</button>
+            <button class="secondary-checkout-btn" (click)="state.prevStep()">Back to Shipping</button>
+          }
+        </div>
+      </app-ui-card>
+
+      <!-- Add-ons section -->
+      @if (state.activeStep === 1) {
+        <app-ui-card class="addons-card">
+          <h4>Customize your order</h4>
+          <p>Add care and protection setups for your items.</p>
+          <div class="addons-list">
+            @for (addon of state.addOns; track addon.name) {
+              <div class="addon-row">
+                <div class="addon-meta">
+                  <strong>{{ addon.name }}</strong>
+                  <span>{{ addon.price | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+                </div>
+                <button type="button" (click)="state.addOn(addon.name, addon.price)" aria-label="Add care item">Add</button>
+              </div>
+            }
+          </div>
+        </app-ui-card>
+      }

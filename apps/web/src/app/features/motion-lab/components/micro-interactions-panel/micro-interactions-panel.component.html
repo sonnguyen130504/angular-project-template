@@ -1,0 +1,106 @@
+<div id="panel-interactions" role="tabpanel" aria-labelledby="tab-interactions" class="tab-panel active">
+  <div class="lab-grid">
+    <!-- Part 1: Tactile States -->
+    <app-ui-card class="lab-card">
+      <div class="card-header-row">
+        <div>
+          <app-ui-badge tone="info">Micro-feedback</app-ui-badge>
+          <h3 class="lab-section-title">Tactile Buttons</h3>
+          <p class="lab-section-desc">Interactive buttons showcasing physics scale-downs, translation offsets, and hover layouts.</p>
+        </div>
+      </div>
+
+      <div class="tactile-buttons-container" [class.no-motion]="simulateReducedMotion()">
+        <button class="tactile-btn primary-push" id="btn-primary-push">
+          <span>Standard Push</span>
+        </button>
+
+        <button class="tactile-btn arrow-shift" id="btn-arrow-shift">
+          <span>Forward Motion</span>
+          <i class="pi pi-arrow-right" aria-hidden="true"></i>
+        </button>
+
+        <button class="tactile-btn fill-overlay" id="btn-fill-overlay">
+          <span class="btn-content">Surface Highlight</span>
+        </button>
+
+        <button class="tactile-btn double-accent" id="btn-double-accent">
+          <span>Dynamic Border</span>
+        </button>
+      </div>
+    </app-ui-card>
+
+    <!-- Part 2: State Machine Pipeline -->
+    <app-ui-card class="lab-card span-2">
+      <div class="card-header-row">
+        <div>
+          <app-ui-badge tone="warning">State Machine</app-ui-badge>
+          <h3 class="lab-section-title">Request State Pipeline</h3>
+          <p class="lab-section-desc">Simulate a backend transaction cycle. Observe the custom loading skeleton and status banners.</p>
+        </div>
+        <div class="btn-group">
+          <app-ui-button variant="secondary" (click)="triggerRequest()" [disabled]="requestState === 'loading'" id="btn-run-request">
+            {{ requestState === 'loading' ? 'Fetching...' : 'Simulate Request' }}
+          </app-ui-button>
+          @if (requestState !== 'idle') {
+            <app-ui-button variant="secondary" (click)="resetRequest()" id="btn-reset-request">Reset</app-ui-button>
+          }
+        </div>
+      </div>
+
+      <div class="pipeline-display-panel" [class.no-motion]="simulateReducedMotion()">
+        @switch (requestState) {
+          @case ('idle') {
+            <div class="pipeline-empty-state">
+              <i class="pi pi-server" aria-hidden="true"></i>
+              <p>Pipeline stands idle. Click "Simulate Request" to trigger verification loops.</p>
+            </div>
+          }
+          @case ('loading') {
+            <div class="skeleton-list-loader">
+              <div class="skeleton-card-row">
+                <div class="skeleton-bar title"></div>
+                <div class="skeleton-bar body"></div>
+                <div class="skeleton-bar price"></div>
+              </div>
+              <div class="skeleton-card-row">
+                <div class="skeleton-bar title"></div>
+                <div class="skeleton-bar body"></div>
+                <div class="skeleton-bar price"></div>
+              </div>
+            </div>
+          }
+          @case ('success') {
+            <div class="request-result-items">
+              <div class="success-banner">
+                <i class="pi pi-check-circle" aria-hidden="true"></i>
+                <span>Transaction verified successfully. Staggering elements onto surface.</span>
+              </div>
+              <div class="result-grid">
+                @for (item of requestItems; track item.name; let i = $index) {
+                  <div class="result-item-card" [style.--stagger-index]="i">
+                    <span class="category">{{ item.category }}</span>
+                    <h4>{{ item.name }}</h4>
+                    <span class="price">{{ item.price }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+          @case ('error') {
+            <div class="error-banner-container">
+              <div class="error-alert-banner">
+                <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+                <div>
+                  <strong>Verification Failed</strong>
+                  <p>{{ requestErrorMsg }}</p>
+                </div>
+              </div>
+              <app-ui-button variant="primary" (click)="triggerRequest()" id="btn-retry-request">Retry Transaction</app-ui-button>
+            </div>
+          }
+        }
+      </div>
+    </app-ui-card>
+  </div>
+</div>

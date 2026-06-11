@@ -1,0 +1,110 @@
+<app-page-section subtitle="Workspace" title="Tasks">
+  <div sectionActions class="task-actions">
+    <select [(ngModel)]="priorityFilter" aria-label="Priority filter">
+      @for (priority of ['All', 'High', 'Normal', 'Low']; track priority) {
+        <option>{{ priority }}</option>
+      }
+    </select>
+    <div class="mode-switch">
+      <button type="button" [class.active]="viewMode === 'board'" (click)="viewMode = 'board'">Board</button>
+      <button type="button" [class.active]="viewMode === 'list'" (click)="viewMode = 'list'">List</button>
+    </div>
+  </div>
+
+  <section class="task-brief" aria-label="Sprint health">
+    <div>
+      <app-ui-badge tone="info">Sprint board</app-ui-badge>
+      <h3>{{ visibleTasks.length }} visible tasks, {{ blockedTasks.length }} blocker</h3>
+      <p>Reference layout for product work queues: filters, board movement, list mode, blockers, and a persistent task inspector.</p>
+    </div>
+    <div class="task-meter">
+      <strong>{{ completionRate }}%</strong>
+      <span>Done</span>
+      <div class="meter"><i [style.width.%]="completionRate"></i></div>
+    </div>
+  </section>
+
+  <div class="task-workspace">
+    <section class="task-main">
+      @if (viewMode === 'board') {
+        <div class="board" aria-label="Task board">
+          @for (column of columns; track column) {
+            <section class="task-column">
+              <header>
+                <h3>{{ column }}</h3>
+                <span>{{ tasksFor(column).length }}</span>
+              </header>
+              @for (task of tasksFor(column); track task.id) {
+                <article class="task-card" [class.selected]="selectedTask.id === task.id" [class.blocked]="task.blocked">
+                  <button type="button" class="task-select" (click)="selectTask(task)">
+                    <span class="task-meta">
+                      <app-ui-badge [tone]="task.priority === 'High' ? 'negative' : task.priority === 'Low' ? 'info' : 'positive'">
+                        {{ task.priority }}
+                      </app-ui-badge>
+                      <small>{{ task.type }}</small>
+                    </span>
+                    <strong>{{ task.title }}</strong>
+                    <span>{{ task.owner }} · {{ task.due }} · {{ task.estimate }}</span>
+                  </button>
+                  <div class="task-moves">
+                    <button type="button" (click)="moveTask(task, -1)" [disabled]="task.status === 'Backlog'" aria-label="Move back">
+                      <i class="pi pi-arrow-left"></i>
+                    </button>
+                    <button type="button" (click)="moveTask(task, 1)" [disabled]="task.status === 'Done'" aria-label="Move forward">
+                      <i class="pi pi-arrow-right"></i>
+                    </button>
+                  </div>
+                </article>
+              } @empty {
+                <div class="column-empty">No tasks here</div>
+              }
+            </section>
+          }
+        </div>
+      }
+
+      @if (viewMode === 'list') {
+        <div class="task-table">
+          <div class="table-head">
+            <span>Task</span>
+            <span>Owner</span>
+            <span>Status</span>
+            <span>Due</span>
+            <span>Priority</span>
+          </div>
+          @for (task of visibleTasks; track task.id) {
+            <button type="button" class="task-row" [class.selected]="selectedTask.id === task.id" (click)="selectTask(task)">
+              <strong>{{ task.title }}</strong>
+              <span>{{ task.owner }}</span>
+              <app-ui-badge>{{ task.status }}</app-ui-badge>
+              <span>{{ task.due }}</span>
+              <small>{{ task.priority }}</small>
+            </button>
+          } @empty {
+            <div class="column-empty">No tasks match this filter</div>
+          }
+        </div>
+      }
+    </section>
+
+    <aside class="task-inspector" aria-label="Selected task detail">
+      <app-ui-badge [tone]="selectedTask.blocked ? 'negative' : 'positive'">{{ selectedTask.blocked ? 'Blocked' : selectedTask.status }}</app-ui-badge>
+      <h3>{{ selectedTask.title }}</h3>
+      <p>{{ selectedTask.summary }}</p>
+      <dl>
+        <div><dt>Owner</dt><dd>{{ selectedTask.owner }}</dd></div>
+        <div><dt>Due</dt><dd>{{ selectedTask.due }}</dd></div>
+        <div><dt>Estimate</dt><dd>{{ selectedTask.estimate }}</dd></div>
+        <div><dt>Comments</dt><dd>{{ selectedTask.comments }}</dd></div>
+      </dl>
+      <div class="blocker-panel">
+        <strong>Blocker queue</strong>
+        @for (task of blockedTasks; track task.id) {
+          <button type="button" (click)="selectTask(task)">{{ task.title }}</button>
+        } @empty {
+          <span>No blockers right now.</span>
+        }
+      </div>
+    </aside>
+  </div>
+</app-page-section>

@@ -1,0 +1,81 @@
+<app-page-section subtitle="Workspace" title="Assets">
+  <div sectionActions>
+    <app-ui-button (click)="simulateUpload()">Queue upload</app-ui-button>
+  </div>
+
+  <section class="assets-brief" aria-label="Asset library summary">
+    <div>
+      <app-ui-badge tone="info">File manager</app-ui-badge>
+      <h3>{{ assets.length }} assets across {{ folders.length }} folders</h3>
+      <p>Asset reference for folder navigation, dropzone state, selected-file metadata, processing queues, and empty folders.</p>
+    </div>
+    <div class="storage-card">
+      <span>Storage</span>
+      <strong>{{ totalSizeLabel }}</strong>
+      <small>{{ processingAssets.length }} processing</small>
+    </div>
+  </section>
+
+  <div class="assets-layout">
+    <aside class="folder-panel">
+      <app-ui-badge>Folders</app-ui-badge>
+      @for (folder of folders; track folder) {
+        <button type="button" [class.active]="selectedFolder === folder" (click)="selectFolder(folder)">
+          <i class="pi pi-folder"></i>
+          <span>{{ folder }}</span>
+          <strong>{{ folderCount(folder) }}</strong>
+        </button>
+      }
+    </aside>
+
+    <section class="asset-list">
+      <div class="dropzone">
+        <i class="pi pi-cloud-upload"></i>
+        <strong>{{ uploadState }}</strong>
+        <span>Mock upload state only, no backend required.</span>
+      </div>
+      @if (visibleAssets.length) {
+        <div class="asset-grid">
+          @for (asset of visibleAssets; track asset.name) {
+            <button type="button" class="asset-card" [class.selected]="selectedAsset?.name === asset.name" (click)="selectAsset(asset)">
+              <div class="asset-thumb">{{ asset.type }}</div>
+              <strong>{{ asset.name }}</strong>
+              <span>{{ asset.size }}</span>
+              <app-ui-badge [tone]="asset.status === 'Ready' ? 'positive' : 'warning'">{{ asset.status }}</app-ui-badge>
+            </button>
+          }
+        </div>
+      } @else {
+        <div class="empty-folder">
+          <i class="pi pi-folder-open"></i>
+          <strong>This folder is empty</strong>
+          <span>Use this state for file managers and media libraries.</span>
+        </div>
+      }
+    </section>
+
+    <aside class="detail-panel">
+      <app-ui-badge tone="info">Details</app-ui-badge>
+      @if (selectedAsset) {
+        <h3>{{ selectedAsset.name }}</h3>
+        <dl>
+          <div><dt>Type</dt><dd>{{ selectedAsset.type }}</dd></div>
+          <div><dt>Size</dt><dd>{{ selectedAsset.size }}</dd></div>
+          <div><dt>Status</dt><dd>{{ selectedAsset.status }}</dd></div>
+          <div><dt>Folder</dt><dd>{{ selectedAsset.folder }}</dd></div>
+        </dl>
+      } @else {
+        <h3>No asset selected</h3>
+        <p>Select or upload a file to inspect metadata.</p>
+      }
+      <div class="processing-panel">
+        <strong>Processing queue</strong>
+        @for (asset of processingAssets; track asset.name) {
+          <span>{{ asset.name }}</span>
+        } @empty {
+          <span>No files processing.</span>
+        }
+      </div>
+    </aside>
+  </div>
+</app-page-section>

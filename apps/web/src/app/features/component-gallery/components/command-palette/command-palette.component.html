@@ -1,0 +1,55 @@
+<div class="demo-trigger">
+  <button type="button" class="btn-primary" (click)="open()">
+    Open Command Palette <kbd>Ctrl</kbd> + <kbd>K</kbd>
+  </button>
+</div>
+
+<!-- Native Dialog -->
+<dialog #dialog class="command-dialog" (click)="close()">
+  <!-- Stop propagation to prevent closing when clicking inside the palette -->
+  <div class="palette-container" (click)="$event.stopPropagation()">
+    <header class="palette-search">
+      <i class="pi pi-search"></i>
+      <input 
+        type="text" 
+        placeholder="Search commands, files, or settings..." 
+        [value]="searchQuery()" 
+        (input)="onSearch($event)"
+        autofocus
+      />
+      <kbd>Esc</kbd>
+    </header>
+    
+    <div class="palette-results">
+      @if (filteredResults().length === 0) {
+        <div class="empty-state">
+          No results found for "{{ searchQuery() }}"
+        </div>
+      } @else {
+        <ul class="result-list">
+          @for (item of filteredResults(); track item.label) {
+            <li>
+              <button type="button" class="result-item" (click)="close()">
+                <i class="pi {{ item.icon }}"></i>
+                <span>{{ item.label }}</span>
+                <small class="group-label">{{ item.group }}</small>
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+    
+    <footer class="palette-footer">
+      <div class="footer-tip">
+        <kbd><i class="pi pi-arrow-up"></i></kbd>
+        <kbd><i class="pi pi-arrow-down"></i></kbd>
+        <span>to navigate</span>
+      </div>
+      <div class="footer-tip">
+        <kbd>↵</kbd>
+        <span>to select</span>
+      </div>
+    </footer>
+  </div>
+</dialog>

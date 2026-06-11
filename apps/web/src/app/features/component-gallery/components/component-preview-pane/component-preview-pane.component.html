@@ -1,0 +1,100 @@
+      <div class="explorer-preview-card">
+        <span class="preview-tag">Canvas Preview</span>
+        <div class="canvas-render">
+          <!-- Button Render -->
+          @if (state.activeExplorerTab === 'button') {
+            <app-ui-button
+              [variant]="state.btnVariant"
+              [class]="'btn-' + state.btnSize"
+              [disabled]="state.btnDisabled"
+              [loading]="state.btnLoading"
+            >
+              @if (state.btnIcon === 'left') {
+                <i class="pi pi-check" aria-hidden="true" style="margin-right: 8px;"></i>
+              }
+              {{ state.btnLabel }}
+              @if (state.btnIcon === 'right') {
+                <i class="pi pi-arrow-right" aria-hidden="true" style="margin-left: 8px;"></i>
+              }
+            </app-ui-button>
+          }
+
+          <!-- Badge Render -->
+          @if (state.activeExplorerTab === 'badge') {
+            <app-ui-badge
+              [tone]="state.badgeTone"
+              [class]="state.badgeVariant === 'filled' ? '' : 'badge-' + state.badgeVariant"
+            >
+              {{ state.badgeLabel }}
+            </app-ui-badge>
+          }
+
+          <!-- Card Render -->
+          @if (state.activeExplorerTab === 'card') {
+            <app-ui-card
+              [class]="'card shadow-' + state.cardShadow + ' pad-' + state.cardPadding + (state.cardAccent !== 'none' ? ' accent-' + state.cardAccent : '')"
+            >
+              <h3>{{ state.cardTitle }}</h3>
+              <p>{{ state.cardBody }}</p>
+            </app-ui-card>
+          }
+
+          <!-- Dialog Render -->
+          @if (state.activeExplorerTab === 'dialog') {
+            <div class="modal-placeholder">
+              <i class="pi pi-window-maximize" aria-hidden="true"></i>
+              <p>Click "Open Modal Preview" in the properties sidebar to inspect the dialog overlay overlaying the viewport.</p>
+              <app-ui-button variant="secondary" (click)="state.dialogVisible = true">Trigger Dialog</app-ui-button>
+            </div>
+          }
+
+          <!-- Toggle Render -->
+          @if (state.activeExplorerTab === 'toggle') {
+            <label class="toggle-control" [class.toggle-sm]="state.toggleSize === 'sm'">
+              <input type="checkbox" [(ngModel)]="state.toggleChecked" />
+              <span class="toggle-indicator"></span>
+              @if (state.toggleLabel) {
+                <span>{{ state.toggleLabel }}</span>
+              }
+            </label>
+          }
+
+          <!-- Float Input Render -->
+          @if (state.activeExplorerTab === 'input') {
+            <div class="float-input-wrapper" [class.status-success]="state.inputStatus === 'success'" [class.status-error]="state.inputStatus === 'error'">
+              <input 
+                type="text" 
+                id="float-input-field" 
+                placeholder=" " 
+                [(ngModel)]="state.inputValue" 
+              />
+              <label for="float-input-field">{{ state.inputPlaceholder }}</label>
+            </div>
+          }
+
+          <!-- Toast Render -->
+          @if (state.activeExplorerTab === 'toast') {
+            <div class="modal-placeholder">
+              <i class="pi pi-bell" aria-hidden="true" style="font-size: 2.2rem; color: var(--muted); margin-bottom: 12px;"></i>
+              <p>Configure details and click "Trigger Toast Alert" to slide the notification panel from the viewport corner.</p>
+              <app-ui-button variant="secondary" (click)="state.triggerToast()">Trigger Toast</app-ui-button>
+            </div>
+          }
+          <!-- Command Palette Render -->
+          @if (state.activeExplorerTab === 'palette') {
+            <app-command-palette></app-command-palette>
+          }
+
+          <!-- Skeleton Loader Render -->
+          @if (state.activeExplorerTab === 'skeleton') {
+            <div style="width: 100%; max-width: 600px;">
+              <app-skeleton-loader></app-skeleton-loader>
+            </div>
+          }
+
+          <!-- Spinner Loader Render -->
+          @if (state.activeExplorerTab === 'spinner') {
+            <app-spinner-loader></app-spinner-loader>
+          }
+        </div>
+      </div>

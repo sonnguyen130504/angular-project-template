@@ -1,0 +1,40 @@
+<div class="panel-container">
+  <div class="panel-header">
+    <h3>3D Tilt Card</h3>
+    <p>A premium glassmorphism card that smoothly rotates in 3D space based on mouse position, featuring a dynamic glare layer.</p>
+  </div>
+
+  <div class="panel-content">
+    <div class="perspective-wrapper">
+      <div 
+        #card
+        class="tilt-card"
+        [class.is-hovered]="isHovered()"
+        [style.transform]="'rotateX(' + rotateX() + 'deg) rotateY(' + rotateY() + 'deg)'"
+        (mouseenter)="onMouseEnter()"
+        (mouseleave)="onMouseLeave()"
+      >
+        <div class="card-glare" [style.background]="'radial-gradient(circle at ' + glareX() + '% ' + glareY() + '%, rgba(255,255,255,0.3) 0%, transparent 60%)'"></div>
+        
+        <div class="card-inner">
+          <div class="card-chip"></div>
+          <div class="card-number">4000 1234 5678 9010</div>
+          <div class="card-details">
+            <div class="detail-block">
+              <span>Card Holder</span>
+              <strong>Sion User</strong>
+            </div>
+            <div class="detail-block">
+              <span>Expires</span>
+              <strong>12/28</strong>
+            </div>
+          </div>
+          <div class="card-logo">
+            <i class="pi pi-circle-fill"></i>
+            <i class="pi pi-circle-fill"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
