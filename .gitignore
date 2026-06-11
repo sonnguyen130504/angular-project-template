@@ -1,0 +1,34 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+coverage/
+.angular/
+.nx/
+
+# local caches
+.cache/
+.vite/
+.vite-temp/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# env
+.env
+.env.local
+.env.*.local
+
+# custom ignored templates
+ECommerce-UI-Template/
