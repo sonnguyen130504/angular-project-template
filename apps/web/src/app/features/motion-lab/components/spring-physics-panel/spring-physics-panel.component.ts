@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, viewChild, input, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, NgZone, OnDestroy, OnInit, viewChild, input, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgClass, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SliderModule } from 'primeng/slider';
@@ -18,6 +18,7 @@ import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
     UiButtonComponent,
     UiCardComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './spring-physics-panel.component.html',
 })
 export class SpringPhysicsPanelComponent implements OnInit, OnDestroy {

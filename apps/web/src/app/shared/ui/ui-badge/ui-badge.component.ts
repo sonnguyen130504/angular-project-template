@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-ui-badge',
@@ -10,9 +10,10 @@ import { Component, input } from '@angular/core';
     '[class.info]': 'tone() === "info"',
   },
   templateUrl: './ui-badge.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './ui-badge.component.scss',
 })
 export class UiBadgeComponent {
-  tone = input<'default' | 'positive' | 'negative' | 'warning' | 'info'>('default');
+  tone = input<'default' | 'positive' | 'negative' | 'warning' | 'info' | 'neutral'>('default');
 }
 

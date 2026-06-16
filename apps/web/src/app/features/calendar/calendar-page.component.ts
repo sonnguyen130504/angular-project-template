@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
@@ -23,6 +23,7 @@ type CalendarEvent = {
   standalone: true,
   imports: [DatePipe, FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent],
   templateUrl: './calendar-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './calendar-page.component.scss',
 })
 export class CalendarPageComponent {

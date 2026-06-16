@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, OnDestroy, AfterViewInit, viewChild, input, inject } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, AfterViewInit, viewChild, input, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NgClass, UpperCasePipe } from '@angular/common';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
@@ -14,6 +14,7 @@ import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
     UiButtonComponent,
     UiCardComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './canvas-svg-physics-panel.component.html',
 })
 export class CanvasSvgPhysicsPanelComponent implements AfterViewInit, OnDestroy {

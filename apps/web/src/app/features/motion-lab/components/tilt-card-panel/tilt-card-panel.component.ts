@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, HostListener, computed,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TiltCardPanelComponent {
-  motionIntensity = input<'high' | 'medium' | 'low'>('high');
+  motionIntensity = input<number>(6);
   simulateReducedMotion = input<boolean>(false);
 
   cardRef = viewChild<ElementRef<HTMLDivElement>>('card');

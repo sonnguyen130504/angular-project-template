@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 @Component({
@@ -6,6 +6,7 @@ import { NgClass } from '@angular/common';
   standalone: true,
   imports: [NgClass],
   templateUrl: './empty-state-variant.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './empty-state-variant.component.scss'
 })
 export class EmptyStateVariantComponent {

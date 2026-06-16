@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
@@ -13,6 +13,7 @@ import { SpinnerLoaderComponent } from '../spinner-loader/spinner-loader.compone
   selector: 'app-component-preview-pane',
   standalone: true,
   imports: [FormsModule, UiBadgeComponent, UiButtonComponent, UiCardComponent, CommandPaletteComponent, SkeletonLoaderComponent, SpinnerLoaderComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './component-preview-pane.component.html',
 })
 export class ComponentPreviewPaneComponent {

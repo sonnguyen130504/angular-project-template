@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
+import { Component, inject, signal, computed, ElementRef, ViewChild, AfterViewChecked, ChangeDetectionStrategy } from '@angular/core';
 import { CommentService, Comment } from '../../services/comment.service';
 
 @Component({
@@ -6,6 +6,7 @@ import { CommentService, Comment } from '../../services/comment.service';
   standalone: true,
   imports: [],
   templateUrl: './feedback-widget.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './feedback-widget.component.scss',
 })
 export class FeedbackWidgetComponent implements AfterViewChecked {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
@@ -17,6 +17,7 @@ type SetupStep = {
   standalone: true,
   imports: [PageSectionComponent, UiBadgeComponent, UiButtonComponent],
   templateUrl: './setup-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './setup-page.component.scss',
 })
 export class SetupPageComponent {

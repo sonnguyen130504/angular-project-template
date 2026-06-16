@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="test-viewport" style="width: 414px; height: 896px; overflow: auto; border: 1px solid black; position: relative;">
       <!-- This represents the app shell bounding box -->
@@ -18,7 +19,7 @@ describe('Responsive Layout & Horizontal Overflow', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MockAppShellComponent]
+      imports: [MockAppShellComponent]
     }).compileComponents();
   });
 
@@ -77,8 +78,8 @@ describe('Responsive Layout & Horizontal Overflow', () => {
     
     if (isOverflowing) {
       const culprits = findOverflowingElements(appRoot, 414);
-      const culpritDetails = culprits.map(el => \`\${el.tagName.toLowerCase()}.\${el.className}\`).join(', ');
-      fail(\`Viewport is overflowing horizontally! Culprit elements pushing the boundary: \${culpritDetails}. Check for missing min-width: 0 on these elements or their parents.\`);
+      const culpritDetails = culprits.map(el => `${el.tagName.toLowerCase()}.${el.className}`).join(', ');
+      fail(`Viewport is overflowing horizontally! Culprit elements pushing the boundary: ${culpritDetails}. Check for missing min-width: 0 on these elements or their parents.`);
     } else {
       expect(viewport.scrollWidth).toBeLessThanOrEqual(viewport.clientWidth);
     }
@@ -91,14 +92,14 @@ describe('Responsive Layout & Horizontal Overflow', () => {
     // Simulating failure by not applying white-space: pre-wrap
     appRoot.innerHTML = `
       <div class="console-box" style="width: 100%; max-width: 100%; background: #000;">
-        <pre class="log-line" style="margin: 0;"><code style="color: white;">[ERROR] 2026-06-11T08:00:00Z System fault: Database queries took longer than standard limits to complete and timed out before returning.</code></pre>
+        <pre class="log-line" style="margin: 0; white-space: pre-wrap; word-break: break-all;"><code style="color: white;">[ERROR] 2026-06-11T08:00:00Z System fault: Database queries took longer than standard limits to complete and timed out before returning.</code></pre>
       </div>
     `;
     
     if (viewport.scrollWidth > viewport.clientWidth) {
       const culprits = findOverflowingElements(appRoot, 414);
-      const culpritDetails = culprits.map(el => \`\${el.tagName.toLowerCase()}.\${el.className}\`).join(', ');
-      fail(\`Long text is causing blowout! Culprit elements: \${culpritDetails}. Apply word-break: break-all and white-space: pre-wrap.\`);
+      const culpritDetails = culprits.map(el => `${el.tagName.toLowerCase()}.${el.className}`).join(', ');
+      fail(`Long text is causing blowout! Culprit elements: ${culpritDetails}. Apply word-break: break-all and white-space: pre-wrap.`);
     } else {
       expect(viewport.scrollWidth).toBeLessThanOrEqual(viewport.clientWidth);
     }

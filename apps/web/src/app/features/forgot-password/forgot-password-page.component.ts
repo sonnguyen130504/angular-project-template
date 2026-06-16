@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
 import { FormsModule } from '@angular/forms';
@@ -21,6 +21,7 @@ import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
     DecimalPipe
 ],
   templateUrl: './forgot-password-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './forgot-password-page.component.scss',
 })
 export class ForgotPasswordPageComponent implements OnDestroy {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
@@ -12,6 +12,7 @@ import { UiStatComponent } from '@app/shared/ui/ui-stat/ui-stat.component';
   standalone: true,
   imports: [ChartModule, FormsModule, PageSectionComponent, TableModule, UiBadgeComponent, UiCardComponent, UiStatComponent],
   templateUrl: './data-visualization-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './data-visualization-page.component.scss',
 })
 export class DataVisualizationPageComponent {

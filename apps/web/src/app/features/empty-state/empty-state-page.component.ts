@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NgClass, DecimalPipe } from '@angular/common';
 
@@ -32,6 +32,7 @@ export interface StateDefinition {
     DecimalPipe
 ],
   templateUrl: './empty-state-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './empty-state-page.component.scss'
 })
 export class EmptyStatePageComponent implements OnDestroy {

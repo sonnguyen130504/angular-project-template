@@ -18,7 +18,7 @@ describe('AppShellComponent', () => {
     const navLinks = fixture.nativeElement.querySelectorAll('nav a');
 
     expect(fixture.nativeElement.textContent).toContain('Sion Studio');
-    expect(navLinks.length).toBe(4);
+    expect(navLinks.length).toBe(5);
     expect(fixture.nativeElement.textContent).toContain('Catalog');
   });
 

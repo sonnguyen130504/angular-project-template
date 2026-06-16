@@ -1,8 +1,9 @@
+import { provideZoneChangeDetection } from "@angular/core";
 import 'zone.js';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import Aura from '@primeng/themes/aura';
 import { providePrimeNG } from 'primeng/config';
 import { AppComponent } from '@app/app.component';
@@ -10,8 +11,8 @@ import { appRoutes } from '@app/app.routes';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideAnimations(),
-    provideHttpClient(),
+    provideZoneChangeDetection(),provideAnimations(),
+    provideHttpClient(withXhr()),
     provideRouter(appRoutes),
     providePrimeNG({
       theme: {

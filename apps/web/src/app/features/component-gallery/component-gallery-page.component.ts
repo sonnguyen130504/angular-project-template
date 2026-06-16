@@ -1,4 +1,4 @@
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component, inject, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
@@ -24,6 +24,7 @@ import { GalleryStateService } from './services/gallery-state.service';
   providers: [GalleryStateService],
   templateUrl: './component-gallery-page.component.html',
   styleUrl: './component-gallery-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class ComponentGalleryPageComponent {

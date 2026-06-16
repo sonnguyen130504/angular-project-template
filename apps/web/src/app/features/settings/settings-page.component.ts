@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
@@ -12,6 +12,7 @@ import { UiStatComponent } from '@app/shared/ui/ui-stat/ui-stat.component';
   standalone: true,
   imports: [FormsModule, RouterLink, PageSectionComponent, UiBadgeComponent, UiButtonComponent, UiCardComponent, UiStatComponent],
   templateUrl: './settings-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './settings-page.component.scss',
 })
 export class SettingsPageComponent {

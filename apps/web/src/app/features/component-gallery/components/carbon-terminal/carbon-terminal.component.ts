@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 
 @Component({
@@ -6,6 +6,7 @@ import { Component, input } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './carbon-terminal.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './carbon-terminal.component.scss',
 })
 export class CarbonTerminalComponent {

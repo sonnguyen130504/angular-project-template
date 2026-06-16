@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChartModule } from 'primeng/chart';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -37,6 +37,7 @@ type OrderRow = {
   ],
   providers: [MessageService],
   templateUrl: './dashboard-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './dashboard-page.component.scss',
 })
 export class DashboardPageComponent {

@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
@@ -9,6 +9,7 @@ import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component'
   standalone: true,
   imports: [CurrencyPipe, PageSectionComponent, UiBadgeComponent, UiButtonComponent],
   templateUrl: './billing-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './billing-page.component.scss',
 })
 export class BillingPageComponent {

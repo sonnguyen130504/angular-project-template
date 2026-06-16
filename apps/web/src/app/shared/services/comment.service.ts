@@ -53,8 +53,8 @@ export class CommentService {
   private lastPostTime = 0;
   private static readonly RATE_LIMIT_MS = 30_000;
 
-  /* ── Like tracking (per-session) ────────────────────────────────── */
-  private readonly likedIds = new Set<string>();
+  /* ── Like tracking (localStorage persisted) ──────────────────────── */
+  private readonly likedIds = new Set<string>(this.loadLikes());
 
   /* ── Ban system (per-browser localStorage) ──────────────────────── */
   private ban: BanRecord = this.loadBan();
@@ -217,9 +217,10 @@ export class CommentService {
     }
   }
 
-  /** Toggle like (client-side tracking + server increment). */
+  /** Toggle like (client-side tracking + server sync). */
   async toggleLike(id: string): Promise<void> {
     const alreadyLiked = this.likedIds.has(id);
+    const action = alreadyLiked ? 'unlike' : 'like';
 
     // Optimistic update
     this._comments.update(list =>
@@ -234,15 +235,14 @@ export class CommentService {
         }
       })
     );
+    this.saveLikes();
 
-    // Sync to server (only on like, not unlike — server just increments)
-    if (!alreadyLiked) {
-      try {
-        await firstValueFrom(
-          this.http.post(`${API_BASE}/like`, { id })
-        );
-      } catch { /* optimistic already applied — swallow error */ }
-    }
+    // Sync to server
+    try {
+      await firstValueFrom(
+        this.http.post(`${API_BASE}/like`, { id, action })
+      );
+    } catch { /* optimistic already applied — swallow error */ }
   }
 
   /* ── Ban status ─────────────────────────────────────────────────── */
@@ -354,5 +354,21 @@ export class CommentService {
   private saveBan(): void {
     try { localStorage.setItem('sion-feedback-ban', JSON.stringify(this.ban)); }
     catch { /* quota */ }
+  }
+
+  private loadLikes(): string[] {
+    try {
+      const raw = localStorage.getItem('sion-feedback-likes');
+      if (raw) {
+        return JSON.parse(raw);
+      }
+    } catch { /* corrupted */ }
+    return [];
+  }
+
+  private saveLikes(): void {
+    try {
+      localStorage.setItem('sion-feedback-likes', JSON.stringify([...this.likedIds]));
+    } catch { /* quota */ }
   }
 }

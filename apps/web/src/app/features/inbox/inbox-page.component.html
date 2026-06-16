@@ -18,10 +18,10 @@
 
   <div class="inbox-layout">
     <aside class="inbox-sidebar" aria-label="Inbox filters">
-      @for (item of ['All', 'Unread', 'Waiting', 'Archived']; track item) {
-        <button type="button" [class.active]="filter === item" (click)="setFilter($any(item))">
+      @for (item of filterOptions; track item) {
+        <button type="button" [class.active]="filter === item" (click)="setFilter(item)">
           <span>{{ item }}</span>
-          <strong>{{ counts[$any(item)] }}</strong>
+          <strong>{{ counts[item] }}</strong>
         </button>
       }
     </aside>

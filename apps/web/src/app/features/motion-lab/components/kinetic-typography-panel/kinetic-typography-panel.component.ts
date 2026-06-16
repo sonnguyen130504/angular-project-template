@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, viewChild, input } from '@angular/core';
+import { Component, ElementRef, OnDestroy, viewChild, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
@@ -12,6 +12,7 @@ import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
     UiButtonComponent,
     UiCardComponent
 ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './kinetic-typography-panel.component.html',
 })
 export class KineticTypographyPanelComponent implements OnDestroy {

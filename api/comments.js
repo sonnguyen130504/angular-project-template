@@ -77,14 +77,17 @@ export default function handler(req, res) {
 
   // ── POST /api/comments/like ───────────────────────────────────
   if (method === 'POST' && isLike) {
-    const { id } = body ?? {};
+    const { id, action } = body ?? {};
     if (!id) return json(res, 400, { error: 'Missing comment id' });
 
     const idx = comments.findIndex(c => c.id === id);
     if (idx === -1) return json(res, 404, { error: 'Comment not found' });
 
-    // Simple toggle: just increment (like tracking is client-side per session)
-    comments[idx] = { ...comments[idx], likes: comments[idx].likes + 1 };
+    if (action === 'unlike') {
+      comments[idx] = { ...comments[idx], likes: Math.max(0, comments[idx].likes - 1) };
+    } else {
+      comments[idx] = { ...comments[idx], likes: comments[idx].likes + 1 };
+    }
     return json(res, 200, comments[idx]);
   }
 

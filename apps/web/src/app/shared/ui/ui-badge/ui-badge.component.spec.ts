@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { UiBadgeComponent } from './ui-badge.component';
 
 @Component({
   standalone: true,
   imports: [UiBadgeComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<app-ui-badge>In stock</app-ui-badge>',
 })
 class HostComponent {}

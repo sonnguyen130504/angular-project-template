@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { UiCardComponent } from './ui-card.component';
 
 @Component({
   standalone: true,
   imports: [UiCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<app-ui-card><span>Card body</span></app-ui-card>',
 })
 class HostComponent {}

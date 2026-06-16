@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
@@ -25,6 +25,7 @@ type InboxThread = {
   standalone: true,
   imports: [FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent],
   templateUrl: './inbox-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './inbox-page.component.scss',
 })
 export class InboxPageComponent {
@@ -40,6 +41,7 @@ export class InboxPageComponent {
   ];
 
   readonly macros = ['Send return label', 'Ask for order number', 'Escalate to warehouse'];
+  readonly filterOptions: ('All' | ThreadStatus)[] = ['All', 'Unread', 'Waiting', 'Archived'];
 
   get counts(): Record<'All' | ThreadStatus, number> {
     return {

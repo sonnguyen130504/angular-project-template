@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -19,6 +19,7 @@ import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
     UiCardComponent
 ],
   templateUrl: './sign-in-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './sign-in-page.component.scss',
 })
 export class SignInPageComponent implements OnInit, OnDestroy {

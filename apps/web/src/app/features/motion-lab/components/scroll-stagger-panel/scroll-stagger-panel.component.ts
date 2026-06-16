@@ -1,4 +1,4 @@
-import { Component, ElementRef, viewChild, input } from '@angular/core';
+import { Component, ElementRef, viewChild, input, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { SliderModule } from 'primeng/slider';
@@ -16,6 +16,7 @@ import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
     UiButtonComponent,
     UiCardComponent
 ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './scroll-stagger-panel.component.html',
 })
 export class ScrollStaggerPanelComponent {

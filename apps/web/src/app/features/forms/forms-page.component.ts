@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { NgClass, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -25,6 +25,7 @@ import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
     UiCardComponent,
   ],
   templateUrl: './forms-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './forms-page.component.scss',
 })
 export class FormsPageComponent {

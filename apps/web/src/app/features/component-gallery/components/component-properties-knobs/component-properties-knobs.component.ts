@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
@@ -8,6 +8,7 @@ import { GalleryStateService } from '../../services/gallery-state.service';
   selector: 'app-component-properties-knobs',
   standalone: true,
   imports: [FormsModule, UiButtonComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './component-properties-knobs.component.html',
 })
 export class ComponentPropertiesKnobsComponent {

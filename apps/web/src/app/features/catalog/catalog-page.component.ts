@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { SelectModule } from 'primeng/select';
@@ -25,6 +25,7 @@ type ProductCard = {
   standalone: true,
   imports: [CurrencyPipe, FormsModule, PageSectionComponent, PaginatorModule, SelectModule, SliderModule, UiBadgeComponent, UiButtonComponent, UiCardComponent],
   templateUrl: './catalog-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './catalog-page.component.scss',
 })
 export class CatalogPageComponent {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { RouterLink } from '@angular/router';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
@@ -22,6 +22,7 @@ import { SliderModule } from 'primeng/slider';
     SliderModule,
   ],
   templateUrl: './home-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './home-page.component.scss',
 })
 export class HomePageComponent {

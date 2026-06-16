@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
@@ -11,6 +11,7 @@ import { UiStatComponent } from '@app/shared/ui/ui-stat/ui-stat.component';
   standalone: true,
   imports: [FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent, UiCardComponent, UiStatComponent],
   templateUrl: './profile-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './profile-page.component.scss',
 })
 export class ProfilePageComponent {

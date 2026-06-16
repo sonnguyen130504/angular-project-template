@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
 import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
@@ -9,6 +9,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-cart-item-list',
   standalone: true,
   imports: [CurrencyPipe, UiButtonComponent, UiCardComponent, RouterLink],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './cart-item-list.component.html',
 })
 export class CartItemListComponent {

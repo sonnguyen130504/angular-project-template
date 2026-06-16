@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { SliderModule } from 'primeng/slider';
@@ -30,6 +30,7 @@ type MotionLabTab = 'physics' | 'interactions' | 'flip' | 'scroll' | 'typography
 ],
   templateUrl: './motion-lab-page.component.html',
   styleUrl: './motion-lab-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class MotionLabPageComponent {

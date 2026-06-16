@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { ThemeService } from '../../shared/services/theme.service';
@@ -15,6 +15,7 @@ type NavGroup = {
   standalone: true,
   imports: [RouterLink, RouterLinkActive, RouterOutlet, FeedbackWidgetComponent],
   templateUrl: './app-shell.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './app-shell.component.scss',
 })
 export class AppShellComponent {
