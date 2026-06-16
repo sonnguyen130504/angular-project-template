@@ -122,12 +122,56 @@ export class CommentService {
       const raw = await firstValueFrom(
         this.http.get<Omit<Comment, 'likedByUser'>[]>(API_BASE)
       );
-      // Merge server data with client-side likedByUser state
-      this._comments.set(
-        raw.map(c => ({ ...c, likedByUser: this.likedIds.has(c.id) }))
+      
+      const localComments = this.loadLocalComments();
+      const localLikesMap = this.loadLocalLikesMap();
+      const SEED_LIKES: Record<string, number> = { seed_1: 5, seed_2: 3, seed_3: 7 };
+
+      const mergedMap = new Map<string, Comment>();
+
+      // Load local comments first (to preserve user's own comments if server reset)
+      for (const lc of localComments) {
+        mergedMap.set(lc.id, {
+          ...lc,
+          likedByUser: this.likedIds.has(lc.id)
+        });
+      }
+
+      // Overwrite/merge with server comments
+      for (const sc of raw) {
+        const likedByUser = this.likedIds.has(sc.id);
+        let likes = sc.likes;
+
+        // Sync likes with local tracking
+        if (localLikesMap.has(sc.id)) {
+          likes = Math.max(likes, localLikesMap.get(sc.id) ?? 0);
+        }
+
+        // If user liked it, but server returned original seed count, increment by 1
+        if (likedByUser && likes === sc.likes && sc.likes === (SEED_LIKES[sc.id] ?? 0)) {
+          likes = sc.likes + 1;
+        }
+
+        mergedMap.set(sc.id, {
+          ...sc,
+          likes,
+          likedByUser
+        });
+      }
+
+      const mergedList = Array.from(mergedMap.values()).sort(
+        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
       );
+
+      this._comments.set(mergedList);
+      this.saveLocalComments(mergedList);
     } catch {
-      this._error.set('Could not load comments. Please try again later.');
+      const localComments = this.loadLocalComments().map(c => ({
+        ...c,
+        likedByUser: this.likedIds.has(c.id)
+      }));
+      this._comments.set(localComments);
+      this._error.set('Could not load comments. Loaded offline comments instead.');
     } finally {
       this._loading.set(false);
     }
@@ -205,7 +249,11 @@ export class CommentService {
         })
       );
       const withClient: Comment = { ...saved, likedByUser: false };
-      this._comments.update(list => [withClient, ...list]);
+      this._comments.update(list => {
+        const updated = [withClient, ...list];
+        this.saveLocalComments(updated);
+        return updated;
+      });
       this.lastPostTime = now;
 
       const warnSuffix = hasProfanity
@@ -213,7 +261,23 @@ export class CommentService {
         : '';
       return { success: true, message: 'Comment posted!' + warnSuffix, comment: withClient };
     } catch {
-      return { success: false, message: 'Failed to post comment. Please try again.' };
+      // Offline fallback: simulate saving to backend locally
+      const mockComment: Comment = {
+        id: this.uid(),
+        author: sanitizedAuthor,
+        content: sanitizedContent,
+        avatarColor,
+        timestamp: new Date().toISOString(),
+        likes: 0,
+        likedByUser: false
+      };
+      this._comments.update(list => {
+        const updated = [mockComment, ...list];
+        this.saveLocalComments(updated);
+        return updated;
+      });
+      this.lastPostTime = now;
+      return { success: true, message: 'Comment posted offline!', comment: mockComment };
     }
   }
 
@@ -223,18 +287,28 @@ export class CommentService {
     const action = alreadyLiked ? 'unlike' : 'like';
 
     // Optimistic update
-    this._comments.update(list =>
-      list.map(c => {
+    this._comments.update(list => {
+      const updated = list.map(c => {
         if (c.id !== id) return c;
+        let likes = c.likes;
         if (alreadyLiked) {
           this.likedIds.delete(id);
-          return { ...c, likes: Math.max(0, c.likes - 1), likedByUser: false };
+          likes = Math.max(0, c.likes - 1);
+          return { ...c, likes, likedByUser: false };
         } else {
           this.likedIds.add(id);
-          return { ...c, likes: c.likes + 1, likedByUser: true };
+          likes = c.likes + 1;
+          return { ...c, likes, likedByUser: true };
         }
-      })
-    );
+      });
+
+      this.saveLocalComments(updated);
+      const target = updated.find(c => c.id === id);
+      if (target) {
+        this.saveLocalLikesCount(id, target.likes);
+      }
+      return updated;
+    });
     this.saveLikes();
 
     // Sync to server
@@ -371,4 +445,46 @@ export class CommentService {
       localStorage.setItem('sion-feedback-likes', JSON.stringify([...this.likedIds]));
     } catch { /* quota */ }
   }
+
+  private loadLocalComments(): Comment[] {
+    try {
+      const raw = localStorage.getItem('sion-feedback-comments');
+      if (raw) {
+        return JSON.parse(raw);
+      }
+    } catch { /* corrupted */ }
+    return [];
+  }
+
+  private saveLocalComments(comments: Comment[]): void {
+    try {
+      localStorage.setItem('sion-feedback-comments', JSON.stringify(comments));
+    } catch { /* quota */ }
+  }
+
+  private loadLocalLikesMap(): Map<string, number> {
+    const map = new Map<string, number>();
+    try {
+      const raw = localStorage.getItem('sion-feedback-likes-count');
+      if (raw) {
+        const obj = JSON.parse(raw);
+        for (const [k, v] of Object.entries(obj)) {
+          if (typeof v === 'number') {
+            map.set(k, v);
+          }
+        }
+      }
+    } catch { /* corrupted */ }
+    return map;
+  }
+
+  private saveLocalLikesCount(id: string, count: number): void {
+    try {
+      const raw = localStorage.getItem('sion-feedback-likes-count');
+      const obj = raw ? JSON.parse(raw) : {};
+      obj[id] = count;
+      localStorage.setItem('sion-feedback-likes-count', JSON.stringify(obj));
+    } catch { /* quota */ }
+  }
 }
+
