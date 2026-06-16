@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { ThemeService } from '../../shared/services/theme.service';
+import { FeedbackWidgetComponent } from '../../shared/ui/feedback-widget/feedback-widget.component';
 
 type NavGroup = {
   label: string;
@@ -12,7 +13,7 @@ type NavGroup = {
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, FeedbackWidgetComponent],
   templateUrl: './app-shell.component.html',
   styleUrl: './app-shell.component.scss',
 })

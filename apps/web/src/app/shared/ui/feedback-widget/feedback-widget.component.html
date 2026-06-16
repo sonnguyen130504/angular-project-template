@@ -1,0 +1,181 @@
+<!-- Floating Action Button -->
+<button
+  type="button"
+  class="feedback-fab"
+  [class.is-open]="isOpen()"
+  (click)="toggle()"
+  [attr.aria-expanded]="isOpen()"
+  aria-label="Toggle feedback panel"
+>
+  @if (!isOpen()) {
+    <i class="pi pi-comments" aria-hidden="true"></i>
+    @if (svc.commentCount() > 0) {
+      <span class="fab-badge">{{ svc.commentCount() }}</span>
+    }
+  } @else {
+    <i class="pi pi-times" aria-hidden="true"></i>
+  }
+</button>
+
+<!-- Panel -->
+@if (isOpen()) {
+  <div class="feedback-panel" role="dialog" aria-label="Community feedback">
+
+    <!-- Header -->
+    <header class="panel-header">
+      <div class="header-info">
+        <h3>Community Feedback</h3>
+        <span class="comment-count">{{ svc.commentCount() }} comments</span>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="icon-btn" (click)="refresh()" aria-label="Refresh comments"
+          [class.spinning]="svc.loading()">
+          <i class="pi pi-refresh" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="icon-btn" (click)="close()" aria-label="Close feedback panel">
+          <i class="pi pi-times" aria-hidden="true"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Ban Banner -->
+    @if (isBanned()) {
+      <div class="ban-banner" role="alert">
+        <i class="pi pi-ban" aria-hidden="true"></i>
+        <div class="ban-info">
+          <strong>You are banned</strong>
+          <span>{{ banMessage() }}</span>
+        </div>
+      </div>
+    }
+
+    <!-- Compose Area -->
+    <div class="compose-area" [class.is-disabled]="isBanned()">
+      <div class="compose-fields">
+        <input
+          type="text"
+          class="author-input"
+          placeholder="Your name"
+          [value]="authorName()"
+          (input)="onAuthorInput($event)"
+          maxlength="30"
+          autocomplete="off"
+          [disabled]="isBanned()"
+        />
+        <div class="textarea-wrap">
+          <textarea
+            class="comment-textarea"
+            placeholder="Share your thoughts… (Ctrl+Enter to post)"
+            [value]="commentText()"
+            (input)="onTextareaInput($event)"
+            (keydown)="handleKeydown($event)"
+            maxlength="500"
+            rows="2"
+            [disabled]="isBanned()"
+          ></textarea>
+          <span class="char-counter" [class.over-limit]="charOverLimit()">
+            {{ charCount() }}/500
+          </span>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="submit-btn"
+        [disabled]="!canSubmit()"
+        (click)="submit()"
+      >
+        @if (isSubmitting()) {
+          <i class="pi pi-spin pi-spinner" aria-hidden="true"></i>
+        } @else {
+          <i class="pi pi-send" aria-hidden="true"></i>
+          <span>Post</span>
+        }
+      </button>
+    </div>
+
+    <!-- Feedback Toast -->
+    @if (feedbackMsg(); as msg) {
+      <div class="feedback-toast"
+           [class.is-error]="msg.type === 'error'"
+           [class.is-success]="msg.type === 'success'"
+           role="alert">
+        <i class="pi"
+           [class.pi-check-circle]="msg.type === 'success'"
+           [class.pi-exclamation-circle]="msg.type === 'error'"
+           aria-hidden="true"></i>
+        <span>{{ msg.text }}</span>
+      </div>
+    }
+
+    <!-- Comment List -->
+    <div class="comment-list" #commentList>
+
+      <!-- Loading skeleton -->
+      @if (svc.loading()) {
+        <div class="skeleton-list">
+          @for (i of [1,2,3]; track i) {
+            <div class="skeleton-card">
+              <div class="skeleton-avatar"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line long"></div>
+                <div class="skeleton-line medium"></div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Error state -->
+      @else if (svc.error()) {
+        <div class="error-state">
+          <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+          <p>{{ svc.error() }}</p>
+          <button type="button" class="retry-btn" (click)="refresh()">Try again</button>
+        </div>
+      }
+
+      <!-- Empty state -->
+      @else if (svc.comments().length === 0) {
+        <div class="empty-state">
+          <i class="pi pi-comments" aria-hidden="true"></i>
+          <p>No comments yet — be the first!</p>
+        </div>
+      }
+
+      <!-- Comment cards -->
+      @else {
+        @for (comment of svc.comments(); track trackById($index, comment)) {
+          <article class="comment-card">
+            <div class="comment-avatar" [style.background]="comment.avatarColor">
+              {{ getInitials(comment.author) }}
+            </div>
+            <div class="comment-body">
+              <div class="comment-meta">
+                <strong class="comment-author">{{ comment.author }}</strong>
+                <time class="comment-time">{{ relativeTime(comment.timestamp) }}</time>
+              </div>
+              <p class="comment-content">{{ comment.content }}</p>
+              <button
+                type="button"
+                class="like-btn"
+                [class.is-liked]="comment.likedByUser"
+                (click)="likeComment(comment)"
+                [attr.aria-label]="'Like comment by ' + comment.author"
+              >
+                <i class="pi"
+                   [class.pi-heart-fill]="comment.likedByUser"
+                   [class.pi-heart]="!comment.likedByUser"
+                   aria-hidden="true"></i>
+                @if (comment.likes > 0) {
+                  <span>{{ comment.likes }}</span>
+                }
+              </button>
+            </div>
+          </article>
+        }
+      }
+    </div>
+
+  </div>
+}
