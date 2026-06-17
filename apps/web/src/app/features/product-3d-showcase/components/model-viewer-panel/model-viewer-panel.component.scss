@@ -1,0 +1,159 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.viewer-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--surface-2);
+
+  model-viewer {
+    --poster-color: transparent;
+    --progress-bar-color: var(--accent);
+    --progress-bar-height: 3px;
+  }
+}
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(var(--surface-rgb), 0.85);
+  z-index: 2;
+  backdrop-filter: blur(4px);
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* Hotspot styling */
+.hotspot {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 10;
+}
+
+.hotspot-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--surface);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  position: relative;
+  transition: transform 0.2s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    opacity: 0.4;
+    animation: hotspot-pulse 2s ease-in-out infinite;
+  }
+}
+
+.hotspot:hover .hotspot-dot,
+.hotspot.is-active .hotspot-dot {
+  transform: scale(1.2);
+}
+
+.hotspot.is-active .hotspot-dot::after {
+  animation: none;
+  opacity: 0.6;
+}
+
+@keyframes hotspot-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.5); opacity: 0; }
+}
+
+.hotspot-tooltip {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 12px);
+  transform: translateY(-50%);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  box-shadow: var(--shadow);
+  min-width: 160px;
+  white-space: nowrap;
+  animation: tooltip-in 0.2s ease;
+
+  strong {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+}
+
+@keyframes tooltip-in {
+  from { opacity: 0; transform: translateY(-50%) translateX(-4px); }
+  to { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
+
+/* Progress bar slot */
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.progress-track {
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotspot-dot::after {
+    animation: none;
+  }
+  .loading-spinner {
+    animation: none;
+  }
+}

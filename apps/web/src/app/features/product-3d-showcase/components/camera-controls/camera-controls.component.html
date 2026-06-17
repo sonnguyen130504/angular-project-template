@@ -1,0 +1,44 @@
+<div class="controls-bar">
+  <div class="preset-group">
+    @for (preset of presets(); track preset.label) {
+      <button
+        class="control-btn"
+        [class.is-active]="activePreset === preset.label"
+        (click)="selectPreset(preset)"
+        [title]="preset.label + ' view'"
+      >
+        <i [class]="preset.icon"></i>
+        <span>{{ preset.label }}</span>
+      </button>
+    }
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="action-group">
+    <button
+      class="control-btn icon-only"
+      [class.is-active]="autoRotate()"
+      (click)="onAutoRotateToggle()"
+      title="Toggle auto-rotate"
+    >
+      <i class="pi pi-sync"></i>
+    </button>
+
+    <button
+      class="control-btn icon-only"
+      (click)="onReset()"
+      title="Reset camera"
+    >
+      <i class="pi pi-refresh"></i>
+    </button>
+
+    <button
+      class="control-btn icon-only"
+      (click)="onFullscreen()"
+      [title]="isFullscreen() ? 'Exit fullscreen' : 'Enter fullscreen'"
+    >
+      <i class="pi" [class.pi-window-maximize]="!isFullscreen()" [class.pi-window-minimize]="isFullscreen()"></i>
+    </button>
+  </div>
+</div>

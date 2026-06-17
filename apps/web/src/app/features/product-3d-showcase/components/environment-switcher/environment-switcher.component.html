@@ -1,0 +1,15 @@
+<div class="env-track">
+  <span class="env-label">Lighting</span>
+  <div class="env-pills">
+    @for (env of environments(); track env.id) {
+      <button
+        class="env-pill"
+        [class.is-active]="env.id === activeId()"
+        (click)="selectEnvironment(env)"
+      >
+        <i [class]="env.icon"></i>
+        {{ env.label }}
+      </button>
+    }
+  </div>
+</div>

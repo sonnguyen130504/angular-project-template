@@ -1,0 +1,149 @@
+<app-page-section
+  heading="3D Product Showcase"
+  subheading="Explore products in immersive 3D — rotate, zoom, and interact with every detail."
+>
+  <div class="showcase-layout" #showcaseContainer [class.is-fullscreen]="isFullscreen()">
+    <!-- Main Viewer Area -->
+    <div class="viewer-column">
+      <div class="viewer-frame">
+        <app-model-viewer-panel
+          #viewerPanel
+          [modelUrl]="resolvedModelUrl()"
+          [posterUrl]="activeProduct().posterUrl"
+          [cameraOrbit]="cameraOrbit()"
+          [environmentImage]="environmentImage()"
+          [autoRotate]="autoRotate()"
+          [hotspots]="currentHotspots()"
+          [exposure]="exposure()"
+          (modelLoaded)="onModelLoaded()"
+          (hotspotClicked)="onHotspotClicked($event)"
+        />
+
+        @if (isModelDownloading()) {
+          <div class="download-overlay">
+            <div class="download-spinner"></div>
+            <span class="download-text">Caching 3D Assets ({{ modelDownloadProgress() }}%)</span>
+            <div class="download-progress-bar">
+              <div class="download-progress-fill" [style.width.%]="modelDownloadProgress()"></div>
+            </div>
+          </div>
+        }
+
+        <!-- Floating controls overlay -->
+        <div class="viewer-overlay-controls">
+          <div class="viewer-badge">
+            <i class="pi pi-box"></i>
+            <span>3D Interactive</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls Bar -->
+      <app-camera-controls
+        [autoRotate]="autoRotate()"
+        [isFullscreen]="isFullscreen()"
+        (cameraChange)="onCameraChange($event)"
+        (autoRotateToggle)="onAutoRotateToggle($event)"
+        (fullscreenToggle)="toggleFullscreen()"
+        (resetCamera)="onResetCamera()"
+      />
+
+      <!-- Environment Switcher -->
+      <app-environment-switcher
+        [activeId]="activeEnvironment()"
+        (environmentChange)="onEnvironmentChange($event)"
+      />
+    </div>
+
+    <!-- Info Panel -->
+    <div class="info-column">
+      <!-- Product Switcher -->
+      <div class="switcher-section-inline">
+        <h3 class="section-label">Select Product</h3>
+        <app-product-switcher
+          [products]="products"
+          [activeId]="activeProduct().id"
+          (productSelected)="onProductSelected($event)"
+        />
+      </div>
+
+      <div class="product-header">
+        <div class="product-accent-bar" [style.background]="activeProduct().accent"></div>
+        <h2 class="product-name">{{ activeProduct().name }}</h2>
+        <p class="product-tagline">{{ activeProduct().tagline }}</p>
+        <div class="product-price">{{ activeProduct().price | currency:'USD':'symbol':'1.0-0' }}</div>
+      </div>
+
+      <div class="product-description">
+        <h3 class="section-label">About this product</h3>
+        <p class="description-text">
+          High-fidelity 3D model rendered in real-time. Drag to rotate 360°, 
+          scroll to zoom, and tap the highlighted points to discover product details.
+          This showcase demonstrates interactive 3D product visualization for 
+          modern e-commerce experiences.
+        </p>
+      </div>
+
+      <!-- Specs -->
+      <div class="product-specs">
+        <h3 class="section-label">Specifications</h3>
+        <div class="specs-grid">
+          @for (spec of currentSpecs(); track spec.label) {
+            <div class="spec-row">
+              <span class="spec-label">{{ spec.label }}</span>
+              <span class="spec-value">{{ spec.value }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Interaction hints -->
+      <div class="interaction-hints">
+        <h3 class="section-label">How to interact</h3>
+        <div class="hints-grid">
+          <div class="hint">
+            <div class="hint-icon"><i class="pi pi-arrows-alt"></i></div>
+            <div class="hint-content">
+              <strong>Drag</strong>
+              <span>Rotate the model</span>
+            </div>
+          </div>
+          <div class="hint">
+            <div class="hint-icon"><i class="pi pi-search-plus"></i></div>
+            <div class="hint-content">
+              <strong>Scroll</strong>
+              <span>Zoom in & out</span>
+            </div>
+          </div>
+          <div class="hint">
+            <div class="hint-icon"><i class="pi pi-circle-fill"></i></div>
+            <div class="hint-content">
+              <strong>Hotspots</strong>
+              <span>Tap for details</span>
+            </div>
+          </div>
+          <div class="hint">
+            <div class="hint-icon"><i class="pi pi-mobile"></i></div>
+            <div class="hint-content">
+              <strong>AR View</strong>
+              <span>See in your space</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-section">
+        <button class="btn-primary" disabled>
+          <i class="pi pi-shopping-cart"></i>
+          Add to Cart
+        </button>
+        <button class="btn-secondary" disabled>
+          <i class="pi pi-heart"></i>
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+
+</app-page-section>

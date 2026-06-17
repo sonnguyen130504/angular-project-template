@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { Product3DShowcasePageComponent } from '@app/features/product-3d-showcase/product-3d-showcase-page.component';
 import { HomePageComponent } from '@app/features/home/home-page.component';
 import { MobilePatternsPageComponent } from '@app/features/mobile-patterns/mobile-patterns-page.component';
 import { CatalogPageComponent } from '@app/features/catalog/catalog-page.component';
@@ -40,6 +41,10 @@ export const appRoutes: Routes = [
   {
     path: 'product',
     component: ProductPageComponent,
+  },
+  {
+    path: '3d-showcase',
+    component: Product3DShowcasePageComponent,
   },
   {
     path: 'cart',

@@ -1,0 +1,19 @@
+<div class="switcher-track">
+  @for (product of products(); track product.id) {
+    <button
+      class="product-card"
+      [class.is-active]="product.id === activeId()"
+      (click)="selectProduct(product)"
+    >
+      <div class="card-accent" [style.background]="product.accent"></div>
+      <div class="card-poster">
+        <img [src]="product.posterUrl" [alt]="product.name" loading="lazy" />
+      </div>
+      <div class="card-info">
+        <span class="card-name">{{ product.name }}</span>
+        <span class="card-tagline">{{ product.tagline }}</span>
+      </div>
+      <div class="active-indicator"></div>
+    </button>
+  }
+</div>

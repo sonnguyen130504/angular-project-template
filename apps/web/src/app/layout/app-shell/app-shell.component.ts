@@ -66,6 +66,7 @@ export class AppShellComponent {
         { label: 'Home', path: '/', exact: true, note: 'Template overview' },
         { label: 'Catalog', path: '/catalog', note: 'Filters and listing states' },
         { label: 'Product', path: '/product', note: 'Variants and buy box' },
+        { label: '3D Showcase', path: '/3d-showcase', note: 'Interactive 3D viewer' },
         { label: 'Cart', path: '/cart', note: 'Checkout steps and totals' },
       ],
     },
