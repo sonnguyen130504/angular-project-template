@@ -160,7 +160,8 @@ function filterProfanity(text) {
 function sanitizeComment(comment) {
   if (!comment) return comment;
   const content = containsProfanity(comment.content) ? filterProfanity(comment.content) : comment.content;
-  return { ...comment, content };
+  const author = containsProfanity(comment.author) ? filterProfanity(comment.author) : comment.author;
+  return { ...comment, author, content };
 }
 
 function uid() {
@@ -220,11 +221,12 @@ export default function handler(req, res) {
     }
 
     const normalizedContent = String(content);
-    const hasProfanity = containsProfanity(normalizedContent);
+    const normalizedAuthor = String(author);
+    const hasProfanity = containsProfanity(normalizedContent) || containsProfanity(normalizedAuthor);
 
     const newComment = {
       id: uid(),
-      author: String(author).slice(0, 30),
+      author: normalizedAuthor.slice(0, 30),
       avatarColor: String(avatarColor),
       content: (hasProfanity ? filterProfanity(normalizedContent) : normalizedContent).slice(0, 500),
       timestamp: new Date().toISOString(),

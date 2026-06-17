@@ -266,10 +266,13 @@ export class CommentService {
     }
 
     /* ── 5. Profanity filter + strike tracking ────────────────────── */
-    const escaped = this.escapeHtml(trimmedContent);
-    const hasProfanity = this.containsProfanity(escaped);
-    const sanitizedContent = hasProfanity ? this.filterProfanity(escaped) : escaped;
-    const sanitizedAuthor  = this.escapeHtml(trimmedAuthor);
+    const escapedContent = this.escapeHtml(trimmedContent);
+    const escapedAuthor = this.escapeHtml(trimmedAuthor);
+    const contentHasProfanity = this.containsProfanity(escapedContent);
+    const authorHasProfanity = this.containsProfanity(escapedAuthor);
+    const hasProfanity = contentHasProfanity || authorHasProfanity;
+    const sanitizedContent = contentHasProfanity ? this.filterProfanity(escapedContent) : escapedContent;
+    const sanitizedAuthor  = authorHasProfanity ? this.filterProfanity(escapedAuthor) : escapedAuthor;
 
     if (hasProfanity) {
       this.addStrike();
@@ -301,7 +304,7 @@ export class CommentService {
       this.lastPostTime = now;
 
       const warnSuffix = hasProfanity
-        ? ` WARNING: profane language was detected, sanitized, and counted as a strike (${this.ban.strikes}/${this.nextBanThreshold()}).`
+        ? ` WARNING: profane language was detected in the name or comment, sanitized, and counted as a strike (${this.ban.strikes}/${this.nextBanThreshold()}).`
         : '';
       return { success: true, message: 'Comment posted!' + warnSuffix, comment: withClient, hasProfanity };
     } catch {
@@ -322,7 +325,7 @@ export class CommentService {
       });
       this.lastPostTime = now;
       const offlineWarn = hasProfanity
-        ? ' WARNING: profane language was detected, sanitized, and counted as a strike.'
+        ? ' WARNING: profane language was detected in the name or comment, sanitized, and counted as a strike.'
         : '';
       return { success: true, message: 'Comment posted offline!' + offlineWarn, comment: mockComment, hasProfanity };
     }
@@ -445,8 +448,10 @@ export class CommentService {
 
   private sanitizeComment(comment: Omit<Comment, 'likedByUser'> | Comment): Comment {
     const content = this.containsProfanity(comment.content) ? this.filterProfanity(comment.content) : comment.content;
+    const author = this.containsProfanity(comment.author) ? this.filterProfanity(comment.author) : comment.author;
     return {
       ...comment,
+      author,
       content,
       likedByUser: 'likedByUser' in comment ? comment.likedByUser : false,
     };
