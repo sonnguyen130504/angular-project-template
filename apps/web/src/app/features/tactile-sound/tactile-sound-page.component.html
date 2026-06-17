@@ -1,0 +1,158 @@
+<app-page-section 
+  title="Tactile Sound Laboratory" 
+  subtitle="Interactive programmatically synthesized sound effects using the Web Audio API."
+>
+  <div class="audio-lab-grid">
+    <!-- Visualizer and Custom Synthesizer Column -->
+    <div class="lab-card visualizer-card">
+      <div class="card-header">
+        <h3>Waveform Visualizer</h3>
+        <span class="badge" [class.badge-active]="!audio.isMuted()">
+          {{ audio.isMuted() ? 'Muted' : 'Live Output' }}
+        </span>
+      </div>
+      
+      <div class="canvas-container">
+        <canvas #visualizerCanvas width="600" height="240"></canvas>
+      </div>
+
+      <div class="card-section">
+        <h3>Custom Synth Sandbox</h3>
+        <p class="section-desc">Design your own wave frequency sweeps and envelope parameters.</p>
+        
+        <div class="control-group">
+          <label>Oscillator Type</label>
+          <div class="custom-select-wrapper">
+            <select [(ngModel)]="oscillatorType">
+              <option value="sine">Sine (Soft/Tactile)</option>
+              <option value="triangle">Triangle (Warm/Retro)</option>
+              <option value="sawtooth">Sawtooth (Bright/Electronic)</option>
+              <option value="square">Square (Chiptune/Digital)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="slider-header">
+            <label>Frequency</label>
+            <span class="slider-value">{{ frequency }} Hz</span>
+          </div>
+          <input type="range" min="60" max="2500" step="10" [(ngModel)]="frequency" />
+        </div>
+
+        <div class="control-group">
+          <div class="slider-header">
+            <label>Decay Duration</label>
+            <span class="slider-value">{{ duration }} s</span>
+          </div>
+          <input type="range" min="0.02" max="1.5" step="0.01" [(ngModel)]="duration" />
+        </div>
+
+        <div class="control-group">
+          <div class="slider-header">
+            <label>Volume / Amplitude</label>
+            <span class="slider-value">{{ (volume * 100).toFixed(0) }}%</span>
+          </div>
+          <input type="range" min="0.01" max="0.3" step="0.01" [(ngModel)]="volume" />
+        </div>
+
+        <button class="play-btn" (click)="playCustom()">
+          <i class="pi pi-play"></i> Trigger Synthesizer
+        </button>
+      </div>
+    </div>
+
+    <!-- Presets & Interactive Pads Column -->
+    <div class="lab-card presets-card">
+      <div class="card-header">
+        <h3>Standard Interaction Presets</h3>
+      </div>
+      
+      <div class="presets-list">
+        @for (preset of presets; track preset.name) {
+          <div class="preset-item">
+            <div class="preset-info">
+              <strong>{{ preset.name }}</strong>
+              <small>{{ preset.desc }}</small>
+            </div>
+            <button class="trigger-btn" (click)="preset.action()">
+              <i class="pi pi-volume-up"></i> Play
+            </button>
+          </div>
+        }
+      </div>
+
+      <div class="card-section">
+        <h3>Dynamic Fun Effects</h3>
+        <div class="sound-grid">
+          @for (laser of laserPresets; track laser.name) {
+            <button class="sound-pill" (click)="playLaser(laser)">
+              <i class="pi pi-bolt"></i>
+              <span>{{ laser.name }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="card-section">
+        <h3>Interactive Tactile Zones</h3>
+        <p class="section-desc">Test real-time hover, click, success, and error feedback.</p>
+        
+        <div class="pads-row">
+          <div 
+            class="tactile-pad hover-pad" 
+            (mouseenter)="onPadHover()"
+            (click)="onPadClick()"
+          >
+            <span>Hover & Click</span>
+            <small>Tactile feedback</small>
+          </div>
+
+          <div 
+            class="tactile-pad success-pad" 
+            (click)="onPadSuccess()"
+          >
+            <span>Success Zone</span>
+            <small>Arpeggio chime</small>
+          </div>
+
+          <div 
+            class="tactile-pad error-pad" 
+            (click)="onPadError()"
+          >
+            <span>Error Zone</span>
+            <small>Sawtooth buzz</small>
+          </div>
+
+          <div 
+            class="tactile-pad toggle-pad" 
+            [class.toggle-active]="isToggleOn"
+            (click)="onToggleChange()"
+          >
+            <span>Toggle State</span>
+            <small>{{ isToggleOn ? 'Status: ON' : 'Status: OFF' }}</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-section">
+        <h3>Keyboard Sound Simulator</h3>
+        <p class="section-desc">Type in the box below to hear mechanical key clicks.</p>
+        <div class="typing-box-wrapper">
+          <input 
+            type="text" 
+            class="typing-input" 
+            placeholder="Type anything here..." 
+            [(ngModel)]="keyboardInput"
+            (input)="onKeypress()"
+          />
+          @if (keyboardInput) {
+            <button class="clear-typing-btn" (click)="keyboardInput = ''; audio.playDelete()" title="Clear text">
+              <i class="pi pi-trash"></i>
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</app-page-section>
