@@ -270,9 +270,12 @@ export class CommentService {
     const escapedAuthor = this.escapeHtml(trimmedAuthor);
     const contentHasProfanity = this.containsProfanity(escapedContent);
     const authorHasProfanity = this.containsProfanity(escapedAuthor);
-    const hasProfanity = contentHasProfanity || authorHasProfanity;
+    if (authorHasProfanity) {
+      return { success: false, message: 'Name cannot contain profanity.' };
+    }
+    const hasProfanity = contentHasProfanity;
     const sanitizedContent = contentHasProfanity ? this.filterProfanity(escapedContent) : escapedContent;
-    const sanitizedAuthor  = authorHasProfanity ? this.filterProfanity(escapedAuthor) : escapedAuthor;
+    const sanitizedAuthor  = escapedAuthor;
 
     if (hasProfanity) {
       this.addStrike();

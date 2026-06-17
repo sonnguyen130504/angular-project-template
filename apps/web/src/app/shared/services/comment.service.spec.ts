@@ -35,4 +35,11 @@ describe('CommentService profanity handling', () => {
     expect(filterProfanity('This is f u c k.')).toContain('****');
     expect(filterProfanity('đ m')).toContain('**');
   });
+
+  it('rejects profane author names', async () => {
+    const result = await service.addComment('f u c k name', 'This is fine');
+
+    expect(result.success).toBeFalse();
+    expect(result.message).toContain('Name cannot contain profanity');
+  });
 });

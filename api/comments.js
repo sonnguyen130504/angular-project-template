@@ -222,7 +222,10 @@ export default function handler(req, res) {
 
     const normalizedContent = String(content);
     const normalizedAuthor = String(author);
-    const hasProfanity = containsProfanity(normalizedContent) || containsProfanity(normalizedAuthor);
+    if (containsProfanity(normalizedAuthor)) {
+      return json(res, 400, { error: 'Name cannot contain profanity.' });
+    }
+    const hasProfanity = containsProfanity(normalizedContent);
 
     const newComment = {
       id: uid(),
