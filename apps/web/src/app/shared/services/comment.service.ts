@@ -268,25 +268,16 @@ export class CommentService {
     /* ── 5. Profanity filter + strike tracking ────────────────────── */
     const escapedContent = this.escapeHtml(trimmedContent);
     const escapedAuthor = this.escapeHtml(trimmedAuthor);
-    const contentHasProfanity = this.containsProfanity(escapedContent);
     const authorHasProfanity = this.containsProfanity(escapedAuthor);
+    const contentHasProfanity = this.containsProfanity(escapedContent);
     if (authorHasProfanity) {
       return { success: false, message: 'Name cannot contain profanity.' };
     }
-    const hasProfanity = contentHasProfanity;
-    const sanitizedContent = contentHasProfanity ? this.filterProfanity(escapedContent) : escapedContent;
-    const sanitizedAuthor  = escapedAuthor;
-
-    if (hasProfanity) {
-      this.addStrike();
-      const newBan = this.getBanStatus();
-      if (newBan.banned) {
-        const banMsg = newBan.permanent
-          ? '🚫 Permanently banned for repeated profanity violations.'
-          : `⚠️ Too many violations — banned for ${newBan.remainingLabel}.`;
-        return { success: false, message: banMsg };
-      }
+    if (contentHasProfanity) {
+      return { success: false, message: 'Comment cannot contain profanity.' };
     }
+    const sanitizedAuthor  = escapedAuthor;
+    const sanitizedContent = escapedContent;
 
     /* ── 6. POST to server ────────────────────────────────────────── */
     const avatarColor = this.pickAvatarColor(sanitizedAuthor);
@@ -306,10 +297,7 @@ export class CommentService {
       });
       this.lastPostTime = now;
 
-      const warnSuffix = hasProfanity
-        ? ` WARNING: profane language was detected in the name or comment, sanitized, and counted as a strike (${this.ban.strikes}/${this.nextBanThreshold()}).`
-        : '';
-      return { success: true, message: 'Comment posted!' + warnSuffix, comment: withClient, hasProfanity };
+      return { success: true, message: 'Comment posted!', comment: withClient, hasProfanity: false };
     } catch {
       // Offline fallback: simulate saving to backend locally
       const mockComment: Comment = {
@@ -327,10 +315,7 @@ export class CommentService {
         return updated;
       });
       this.lastPostTime = now;
-      const offlineWarn = hasProfanity
-        ? ' WARNING: profane language was detected in the name or comment, sanitized, and counted as a strike.'
-        : '';
-      return { success: true, message: 'Comment posted offline!' + offlineWarn, comment: mockComment, hasProfanity };
+      return { success: true, message: 'Comment posted offline!', comment: mockComment, hasProfanity: false };
     }
   }
 

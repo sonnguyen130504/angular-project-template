@@ -225,13 +225,15 @@ export default function handler(req, res) {
     if (containsProfanity(normalizedAuthor)) {
       return json(res, 400, { error: 'Name cannot contain profanity.' });
     }
-    const hasProfanity = containsProfanity(normalizedContent);
+    if (containsProfanity(normalizedContent)) {
+      return json(res, 400, { error: 'Comment cannot contain profanity.' });
+    }
 
     const newComment = {
       id: uid(),
       author: normalizedAuthor.slice(0, 30),
       avatarColor: String(avatarColor),
-      content: (hasProfanity ? filterProfanity(normalizedContent) : normalizedContent).slice(0, 500),
+      content: normalizedContent.slice(0, 500),
       timestamp: new Date().toISOString(),
       likes: 0,
     };

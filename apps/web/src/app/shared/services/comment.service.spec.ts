@@ -42,4 +42,21 @@ describe('CommentService profanity handling', () => {
     expect(result.success).toBeFalse();
     expect(result.message).toContain('Name cannot contain profanity');
   });
+
+  it('rejects profane comments, including punctuation-obfuscated variants', async () => {
+    const result1 = await service.addComment('Friendly Name', 'f.u.c.k this');
+    const result2 = await service.addComment('Friendly Name', 'f_u_c_k this');
+
+    expect(result1.success).toBeFalse();
+    expect(result1.message).toContain('Comment cannot contain profanity');
+    expect(result2.success).toBeFalse();
+    expect(result2.message).toContain('Comment cannot contain profanity');
+  });
+
+  it('rejects Vietnamese content variants with punctuation and spacing', async () => {
+    const result = await service.addComment('Friendly Name', 'd-u m-e');
+
+    expect(result.success).toBeFalse();
+    expect(result.message).toContain('Comment cannot contain profanity');
+  });
 });
