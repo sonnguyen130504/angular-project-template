@@ -80,68 +80,74 @@ export class CommentService {
   ];
 
   /* ── Profanity blacklist & filter ───────────────────────────────── */
-  private static readonly STANDALONE_BAD_WORDS = [
+  private static readonly BASE_BAD_WORDS = [
     'fuck', 'shit', 'asshole', 'bitch', 'bastard', 'dick', 'cunt', 'whore', 'slut', 'nigger', 'nigga', 'pussy', 'crap', 'prick',
     'dit', 'deo', 'buoi', 'cac', 'lon', 'vcl', 'clgt', 'vl', 'dm', 'dmm', 'cmn', 'dech', 'du'
   ];
 
-  private static makeSpacedRegex(word: string): RegExp {
-    const pattern = word
-      .split('')
-      .map(char => `${char}+`)
-      .join('[\\W_]*');
-    return new RegExp(`\\b${pattern}\\b`, 'gi');
-  }
-
-  private static readonly STANDALONE_REGEXES: RegExp[] =
-    CommentService.STANDALONE_BAD_WORDS.map(w => CommentService.makeSpacedRegex(w));
-
-  private static readonly BAD_PHRASES: RegExp[] = [
-    /\boc\s*cho\b/gi,
-    /\bcho\s*de\b/gi,
-    /\bcon\s*di\b/gi,
-    /\bdi\s*diem\b/gi,
-    /\bbu\s*cu\b/gi,
-    /\bbu\s*lol\b/gi,
-    /\bdme\b/gi,
-    /\bdu\s*me\b/gi,
-    /\bdu\s*ma\b/gi,
-    /\bngu\s*lo\b/gi,
+  private static readonly BASE_BAD_PHRASES = [
+    'oc cho',
+    'cho de',
+    'con di',
+    'di diem',
+    'bu cu',
+    'bu lol',
+    'du me',
+    'du ma',
+    'ngu lo',
   ];
 
+  private static readonly HOMOGLYPH_MAP: Record<string, string[]> = {
+    a: ['a', '@', '4', 'à', 'á', 'ả', 'ã', 'ạ', 'ă', 'ằ', 'ắ', 'ẳ', 'ẵ', 'ặ', 'â', 'ầ', 'ấ', 'ẩ', 'ẫ', 'ậ'],
+    b: ['b'],
+    c: ['c', '(', '{', '['],
+    d: ['d', 'đ'],
+    e: ['e', '3', 'ê', 'è', 'é', 'ẻ', 'ẽ', 'ẹ', 'ề', 'ế', 'ể', 'ễ', 'ệ'],
+    g: ['g', '9'],
+    h: ['h', '#'],
+    i: ['i', '1', '!', '|', 'j', 'í', 'ì', 'ỉ', 'ĩ', 'ị'],
+    l: ['l', '1', '|'],
+    m: ['m'],
+    n: ['n'],
+    o: ['o', '0', 'ò', 'ó', 'ỏ', 'õ', 'ọ', 'ô', 'ồ', 'ố', 'ổ', 'ỗ', 'ộ', 'ơ', 'ờ', 'ớ', 'ở', 'ỡ', 'ợ'],
+    p: ['p'],
+    r: ['r'],
+    s: ['s', '$', '5'],
+    t: ['t', '7', '+'],
+    u: ['u', 'v', 'w', 'ù', 'ú', 'ủ', 'ũ', 'ụ', 'ư', 'ừ', 'ứ', 'ử', 'ữ', 'ự'],
+    v: ['v'],
+    y: ['y', 'ý', 'ỳ', 'ỷ', 'ỹ', 'ỵ'],
+  };
+
+  private static readonly ZERO_WIDTH = /[\u200B-\u200D\uFEFF]/g;
+  private static readonly SEPARATOR = '[\\W_]*';
+  private static readonly MIN_REPEAT = /([a-zđ])\1{2,}/gi;
+
+  private static makeFlexibleRegex(term: string): RegExp {
+    const parts = term
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/đ/g, 'd')
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((token) => token.split('').map((char) => {
+        const chars = CommentService.HOMOGLYPH_MAP[char] ?? [char];
+        const escaped = chars.map((c) => CommentService.escapeRegex(c));
+        return `(?:${escaped.join('|')})+`;
+      }).join(CommentService.SEPARATOR));
+
+    return new RegExp(`(?:^|\\W)${parts}(?:$|\\W)`, 'giu');
+  }
+
   private static readonly FILTER_LIST: RegExp[] = [
-    /\bf+[\W_]*u+[\W_]*c+[\W_]*k/gi,
-    /\bs+[\W_]*h+[\W_]*[i1!]+[\W_]*t/gi,
-    /\ba+[\W_]*s+[\W_]*s+[\W_]*h+[\W_]*o+[\W_]*l+[\W_]*e/gi,
-    /\bb+[\W_]*[i1!]+[\W_]*t+[\W_]*c+[\W_]*h/gi,
-    /\bd+[\W_]*[a@]+[\W_]*m+[\W_]*n/gi,
-    /\bb+[\W_]*a+[\W_]*s+[\W_]*t+[\W_]*a+[\W_]*r+[\W_]*d/gi,
-    /\bd+[\W_]*[i1!]+[\W_]*c+[\W_]*k/gi,
-    /\bp+[\W_]*[i1!]+[\W_]*s+[\W_]*s/gi,
-    /\bc+[\W_]*u+[\W_]*n+[\W_]*t/gi,
-    /\bw+[\W_]*h+[\W_]*o+[\W_]*r+[\W_]*e/gi,
-    /\bs+[\W_]*l+[\W_]*u+[\W_]*t/gi,
-    /\bn+[\W_]*[i1!]+[\W_]*g+[\W_]*g/gi,
-    /\bp+[\W_]*r+[\W_]*[i1!]+[\W_]*c+[\W_]*k/gi,
-    /\bp+[\W_]*u+[\W_]*s+[\W_]*s+[\W_]*y/gi,
-    /\b[dđ]+[\W_]*[iíìỉĩịyýỳỷỹỵ]+[\W_]*t/gi,
-    /\b[dđ]+[\W_]*[eêéèẻẽẹếềểễệ]+[\W_]*o+[\W_]*s*/gi,
-    /\bl+[\W_]*[oòóỏõọôồốổỗộơờớởỡợ]+[\W_]*[nN]+/gi,
-    /\bc+[\W_]*[aàáảãạăằắẳẵặâầấẩẫậ]+[\W_]*[cC]+/gi,
-    /\bb+[\W_]*[uùúủũụưừứửữự]+[\W_]*[oòóỏõọôồốổỗộơờớởỡợ]*[iìíỉĩịyýỳỷỹỵ]+/gi,
-    /\bv+[\W_]*c+[\W_]*l+/gi,
-    /\bc+[\W_]*l+[\W_]*g+[\W_]*t+/gi,
-    /\bv+[\W_]*l+/gi,
-    /\b[dđ]+[\W_]*m+[\W_]*m*/gi,
-    /\b[dđ]+[\W_]*[uùúủũụưừứửữự]+[\W_]*[mmeẹéèẻẽêếềểễệ]+/gi,
-    /\b[dđ]+[\W_]*[uùúủũụưừứửữự]+[\W_]*[mMaàáảãạ]+/gi,
-    /\b[oòóỏõọôồốổỗộơờớởỡợ]+[\W_]*c+[\W_]*c+[\W_]*[hH]+[oòóỏõọôồốổỗộơờớởỡợ]+/gi,
-    /\b[cC]+[\W_]*[hH]+[\W_]*[oòóỏõọôồốổỗộơờớởỡợ]+[\W_]*[dđ]+[eẹéèẻẽêếềểễệ]+/gi,
-    /\bcon\s+[đđ]+[iíìỉĩịyýỳỷỹỵ]+/gi,
-    /\b[đđ]+[iíìỉĩịyýỳỷỹỵ]\s+[đđ]+[iíìỉĩịyýỳỷỹỵ]*[eẹéèẻẽêếềểễệ]*m+/gi,
-    /\bb+[uúùủũụưừứửữự]+\s+c+u+/gi,
-    /\bb+[uúùủũụưừứửữự]+\s+l+[oòóỏõọôồốổỗộơờớởỡợ]+n+/gi,
-    /\bngu\s+l+[oòóỏõọôồốổỗộơờớởỡợ]+/gi,
+    ...CommentService.BASE_BAD_WORDS.map((word) => CommentService.makeFlexibleRegex(word)),
+    ...CommentService.BASE_BAD_PHRASES.map((phrase) => CommentService.makeFlexibleRegex(phrase)),
+    /\b[dđ]+\W*[iíìỉĩịyýỳỷỹỵ]+\W*t+/giu,
+    /\b[dđ]+\W*[eêéèẻẽẹếềểễệ]+\W*o+\W*s*/giu,
+    /\b[l]+\W*[oòóỏõọôồốổỗộơờớởỡợ]+\W*n+/giu,
+    /\b[c]+\W*[aàáảãạăằắẳẵặâầấẩẫậ]+\W*[c]+/giu,
+    /\b[b]+\W*[uùúủũụưừứửữự]+\W*[oòóỏõọôồốổỗộơờớởỡợ]*\W*[iìíỉĩịyýỳỷỹỵ]+/giu,
   ];
 
   constructor() {
@@ -295,7 +301,7 @@ export class CommentService {
       this.lastPostTime = now;
 
       const warnSuffix = hasProfanity
-        ? ` (Warning: ${this.ban.strikes}/${this.nextBanThreshold()} strikes)`
+        ? ` WARNING: profane language was detected, sanitized, and counted as a strike (${this.ban.strikes}/${this.nextBanThreshold()}).`
         : '';
       return { success: true, message: 'Comment posted!' + warnSuffix, comment: withClient, hasProfanity };
     } catch {
@@ -315,7 +321,10 @@ export class CommentService {
         return updated;
       });
       this.lastPostTime = now;
-      return { success: true, message: 'Comment posted offline!', comment: mockComment, hasProfanity };
+      const offlineWarn = hasProfanity
+        ? ' WARNING: profane language was detected, sanitized, and counted as a strike.'
+        : '';
+      return { success: true, message: 'Comment posted offline!' + offlineWarn, comment: mockComment, hasProfanity };
     }
   }
 
@@ -398,6 +407,7 @@ export class CommentService {
 
   private normalizeText(text: string): string {
     let s = text.toLowerCase();
+    s = s.replace(CommentService.ZERO_WIDTH, '');
     s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     s = s.replace(/đ/g, 'd');
     const charMap: Record<string, string> = {
@@ -408,23 +418,20 @@ export class CommentService {
       '$': 's',
       '7': 't',
       '9': 'g',
-      'w': 'u'
+      'w': 'u',
+      'v': 'u',
     };
-    return s.split('').map(c => charMap[c] || c).join('');
+    s = s.split('').map(c => charMap[c] || c).join('');
+    s = s.replace(CommentService.MIN_REPEAT, '$1$1');
+    return s;
   }
 
   private containsProfanity(text: string): boolean {
     const normalized = this.normalizeText(text);
-
-    if (CommentService.STANDALONE_REGEXES.some(r => { r.lastIndex = 0; return r.test(normalized); })) {
-      return true;
-    }
-
-    if (CommentService.BAD_PHRASES.some(p => { p.lastIndex = 0; return p.test(normalized); })) {
-      return true;
-    }
-
-    return false;
+    return CommentService.FILTER_LIST.some((rule: RegExp) => {
+      rule.lastIndex = 0;
+      return rule.test(normalized);
+    });
   }
 
   private filterProfanity(text: string): string {
@@ -434,6 +441,10 @@ export class CommentService {
       r = r.replace(p, m => '*'.repeat(m.length));
     }
     return r;
+  }
+
+  private static escapeRegex(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   private escapeHtml(s: string): string {
@@ -552,4 +563,3 @@ export class CommentService {
     } catch { /* quota */ }
   }
 }
-

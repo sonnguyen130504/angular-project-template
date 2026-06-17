@@ -97,11 +97,13 @@
     @if (feedbackMsg(); as msg) {
       <div class="feedback-toast"
            [class.is-error]="msg.type === 'error'"
+           [class.is-warning]="msg.type === 'warning'"
            [class.is-success]="msg.type === 'success'"
            role="alert">
         <div class="toast-content">
           <i class="pi"
              [class.pi-check-circle]="msg.type === 'success'"
+             [class.pi-exclamation-triangle]="msg.type === 'warning'"
              [class.pi-exclamation-circle]="msg.type === 'error'"
              aria-hidden="true"></i>
           <span>{{ msg.text }}</span>

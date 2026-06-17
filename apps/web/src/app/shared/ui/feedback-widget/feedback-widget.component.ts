@@ -18,7 +18,7 @@ export class FeedbackWidgetComponent implements AfterViewChecked {
   isOpen = signal(false);
   authorName = signal(this.loadSavedName());
   commentText = signal('');
-  feedbackMsg = signal<{ type: 'success' | 'error'; text: string } | null>(null);
+  feedbackMsg = signal<{ type: 'success' | 'warning' | 'error'; text: string } | null>(null);
   isSubmitting = signal(false);
   private shouldScrollToTop = false;
 
@@ -73,7 +73,7 @@ export class FeedbackWidgetComponent implements AfterViewChecked {
     if (result.success) {
       this.commentText.set('');
       this.saveName(this.authorName());
-      this.showFeedback('success', result.message, !!result.hasProfanity);
+      this.showFeedback(result.hasProfanity ? 'warning' : 'success', result.message, !!result.hasProfanity);
       this.shouldScrollToTop = true;
     } else {
       this.showFeedback('error', result.message, true);
@@ -111,7 +111,7 @@ export class FeedbackWidgetComponent implements AfterViewChecked {
   }
 
   /* ── Private helpers ───────────────────────────────────────────── */
-  private showFeedback(type: 'success' | 'error', text: string, persistent = false): void {
+  private showFeedback(type: 'success' | 'warning' | 'error', text: string, persistent = false): void {
     this.feedbackMsg.set({ type, text });
     if (!persistent) {
       setTimeout(() => this.clearFeedback(), 4000);
