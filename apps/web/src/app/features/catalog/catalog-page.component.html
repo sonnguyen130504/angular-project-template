@@ -76,6 +76,9 @@
             <button type="button" [class.is-active]="viewMode === 'list'" (click)="setViewMode('list')" aria-label="List view">
               <i class="pi pi-list"></i>
             </button>
+            <button type="button" [class.is-active]="viewMode === 'canvas'" (click)="setViewMode('canvas')" aria-label="Spatial Canvas view">
+              <i class="pi pi-map"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -111,6 +114,86 @@
               <div class="skeleton-line short"></div>
             </app-ui-card>
           }
+        </div>
+      } @else if (viewMode === 'canvas') {
+        <div 
+          class="spatial-viewport" 
+          (mousedown)="onCanvasMouseDown($event)"
+          (mousemove)="onCanvasMouseMove($event)"
+          (mouseup)="onCanvasMouseUp()"
+          (mouseleave)="onCanvasMouseUp()"
+          (wheel)="onCanvasWheel($event)"
+          (touchstart)="onCanvasTouchStart($event)"
+          (touchmove)="onCanvasTouchMove($event)"
+          (touchend)="onCanvasTouchEnd()"
+        >
+          <!-- Infinite Pannable Canvas Board -->
+          <div 
+            class="spatial-board" 
+            [style.transform]="'translate(' + panX + 'px, ' + panY + 'px) scale(' + zoom + ')'"
+          >
+            <!-- X Axis Line (Price) -->
+            <div class="axis-line x-axis"></div>
+            <!-- Y Axis Line (Rating) -->
+            <div class="axis-line y-axis"></div>
+
+            <!-- Axis Labels -->
+            <div class="axis-label x-axis-label-left">Lower Price</div>
+            <div class="axis-label x-axis-label-right">Higher Price</div>
+            <div class="axis-label y-axis-label-top">Higher Rating</div>
+            <div class="axis-label y-axis-label-bottom">Lower Rating</div>
+
+            @for (product of filteredProducts; track product.name) {
+              <div 
+                class="product-card-node"
+                [style.transform]="'translate(' + getProductX(product.price) + 'px, ' + getProductY(product.rating) + 'px)'"
+              >
+                <div class="canvas-node-card">
+                  <div class="node-media">
+                    <img [src]="product.image" [alt]="product.name" />
+                    <div class="node-badge">{{ product.price | currency }}</div>
+                  </div>
+                  <div class="node-info">
+                    <h4>{{ product.name }}</h4>
+                    <div class="node-rating">
+                      <i class="pi pi-star-fill"></i>
+                      <span>{{ product.rating }}</span>
+                    </div>
+                  </div>
+                  <div class="node-actions">
+                    <button class="node-btn" (click)="openQuickView(product.name)" title="Quick View">
+                      <i class="pi pi-eye"></i>
+                    </button>
+                    <button class="node-btn" [class.is-active]="wishlist.has(product.name)" (click)="toggleWishlist(product.name)" title="Wishlist">
+                      <i class="pi pi-heart"></i>
+                    </button>
+                    <button class="node-btn primary" title="Add to Cart">
+                      <i class="pi pi-shopping-cart"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            } @empty {
+              <div class="canvas-empty-state">
+                <app-ui-badge tone="warning">No results</app-ui-badge>
+                <h3>No products match these filters</h3>
+                <p>Pan back to center or reset filters.</p>
+              </div>
+            }
+          </div>
+
+          <!-- Zoom & Reset HUD Controls -->
+          <div class="canvas-hud-controls">
+            <button class="hud-btn" (click)="zoomIn()" title="Zoom In"><i class="pi pi-plus"></i></button>
+            <button class="hud-btn" (click)="zoomOut()" title="Zoom Out"><i class="pi pi-minus"></i></button>
+            <button class="hud-btn reset-btn" (click)="resetZoom()" title="Reset view"><i class="pi pi-refresh"></i> Reset</button>
+            <span class="hud-zoom-lbl">{{ (zoom * 100).toFixed(0) }}%</span>
+          </div>
+
+          <!-- Interactive Hint Banner -->
+          <div class="canvas-hud-hint">
+            <i class="pi pi-info-circle"></i> Drag Background to Pan &bull; Mouse Wheel to Zoom
+          </div>
         </div>
       } @else {
         <div class="products" [class.list]="viewMode === 'list'">

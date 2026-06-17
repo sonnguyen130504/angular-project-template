@@ -1,4 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, NgClass } from '@angular/common';
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
@@ -23,7 +23,7 @@ type ProductCard = {
 @Component({
   selector: 'app-catalog-page',
   standalone: true,
-  imports: [CurrencyPipe, FormsModule, PageSectionComponent, PaginatorModule, SelectModule, SliderModule, UiBadgeComponent, UiButtonComponent, UiCardComponent],
+  imports: [CurrencyPipe, NgClass, FormsModule, PageSectionComponent, PaginatorModule, SelectModule, SliderModule, UiBadgeComponent, UiButtonComponent, UiCardComponent],
   templateUrl: './catalog-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './catalog-page.component.scss',
@@ -34,7 +34,7 @@ export class CatalogPageComponent {
   selectedStock = 'Any';
   selectedColor = 'Any';
   sort = 'Featured';
-  viewMode: 'grid' | 'list' = 'grid';
+  viewMode: 'grid' | 'list' | 'canvas' = 'grid';
   priceRange = [20, 220];
   minimumRating = 4.0;
   loading = false;
@@ -43,6 +43,86 @@ export class CatalogPageComponent {
   readonly compare = new Set<string>();
   first = 0;
   rows = 6;
+
+  // Spatial Infinite Canvas Controls
+  panX = 0;
+  panY = 0;
+  zoom = 1.0;
+  isDragging = false;
+  private startX = 0;
+  private startY = 0;
+
+  onCanvasMouseDown(event: MouseEvent): void {
+    if (event.button !== 0) return; // Left click only
+    const target = event.target as HTMLElement;
+    if (target.closest('.product-card-node') || target.closest('button') || target.closest('a')) return;
+
+    this.isDragging = true;
+    this.startX = event.clientX - this.panX;
+    this.startY = event.clientY - this.panY;
+    event.preventDefault();
+  }
+
+  onCanvasMouseMove(event: MouseEvent): void {
+    if (!this.isDragging) return;
+    this.panX = event.clientX - this.startX;
+    this.panY = event.clientY - this.startY;
+  }
+
+  onCanvasMouseUp(): void {
+    this.isDragging = false;
+  }
+
+  onCanvasWheel(event: WheelEvent): void {
+    event.preventDefault();
+    const zoomFactor = 0.08;
+    let newZoom = this.zoom + (event.deltaY < 0 ? zoomFactor : -zoomFactor);
+    newZoom = Math.min(2.0, Math.max(0.4, newZoom));
+    this.zoom = parseFloat(newZoom.toFixed(2));
+  }
+
+  onCanvasTouchStart(event: TouchEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.closest('.product-card-node') || target.closest('button') || target.closest('a')) return;
+
+    if (event.touches.length === 1) {
+      this.isDragging = true;
+      this.startX = event.touches[0].clientX - this.panX;
+      this.startY = event.touches[0].clientY - this.panY;
+    }
+  }
+
+  onCanvasTouchMove(event: TouchEvent): void {
+    if (!this.isDragging || event.touches.length !== 1) return;
+    this.panX = event.touches[0].clientX - this.startX;
+    this.panY = event.touches[0].clientY - this.startY;
+  }
+
+  onCanvasTouchEnd(): void {
+    this.isDragging = false;
+  }
+
+  zoomIn(): void {
+    this.zoom = Math.min(2.0, parseFloat((this.zoom + 0.15).toFixed(2)));
+  }
+
+  zoomOut(): void {
+    this.zoom = Math.max(0.4, parseFloat((this.zoom - 0.15).toFixed(2)));
+  }
+
+  resetZoom(): void {
+    this.zoom = 1.0;
+    this.panX = 0;
+    this.panY = 0;
+  }
+
+  getProductX(price: number): number {
+    return (price - 120) * 4.8;
+  }
+
+  getProductY(rating: number): number {
+    return (rating - 4.5) * -500;
+  }
 
   readonly categories = ['All', 'Outerwear', 'Accessories', 'Home', 'Travel'].map((value) => ({ label: value, value }));
   readonly stockOptions = ['Any', 'In stock', 'Low stock', 'Back soon'].map((value) => ({ label: value, value }));
@@ -88,7 +168,7 @@ export class CatalogPageComponent {
     return this.filteredProducts.slice(this.first, this.first + this.rows);
   }
 
-  setViewMode(mode: 'grid' | 'list'): void {
+  setViewMode(mode: 'grid' | 'list' | 'canvas'): void {
     this.viewMode = mode;
   }
 
