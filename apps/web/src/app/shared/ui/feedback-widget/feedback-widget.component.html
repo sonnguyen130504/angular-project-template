@@ -99,11 +99,16 @@
            [class.is-error]="msg.type === 'error'"
            [class.is-success]="msg.type === 'success'"
            role="alert">
-        <i class="pi"
-           [class.pi-check-circle]="msg.type === 'success'"
-           [class.pi-exclamation-circle]="msg.type === 'error'"
-           aria-hidden="true"></i>
-        <span>{{ msg.text }}</span>
+        <div class="toast-content">
+          <i class="pi"
+             [class.pi-check-circle]="msg.type === 'success'"
+             [class.pi-exclamation-circle]="msg.type === 'error'"
+             aria-hidden="true"></i>
+          <span>{{ msg.text }}</span>
+        </div>
+        <button type="button" class="toast-close-btn" (click)="clearFeedback()" aria-label="Dismiss message">
+          <i class="pi pi-times" aria-hidden="true"></i>
+        </button>
       </div>
     }
 

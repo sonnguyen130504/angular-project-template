@@ -73,10 +73,10 @@ export class FeedbackWidgetComponent implements AfterViewChecked {
     if (result.success) {
       this.commentText.set('');
       this.saveName(this.authorName());
-      this.showFeedback('success', result.message);
+      this.showFeedback('success', result.message, !!result.hasProfanity);
       this.shouldScrollToTop = true;
     } else {
-      this.showFeedback('error', result.message);
+      this.showFeedback('error', result.message, true);
     }
   }
 
@@ -111,11 +111,13 @@ export class FeedbackWidgetComponent implements AfterViewChecked {
   }
 
   /* ── Private helpers ───────────────────────────────────────────── */
-  private showFeedback(type: 'success' | 'error', text: string): void {
+  private showFeedback(type: 'success' | 'error', text: string, persistent = false): void {
     this.feedbackMsg.set({ type, text });
-    setTimeout(() => this.clearFeedback(), 4000);
+    if (!persistent) {
+      setTimeout(() => this.clearFeedback(), 4000);
+    }
   }
-  private clearFeedback(): void { this.feedbackMsg.set(null); }
+  public clearFeedback(): void { this.feedbackMsg.set(null); }
 
   private saveName(name: string): void {
     try { localStorage.setItem('sion-feedback-author', name.trim()); } catch { /* noop */ }

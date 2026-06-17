@@ -19,6 +19,7 @@ export interface CommentResult {
   success: boolean;
   message: string;
   comment?: Comment;
+  hasProfanity?: boolean;
 }
 
 /** Persisted ban record (per-browser, localStorage). */
@@ -78,9 +79,37 @@ export class CommentService {
     'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)',
   ];
 
-  /* ── Profanity blacklist (EN + VI) ──────────────────────────────── */
-  private static readonly PROFANITY_LIST: RegExp[] = [
-    // English
+  /* ── Profanity blacklist & filter ───────────────────────────────── */
+  private static readonly STANDALONE_BAD_WORDS = [
+    'fuck', 'shit', 'asshole', 'bitch', 'bastard', 'dick', 'cunt', 'whore', 'slut', 'nigger', 'nigga', 'pussy', 'crap', 'prick',
+    'dit', 'deo', 'buoi', 'cac', 'lon', 'vcl', 'clgt', 'vl', 'dm', 'dmm', 'cmn', 'dech', 'du'
+  ];
+
+  private static makeSpacedRegex(word: string): RegExp {
+    const pattern = word
+      .split('')
+      .map(char => `${char}+`)
+      .join('[\\W_]*');
+    return new RegExp(`\\b${pattern}\\b`, 'gi');
+  }
+
+  private static readonly STANDALONE_REGEXES: RegExp[] =
+    CommentService.STANDALONE_BAD_WORDS.map(w => CommentService.makeSpacedRegex(w));
+
+  private static readonly BAD_PHRASES: RegExp[] = [
+    /\boc\s*cho\b/gi,
+    /\bcho\s*de\b/gi,
+    /\bcon\s*di\b/gi,
+    /\bdi\s*diem\b/gi,
+    /\bbu\s*cu\b/gi,
+    /\bbu\s*lol\b/gi,
+    /\bdme\b/gi,
+    /\bdu\s*me\b/gi,
+    /\bdu\s*ma\b/gi,
+    /\bngu\s*lo\b/gi,
+  ];
+
+  private static readonly FILTER_LIST: RegExp[] = [
     /\bf+[\W_]*u+[\W_]*c+[\W_]*k/gi,
     /\bs+[\W_]*h+[\W_]*[i1!]+[\W_]*t/gi,
     /\ba+[\W_]*s+[\W_]*s+[\W_]*h+[\W_]*o+[\W_]*l+[\W_]*e/gi,
@@ -94,16 +123,25 @@ export class CommentService {
     /\bs+[\W_]*l+[\W_]*u+[\W_]*t/gi,
     /\bn+[\W_]*[i1!]+[\W_]*g+[\W_]*g/gi,
     /\bp+[\W_]*r+[\W_]*[i1!]+[\W_]*c+[\W_]*k/gi,
-    // Vietnamese
-    /\b[dđ]+[\W_]*[iíìỉĩị]+[\W_]*t[\W_]*m+[\W_]*[eẹéèẻẽê]+/gi,
-    /\b[dđ]+[\W_]*[uùúủũụư]+[\W_]*[.,!?]*/gi,
-    /\bl+[\W_]*[oòóỏõọô]+[\W_]*[nN]+/gi,
-    /\bc+[\W_]*[aàáảãạ]+[\W_]*[cC]+/gi,
-    /\b[dđ]+[\W_]*[eêéèẻẽẹ]+[\W_]*[.,!?]*[\W_]*c+[\W_]*h+[\W_]*[oòóỏõọ]+/gi,
-    /\bm+[\W_]*[aàáảãạ]+[\W_]*[yỹỷýỳ]+[\W_]*[.,!?]*/gi,
-    /\b[cC]+[\W_]*[hH]+[\W_]*[oòóỏõọô]+[\W_]*[.,!?]*/gi,
-    /\bv+[\W_]*[aàáảãạ]+[\W_]*[iíìỉĩị]+[\W_]*l+[\W_]*[oòóỏõọô]+[\W_]*[nN]+/gi,
-    /\bn+[\W_]*g+[\W_]*u+[\W_]*[.,!?]*[\W_]*x+[\W_]*u+[\W_]*a+[\W_]*n+/gi,
+    /\bp+[\W_]*u+[\W_]*s+[\W_]*s+[\W_]*y/gi,
+    /\b[dđ]+[\W_]*[iíìỉĩịyýỳỷỹỵ]+[\W_]*t/gi,
+    /\b[dđ]+[\W_]*[eêéèẻẽẹếềểễệ]+[\W_]*o+[\W_]*s*/gi,
+    /\bl+[\W_]*[oòóỏõọôồốổỗộơờớởỡợ]+[\W_]*[nN]+/gi,
+    /\bc+[\W_]*[aàáảãạăằắẳẵặâầấẩẫậ]+[\W_]*[cC]+/gi,
+    /\bb+[\W_]*[uùúủũụưừứửữự]+[\W_]*[oòóỏõọôồốổỗộơờớởỡợ]*[iìíỉĩịyýỳỷỹỵ]+/gi,
+    /\bv+[\W_]*c+[\W_]*l+/gi,
+    /\bc+[\W_]*l+[\W_]*g+[\W_]*t+/gi,
+    /\bv+[\W_]*l+/gi,
+    /\b[dđ]+[\W_]*m+[\W_]*m*/gi,
+    /\b[dđ]+[\W_]*[uùúủũụưừứửữự]+[\W_]*[mmeẹéèẻẽêếềểễệ]+/gi,
+    /\b[dđ]+[\W_]*[uùúủũụưừứửữự]+[\W_]*[mMaàáảãạ]+/gi,
+    /\b[oòóỏõọôồốổỗộơờớởỡợ]+[\W_]*c+[\W_]*c+[\W_]*[hH]+[oòóỏõọôồốổỗộơờớởỡợ]+/gi,
+    /\b[cC]+[\W_]*[hH]+[\W_]*[oòóỏõọôồốổỗộơờớởỡợ]+[\W_]*[dđ]+[eẹéèẻẽêếềểễệ]+/gi,
+    /\bcon\s+[đđ]+[iíìỉĩịyýỳỷỹỵ]+/gi,
+    /\b[đđ]+[iíìỉĩịyýỳỷỹỵ]\s+[đđ]+[iíìỉĩịyýỳỷỹỵ]*[eẹéèẻẽêếềểễệ]*m+/gi,
+    /\bb+[uúùủũụưừứửữự]+\s+c+u+/gi,
+    /\bb+[uúùủũụưừứửữự]+\s+l+[oòóỏõọôồốổỗộơờớởỡợ]+n+/gi,
+    /\bngu\s+l+[oòóỏõọôồốổỗộơờớởỡợ]+/gi,
   ];
 
   constructor() {
@@ -259,7 +297,7 @@ export class CommentService {
       const warnSuffix = hasProfanity
         ? ` (Warning: ${this.ban.strikes}/${this.nextBanThreshold()} strikes)`
         : '';
-      return { success: true, message: 'Comment posted!' + warnSuffix, comment: withClient };
+      return { success: true, message: 'Comment posted!' + warnSuffix, comment: withClient, hasProfanity };
     } catch {
       // Offline fallback: simulate saving to backend locally
       const mockComment: Comment = {
@@ -277,7 +315,7 @@ export class CommentService {
         return updated;
       });
       this.lastPostTime = now;
-      return { success: true, message: 'Comment posted offline!', comment: mockComment };
+      return { success: true, message: 'Comment posted offline!', comment: mockComment, hasProfanity };
     }
   }
 
@@ -358,13 +396,40 @@ export class CommentService {
      Private helpers
      ══════════════════════════════════════════════════════════════════ */
 
+  private normalizeText(text: string): string {
+    let s = text.toLowerCase();
+    s = s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    s = s.replace(/đ/g, 'd');
+    const charMap: Record<string, string> = {
+      '@': 'a', '4': 'a',
+      '1': 'i', '!': 'i', '|': 'i', 'j': 'i',
+      '0': 'o',
+      '3': 'e',
+      '$': 's',
+      '7': 't',
+      '9': 'g',
+      'w': 'u'
+    };
+    return s.split('').map(c => charMap[c] || c).join('');
+  }
+
   private containsProfanity(text: string): boolean {
-    return CommentService.PROFANITY_LIST.some(p => { p.lastIndex = 0; return p.test(text); });
+    const normalized = this.normalizeText(text);
+
+    if (CommentService.STANDALONE_REGEXES.some(r => { r.lastIndex = 0; return r.test(normalized); })) {
+      return true;
+    }
+
+    if (CommentService.BAD_PHRASES.some(p => { p.lastIndex = 0; return p.test(normalized); })) {
+      return true;
+    }
+
+    return false;
   }
 
   private filterProfanity(text: string): string {
     let r = text;
-    for (const p of CommentService.PROFANITY_LIST) {
+    for (const p of CommentService.FILTER_LIST) {
       p.lastIndex = 0;
       r = r.replace(p, m => '*'.repeat(m.length));
     }
