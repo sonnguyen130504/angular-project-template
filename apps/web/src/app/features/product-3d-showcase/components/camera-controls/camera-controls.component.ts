@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
+import { ThreeDAudioService } from '../../services/three-d-audio.service';
 
 export type CameraPreset = {
   label: string;
@@ -30,20 +31,26 @@ export class CameraControlsComponent {
 
   activePreset = '';
 
+  constructor(public audio: ThreeDAudioService) {}
+
   selectPreset(preset: CameraPreset): void {
+    this.audio.playClick();
     this.activePreset = preset.label;
     this.cameraChange.emit(preset.orbit);
   }
 
   onAutoRotateToggle(): void {
+    this.audio.playClick();
     this.autoRotateToggle.emit(!this.autoRotate());
   }
 
   onFullscreen(): void {
+    this.audio.playClick();
     this.fullscreenToggle.emit();
   }
 
   onReset(): void {
+    this.audio.playClick();
     this.activePreset = '';
     this.resetCamera.emit();
   }

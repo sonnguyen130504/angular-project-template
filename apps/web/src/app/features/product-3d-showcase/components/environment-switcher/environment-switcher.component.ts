@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
+import { ThreeDAudioService } from '../../services/three-d-audio.service';
 
 export type Environment = {
   id: string;
@@ -25,7 +26,10 @@ export class EnvironmentSwitcherComponent {
 
   environmentChange = output<Environment>();
 
+  constructor(public audio: ThreeDAudioService) {}
+
   selectEnvironment(env: Environment): void {
+    this.audio.playClick();
     this.environmentChange.emit(env);
   }
 }

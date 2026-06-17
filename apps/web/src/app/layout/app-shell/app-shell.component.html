@@ -38,9 +38,6 @@
           }
         </div>
       }
-      <a routerLink="/mobile-patterns" routerLinkActive="is-active" class="nav-trigger" style="text-decoration: none;">
-        Mobile
-      </a>
     </nav>
 
     <div class="header-actions desktop-actions">
@@ -49,6 +46,14 @@
         <span>Search pages</span>
         <kbd>/</kbd>
       </div>
+      <button
+        type="button"
+        class="theme-toggle"
+        (click)="audioService.toggleMute()"
+        [attr.title]="audioService.isMuted() ? 'Unmute sounds' : 'Mute sounds'"
+      >
+        <i class="pi" [class.pi-volume-up]="!audioService.isMuted()" [class.pi-volume-off]="audioService.isMuted()"></i>
+      </button>
       <button
         type="button"
         class="theme-toggle"
@@ -61,6 +66,14 @@
 
     <!-- Mobile Actions -->
     <div class="mobile-actions">
+      <button
+        type="button"
+        class="theme-toggle"
+        (click)="audioService.toggleMute()"
+        [attr.title]="audioService.isMuted() ? 'Unmute sounds' : 'Mute sounds'"
+      >
+        <i class="pi" [class.pi-volume-up]="!audioService.isMuted()" [class.pi-volume-off]="audioService.isMuted()"></i>
+      </button>
       <button
         type="button"
         class="theme-toggle"
@@ -120,17 +133,7 @@
               }
             </div>
           }
-          <div class="mobile-nav-group">
-            <a 
-              routerLink="/mobile-patterns" 
-              routerLinkActive="is-active" 
-              class="mobile-group-trigger" 
-              (click)="closeMobileMenu()" 
-              style="text-decoration: none; padding-left: 0;"
-            >
-              <span style="font-weight: 800; padding: 14px 16px;">Mobile</span>
-            </a>
-          </div>
+
         </nav>
       </div>
     }

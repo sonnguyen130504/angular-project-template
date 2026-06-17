@@ -6,6 +6,7 @@
         class="env-pill"
         [class.is-active]="env.id === activeId()"
         (click)="selectEnvironment(env)"
+        (mouseenter)="audio.playTick()"
       >
         <i [class]="env.icon"></i>
         {{ env.label }}

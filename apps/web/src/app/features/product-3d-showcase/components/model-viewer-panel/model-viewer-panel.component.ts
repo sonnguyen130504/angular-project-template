@@ -8,6 +8,12 @@ export type Hotspot = {
   description: string;
 };
 
+export type MaterialProps = {
+  color?: [number, number, number, number];
+  roughness?: number;
+  metallic?: number;
+};
+
 @Component({
   selector: 'app-model-viewer-panel',
   standalone: true,
@@ -25,6 +31,8 @@ export class ModelViewerPanelComponent implements AfterViewInit {
   hotspots = input<Hotspot[]>([]);
   shadowIntensity = input<number>(1);
   exposure = input<number>(1);
+  customization = input<Record<string, MaterialProps>>({});
+  variantName = input<string | null>(null);
 
   modelLoaded = output<void>();
   hotspotClicked = output<Hotspot>();
@@ -59,15 +67,85 @@ export class ModelViewerPanelComponent implements AfterViewInit {
       this.modelUrl();
       this.isLoading.set(true);
     });
+
+    // Apply material customization reactively
+    effect(() => {
+      this.applyCustomizations().catch((err) =>
+        console.error('Error in customizations effect:', err)
+      );
+    });
+
+    // Apply active design variant reactively
+    effect(() => {
+      const viewer = this.viewerRef()?.nativeElement;
+      const variant = this.variantName();
+      if (!viewer) return;
+      
+      // Update variant attribute directly on the DOM element
+      if (variant) {
+        viewer.setAttribute('variant-name', variant);
+      } else {
+        viewer.removeAttribute('variant-name');
+      }
+    });
   }
 
   ngAfterViewInit(): void {
     const viewer = this.viewerRef()?.nativeElement;
     if (viewer) {
-      viewer.addEventListener('load', () => {
+      const handleLoad = () => {
         this.isLoading.set(false);
+        this.applyCustomizations().catch((err) =>
+          console.error('Error applying customizations on load:', err)
+        );
         this.modelLoaded.emit();
-      });
+      };
+
+      if (viewer.loaded || (viewer.model && viewer.model.materials)) {
+        handleLoad();
+      } else {
+        viewer.addEventListener('load', handleLoad);
+      }
+    }
+  }
+
+  async applyCustomizations(): Promise<void> {
+    const viewer = this.viewerRef()?.nativeElement;
+    const custom = this.customization();
+    if (!viewer || !viewer.model || !viewer.model.materials) return;
+
+    for (const [materialName, props] of Object.entries(custom)) {
+      // Find material by name (standard case-insensitive search)
+      const material = viewer.model.materials.find(
+        (m: any) => m.name.toLowerCase() === materialName.toLowerCase()
+      );
+
+      if (!material) continue;
+
+      try {
+        if (typeof material.ensureLoaded === 'function') {
+          await material.ensureLoaded();
+        }
+
+        if (props.color) {
+          // Clear texture to let solid color show
+          if (
+            material.pbrMetallicRoughness.baseColorTexture &&
+            material.pbrMetallicRoughness.baseColorTexture.texture
+          ) {
+            material.pbrMetallicRoughness.baseColorTexture.setTexture(null);
+          }
+          material.pbrMetallicRoughness.setBaseColorFactor(props.color);
+        }
+        if (props.roughness !== undefined) {
+          material.pbrMetallicRoughness.setRoughnessFactor(props.roughness);
+        }
+        if (props.metallic !== undefined) {
+          material.pbrMetallicRoughness.setMetallicFactor(props.metallic);
+        }
+      } catch (err) {
+        console.error('Error applying customization to material:', materialName, err);
+      }
     }
   }
 

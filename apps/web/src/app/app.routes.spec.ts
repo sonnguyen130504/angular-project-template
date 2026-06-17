@@ -2,7 +2,7 @@ import { appRoutes } from './app.routes';
 
 describe('appRoutes', () => {
   it('exposes the expected number of routes', () => {
-    expect(appRoutes.length).toBe(24);
+    expect(appRoutes.length).toBe(27);
   });
 
   it('keeps the fallback route last', () => {

@@ -15,6 +15,8 @@
           [autoRotate]="autoRotate()"
           [hotspots]="currentHotspots()"
           [exposure]="exposure()"
+          [customization]="currentCustomization()"
+          [variantName]="activeProduct().id === 'shoe' ? selectedVariant() : null"
           (modelLoaded)="onModelLoaded()"
           (hotspotClicked)="onHotspotClicked($event)"
         />
@@ -35,6 +37,15 @@
             <i class="pi pi-box"></i>
             <span>3D Interactive</span>
           </div>
+          <button
+            class="audio-toggle-btn"
+            [class.is-muted]="isMuted()"
+            (click)="toggleMute()"
+            (mouseenter)="playTick()"
+            [title]="isMuted() ? 'Unmute sounds' : 'Mute sounds'"
+          >
+            <i class="pi" [class.pi-volume-up]="!isMuted()" [class.pi-volume-off]="isMuted()"></i>
+          </button>
         </div>
       </div>
 
@@ -72,6 +83,107 @@
         <h2 class="product-name">{{ activeProduct().name }}</h2>
         <p class="product-tagline">{{ activeProduct().tagline }}</p>
         <div class="product-price">{{ activeProduct().price | currency:'USD':'symbol':'1.0-0' }}</div>
+      </div>
+
+      <!-- Customizer Panel (PBR & Variant Customization) -->
+      <div class="product-customizer">
+        @if (activeProduct().id === 'shoe') {
+          <h3 class="section-label">Style Customizer</h3>
+          <!-- Variant selector -->
+          <div class="customizer-section">
+            <span class="customizer-label">Select Design Style</span>
+            <div class="part-pills">
+              @for (variant of shoeVariants; track variant) {
+                <button
+                  class="part-pill"
+                  [class.is-active]="selectedVariant() === variant"
+                  (click)="onVariantSelected(variant)"
+                  (mouseenter)="playTick()"
+                >
+                  {{ variant | titlecase }} Style
+                </button>
+              }
+            </div>
+          </div>
+          <p class="description-text mt-2" style="font-size: 0.75rem; font-style: italic; line-height: 1.4;">
+            * This high-fidelity model is styled using pre-designed texture variant coordinates.
+          </p>
+        } @else {
+          <h3 class="section-label">Real-time PBR Customizer</h3>
+          
+          <!-- Part selector -->
+          <div class="customizer-section">
+            <span class="customizer-label">Select Part</span>
+            <div class="part-pills">
+              @for (part of currentParts(); track part.name) {
+                <button
+                  class="part-pill"
+                  [class.is-active]="selectedPart() === part.name"
+                  (click)="onPartSelected(part.name)"
+                  (mouseenter)="playTick()"
+                >
+                  {{ part.label }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <!-- Color Swatches -->
+          <div class="customizer-section">
+            <span class="customizer-label">Material Color</span>
+            <div class="color-swatches">
+              @for (color of premiumColors; track color.name) {
+                <button
+                  class="color-swatch"
+                  [style.background-color]="color.hex"
+                  [class.is-active]="isSameColor(selectedPartProps().color, color.rgba)"
+                  [title]="color.name"
+                  (click)="onColorSelected(color)"
+                  (mouseenter)="playTick()"
+                >
+                  @if (isSameColor(selectedPartProps().color, color.rgba)) {
+                    <i class="pi pi-check text-xs text-white"></i>
+                  }
+                </button>
+              }
+            </div>
+          </div>
+
+          <!-- Sliders -->
+          <div class="customizer-section sliders-section">
+            <div class="slider-row">
+              <div class="slider-header">
+                <span class="customizer-label">Roughness / Gloss</span>
+                <span class="slider-value">{{ (selectedPartProps().roughness ?? 0.5) | number:'1.1-1' }}</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                [value]="selectedPartProps().roughness ?? 0.5"
+                (input)="onRoughnessChanged($event)"
+                class="customizer-slider"
+              />
+            </div>
+
+            <div class="slider-row">
+              <div class="slider-header">
+                <span class="customizer-label">Metallic Factor</span>
+                <span class="slider-value">{{ (selectedPartProps().metallic ?? 0.5) | number:'1.1-1' }}</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                [value]="selectedPartProps().metallic ?? 0.5"
+                (input)="onMetallicChanged($event)"
+                class="customizer-slider"
+              />
+            </div>
+          </div>
+        }
       </div>
 
       <div class="product-description">

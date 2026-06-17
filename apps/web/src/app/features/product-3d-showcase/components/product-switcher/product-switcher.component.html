@@ -4,6 +4,7 @@
       class="product-card"
       [class.is-active]="product.id === activeId()"
       (click)="selectProduct(product)"
+      (mouseenter)="audio.playTick()"
     >
       <div class="card-accent" [style.background]="product.accent"></div>
       <div class="card-poster">

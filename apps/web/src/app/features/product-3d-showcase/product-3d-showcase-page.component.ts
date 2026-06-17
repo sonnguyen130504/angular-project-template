@@ -1,11 +1,18 @@
 import { Component, ChangeDetectionStrategy, CUSTOM_ELEMENTS_SCHEMA, ViewEncapsulation, viewChild, signal, computed, ElementRef, effect } from '@angular/core';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, DecimalPipe, TitleCasePipe } from '@angular/common';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
-import { ModelViewerPanelComponent, Hotspot } from './components/model-viewer-panel/model-viewer-panel.component';
+import { ModelViewerPanelComponent, Hotspot, MaterialProps } from './components/model-viewer-panel/model-viewer-panel.component';
 import { ProductSwitcherComponent, ShowcaseProduct } from './components/product-switcher/product-switcher.component';
 import { CameraControlsComponent } from './components/camera-controls/camera-controls.component';
 import { EnvironmentSwitcherComponent, Environment } from './components/environment-switcher/environment-switcher.component';
 import { ThreeDAssetCacheService } from './services/three-d-asset-cache.service';
+import { ThreeDAudioService } from './services/three-d-audio.service';
+
+export type CustomizerColor = {
+  name: string;
+  rgba: [number, number, number, number];
+  hex: string;
+};
 
 @Component({
   selector: 'app-product-3d-showcase-page',
@@ -13,6 +20,8 @@ import { ThreeDAssetCacheService } from './services/three-d-asset-cache.service'
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CurrencyPipe,
+    DecimalPipe,
+    TitleCasePipe,
     PageSectionComponent,
     ModelViewerPanelComponent,
     ProductSwitcherComponent,
@@ -41,6 +50,25 @@ export class Product3DShowcasePageComponent {
   readonly resolvedModelUrl = signal<string>('');
   readonly isModelDownloading = signal<boolean>(false);
   readonly modelDownloadProgress = signal<number>(0);
+
+  // Material Customizer State
+  readonly customizations = signal<Record<string, Record<string, MaterialProps>>>({});
+  readonly selectedPart = signal<string>('');
+  
+  // Shoe variant styling state
+  readonly selectedVariant = signal<string>('midnight');
+
+  // Mute state exposing from audio service
+  readonly isMuted = this.audioService.isMuted;
+
+  readonly premiumColors: CustomizerColor[] = [
+    { name: 'Titanium Silver', rgba: [0.8, 0.8, 0.82, 1], hex: '#cccccc' },
+    { name: 'Obsidian Black', rgba: [0.1, 0.1, 0.12, 1], hex: '#1a1a1a' },
+    { name: 'Sunset Orange', rgba: [0.95, 0.35, 0.15, 1], hex: '#f25a24' },
+    { name: 'Midnight Navy', rgba: [0.1, 0.2, 0.4, 1], hex: '#1a3366' },
+    { name: 'Forest Green', rgba: [0.15, 0.35, 0.2, 1], hex: '#265933' },
+    { name: 'Sakura Pink', rgba: [0.95, 0.65, 0.7, 1], hex: '#f2a6b2' },
+  ];
 
   readonly products: ShowcaseProduct[] = [
     {
@@ -115,10 +143,33 @@ export class Product3DShowcasePageComponent {
     ],
   };
 
+  // Define customizable parts globally (which maps directly to GLB materials)
+  readonly productCustomizableParts: Record<string, { label: string; name: string }[]> = {
+    astronaut: [{ label: 'Astronaut Suit', name: 'Astronaut_mat' }],
+    helmet: [{ label: 'Helmet Shell', name: 'Material_MR' }],
+    shoe: [{ label: 'Entire Shoe base', name: 'phong1SG' }],
+  };
+
+  // Supported built-in variants for KHR_materials_variants (like for the shoe)
+  readonly shoeVariants = ['midnight', 'beach', 'street'];
+
   readonly currentHotspots = computed(() => this.productHotspots[this.activeProduct().id] ?? []);
   readonly currentSpecs = computed(() => this.specs[this.activeProduct().id] ?? []);
+  readonly currentParts = computed(() => this.productCustomizableParts[this.activeProduct().id] ?? []);
+  
+  // Customization mapping resolver
+  readonly currentCustomization = computed(() => this.customizations()[this.activeProduct().id] ?? {});
 
-  constructor(private cacheService: ThreeDAssetCacheService) {
+  // Get active configurations for selected part
+  readonly selectedPartProps = computed(() => {
+    const part = this.selectedPart();
+    return this.currentCustomization()[part] ?? { roughness: 0.5, metallic: 0.5 };
+  });
+
+  constructor(
+    private cacheService: ThreeDAssetCacheService,
+    private audioService: ThreeDAudioService
+  ) {
     // Eagerly preload all products
     const urls = this.products.map((p) => p.modelUrl);
     this.cacheService.preloadModels(urls);
@@ -127,6 +178,19 @@ export class Product3DShowcasePageComponent {
     effect(() => {
       const activeProd = this.activeProduct();
       this.loadModel(activeProd.modelUrl);
+      
+      // Auto-select first customizable part of new active product
+      const parts = this.productCustomizableParts[activeProd.id] ?? [];
+      if (parts.length > 0) {
+        this.selectedPart.set(parts[0].name);
+      } else {
+        this.selectedPart.set('');
+      }
+
+      // Reset shoe variant if we switch to the shoe
+      if (activeProd.id === 'shoe') {
+        this.selectedVariant.set('midnight');
+      }
     }, { allowSignalWrites: true });
   }
 
@@ -153,31 +217,37 @@ export class Product3DShowcasePageComponent {
 
   onProductSelected(product: ShowcaseProduct): void {
     if (product.id === this.activeProduct().id) return;
+    this.audioService.playClick();
     this.activeProduct.set(product);
     this.cameraOrbit.set(this.defaultOrbit);
     this.autoRotate.set(true);
   }
 
   onCameraChange(orbit: string): void {
+    this.audioService.playClick();
     this.cameraOrbit.set(orbit);
   }
 
   onAutoRotateToggle(enabled: boolean): void {
+    this.audioService.playClick();
     this.autoRotate.set(enabled);
   }
 
   onResetCamera(): void {
+    this.audioService.playClick();
     this.cameraOrbit.set(this.defaultOrbit);
     this.autoRotate.set(true);
   }
 
   onEnvironmentChange(env: Environment): void {
+    this.audioService.playClick();
     this.activeEnvironment.set(env.id);
     this.environmentImage.set(env.image);
     this.exposure.set(env.exposure);
   }
 
   toggleFullscreen(): void {
+    this.audioService.playClick();
     const container = this.showcaseContainer()?.nativeElement;
     if (!container) return;
 
@@ -201,10 +271,118 @@ export class Product3DShowcasePageComponent {
   }
 
   onModelLoaded(): void {
-    // Model loaded successfully
+    // Play success chime when 3D assets are fully loaded in WebGL
+    this.audioService.playSuccess();
   }
 
   onHotspotClicked(hotspot: Hotspot): void {
-    // Hotspot clicked handler
+    this.audioService.playClick();
+  }
+
+  // Audio actions
+  toggleMute(): void {
+    this.audioService.toggleMute();
+  }
+
+  playTick(): void {
+    this.audioService.playTick();
+  }
+
+  playClick(): void {
+    this.audioService.playClick();
+  }
+
+  // Variant Switcher (for KHR_materials_variants)
+  onVariantSelected(variant: string): void {
+    this.audioService.playClick();
+    this.selectedVariant.set(variant);
+    
+    // Clear custom colors on this shoe so the variant texture displays properly
+    const productId = this.activeProduct().id;
+    this.customizations.update((cust) => {
+      return {
+        ...cust,
+        [productId]: {},
+      };
+    });
+  }
+
+  // Customizer actions
+  onPartSelected(partName: string): void {
+    this.audioService.playClick();
+    this.selectedPart.set(partName);
+  }
+
+  isSameColor(c1: any, c2: any): boolean {
+    if (!c1 || !c2) return false;
+    return c1[0] === c2[0] && c1[1] === c2[1] && c1[2] === c2[2] && c1[3] === c2[3];
+  }
+
+  onColorSelected(color: CustomizerColor): void {
+    this.audioService.playClick();
+    const productId = this.activeProduct().id;
+    const part = this.selectedPart();
+    if (!part) return;
+
+    this.customizations.update((cust) => {
+      const prodCust = cust[productId] ?? {};
+      const partCust = prodCust[part] ?? {};
+      return {
+        ...cust,
+        [productId]: {
+          ...prodCust,
+          [part]: {
+            ...partCust,
+            color: color.rgba,
+          },
+        },
+      };
+    });
+  }
+
+  onRoughnessChanged(event: Event): void {
+    const inputEl = event.target as HTMLInputElement;
+    const val = parseFloat(inputEl.value);
+    const productId = this.activeProduct().id;
+    const part = this.selectedPart();
+    if (!part) return;
+
+    this.customizations.update((cust) => {
+      const prodCust = cust[productId] ?? {};
+      const partCust = prodCust[part] ?? {};
+      return {
+        ...cust,
+        [productId]: {
+          ...prodCust,
+          [part]: {
+            ...partCust,
+            roughness: val,
+          },
+        },
+      };
+    });
+  }
+
+  onMetallicChanged(event: Event): void {
+    const inputEl = event.target as HTMLInputElement;
+    const val = parseFloat(inputEl.value);
+    const productId = this.activeProduct().id;
+    const part = this.selectedPart();
+    if (!part) return;
+
+    this.customizations.update((cust) => {
+      const prodCust = cust[productId] ?? {};
+      const partCust = prodCust[part] ?? {};
+      return {
+        ...cust,
+        [productId]: {
+          ...prodCust,
+          [part]: {
+            ...partCust,
+            metallic: val,
+          },
+        },
+      };
+    });
   }
 }

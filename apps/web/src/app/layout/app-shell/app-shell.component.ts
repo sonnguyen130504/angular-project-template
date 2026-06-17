@@ -3,6 +3,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { filter } from 'rxjs';
 import { ThemeService } from '../../shared/services/theme.service';
 import { FeedbackWidgetComponent } from '../../shared/ui/feedback-widget/feedback-widget.component';
+import { ThreeDAudioService } from '../../features/product-3d-showcase/services/three-d-audio.service';
 
 type NavGroup = {
   label: string;
@@ -20,6 +21,7 @@ type NavGroup = {
 })
 export class AppShellComponent {
   public themeService = inject(ThemeService);
+  public audioService = inject(ThreeDAudioService);
   
   openGroup = '';
   isMobileMenuOpen = false;
@@ -66,7 +68,6 @@ export class AppShellComponent {
         { label: 'Home', path: '/', exact: true, note: 'Template overview' },
         { label: 'Catalog', path: '/catalog', note: 'Filters and listing states' },
         { label: 'Product', path: '/product', note: 'Variants and buy box' },
-        { label: '3D Showcase', path: '/3d-showcase', note: 'Interactive 3D viewer' },
         { label: 'Cart', path: '/cart', note: 'Checkout steps and totals' },
       ],
     },
@@ -110,6 +111,16 @@ export class AppShellComponent {
       links: [
         { label: 'Sign in', path: '/sign-in', note: 'Validation and session states' },
         { label: 'Forgot', path: '/forgot-password', note: 'Recovery flow' },
+      ],
+    },
+    {
+      label: 'Interactive',
+      description: '3D showcases, scroll animations, audio labs, and simulators.',
+      links: [
+        { label: '3D Showcase', path: '/3d-showcase', note: 'Interactive viewer and variants' },
+        { label: '3D Storytelling', path: '/3d-storytelling', note: 'Scroll-driven camera animations' },
+        { label: 'Tactile Sound', path: '/tactile-sound', note: 'Web Audio API synthesizers' },
+        { label: 'Mobile Simulator', path: '/mobile-patterns', note: 'Device simulation sandbox' },
       ],
     },
   ];

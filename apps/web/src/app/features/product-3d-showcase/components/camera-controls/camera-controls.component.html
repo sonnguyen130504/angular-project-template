@@ -5,6 +5,7 @@
         class="control-btn"
         [class.is-active]="activePreset === preset.label"
         (click)="selectPreset(preset)"
+        (mouseenter)="audio.playTick()"
         [title]="preset.label + ' view'"
       >
         <i [class]="preset.icon"></i>
@@ -20,6 +21,7 @@
       class="control-btn icon-only"
       [class.is-active]="autoRotate()"
       (click)="onAutoRotateToggle()"
+      (mouseenter)="audio.playTick()"
       title="Toggle auto-rotate"
     >
       <i class="pi pi-sync"></i>
@@ -28,6 +30,7 @@
     <button
       class="control-btn icon-only"
       (click)="onReset()"
+      (mouseenter)="audio.playTick()"
       title="Reset camera"
     >
       <i class="pi pi-refresh"></i>
@@ -36,6 +39,7 @@
     <button
       class="control-btn icon-only"
       (click)="onFullscreen()"
+      (mouseenter)="audio.playTick()"
       [title]="isFullscreen() ? 'Exit fullscreen' : 'Enter fullscreen'"
     >
       <i class="pi" [class.pi-window-maximize]="!isFullscreen()" [class.pi-window-minimize]="isFullscreen()"></i>

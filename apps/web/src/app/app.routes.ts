@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { Product3DShowcasePageComponent } from '@app/features/product-3d-showcase/product-3d-showcase-page.component';
+import { Product3DStorytellingPageComponent } from '@app/features/product-3d-storytelling/product-3d-storytelling-page.component';
+import { TactileSoundPageComponent } from '@app/features/tactile-sound/tactile-sound-page.component';
 import { HomePageComponent } from '@app/features/home/home-page.component';
 import { MobilePatternsPageComponent } from '@app/features/mobile-patterns/mobile-patterns-page.component';
 import { CatalogPageComponent } from '@app/features/catalog/catalog-page.component';
@@ -45,6 +47,14 @@ export const appRoutes: Routes = [
   {
     path: '3d-showcase',
     component: Product3DShowcasePageComponent,
+  },
+  {
+    path: '3d-storytelling',
+    component: Product3DStorytellingPageComponent,
+  },
+  {
+    path: 'tactile-sound',
+    component: TactileSoundPageComponent,
   },
   {
     path: 'cart',

@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
+import { ThreeDAudioService } from '../../services/three-d-audio.service';
 
 export type ShowcaseProduct = {
   id: string;
@@ -22,7 +23,10 @@ export class ProductSwitcherComponent {
   activeId = input.required<string>();
   productSelected = output<ShowcaseProduct>();
 
+  constructor(public audio: ThreeDAudioService) {}
+
   selectProduct(product: ShowcaseProduct): void {
+    this.audio.playClick();
     this.productSelected.emit(product);
   }
 }
