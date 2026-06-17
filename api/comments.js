@@ -9,6 +9,7 @@
  *   GET  /api/comments          → return all comments (newest first)
  *   POST /api/comments          → add a new comment
  *   POST /api/comments/like     → toggle like on a comment
+ *   DELETE /api/comments        → reset comments back to the seed list
  */
 
 // ── In-memory store (module-level, shared across requests on the same instance) ──
@@ -180,6 +181,12 @@ export default function handler(req, res) {
   // ── GET /api/comments ────────────────────────────────────────
   if (method === 'GET') {
     return json(res, 200, comments);
+  }
+
+  // ── DELETE /api/comments ────────────────────────────────────────
+  if (method === 'DELETE' && !isLike) {
+    comments = [...SEED_COMMENTS];
+    return json(res, 200, { ok: true, count: comments.length });
   }
 
   // ── POST /api/comments/like ───────────────────────────────────
