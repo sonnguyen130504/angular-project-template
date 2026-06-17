@@ -1,0 +1,112 @@
+<div class="storytelling-layout" [style.--active-glow]="glowColor()">
+  <!-- Sticky Left Column: 3D Model Visualizer -->
+  <div class="visualizer-pane">
+    <div class="glow-backdrop"></div>
+
+    @if (!isLoading()) {
+      <model-viewer
+        #viewer
+        [attr.src]="modelUrl"
+        camera-controls
+        interaction-prompt="none"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        style="width: 100%; height: 100%;"
+      >
+        <div class="progress-bar" slot="progress-bar">
+          <div class="update-bar"></div>
+        </div>
+      </model-viewer>
+    }
+
+    @if (isLoading()) {
+      <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <span class="loading-text">Calibrating 3D Visualizer...</span>
+      </div>
+    }
+
+    <!-- Scroll Guide Alert (Desktop Only) -->
+    <div class="scroll-guide desktop-only" [class.hidden]="isLoading()">
+      <i class="pi pi-chevron-down animate-bounce"></i>
+      <span>Scroll right panel to explore</span>
+    </div>
+
+    <!-- Mobile Active Slide Card Overlay -->
+    <div class="mobile-story-card">
+      <div class="mobile-card-header">
+        <span class="slide-step">0{{ activeSlideIndex() + 1 }} / 0{{ slides.length }}</span>
+        <span class="slide-subtitle">{{ slides[activeSlideIndex()].subtitle }}</span>
+      </div>
+      <h3 class="slide-title">{{ slides[activeSlideIndex()].title }}</h3>
+      <p class="slide-desc">{{ slides[activeSlideIndex()].description }}</p>
+      
+      <div class="mobile-card-actions">
+        <button class="nav-arrow-btn" [disabled]="activeSlideIndex() === 0" (click)="scrollToSlide(activeSlideIndex() - 1)">
+          <i class="pi pi-chevron-left"></i> Prev
+        </button>
+        
+        @if (activeSlideIndex() === slides.length - 1) {
+          <div class="mobile-outro-actions">
+            <a href="/3d-showcase" class="action-link primary-action">Configurator</a>
+            <a href="/tactile-sound" class="action-link secondary-action">Synth</a>
+          </div>
+        } @else {
+          <button class="nav-arrow-btn" (click)="scrollToSlide(activeSlideIndex() + 1)">
+            Next <i class="pi pi-chevron-right"></i>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Column: Narrative Timeline & Navigation -->
+  <div class="timeline-container">
+    <!-- Top Horizontal Progress & Step Navigation Header -->
+    <div class="story-navbar">
+      <div class="story-nav-items">
+        @for (slide of slides; track $index) {
+          <button 
+            class="story-nav-item" 
+            [class.is-active]="$index === activeSlideIndex()"
+            (click)="scrollToSlide($index)"
+          >
+            <span class="step-num">0{{ $index + 1 }}</span>
+            <span class="step-label">{{ slide.title.split(' ')[0] }}</span>
+          </button>
+        }
+      </div>
+      <div class="track-bar-container">
+        <div class="active-track-bar" [style.left.%]="activeSlideIndex() * 20"></div>
+      </div>
+    </div>
+
+    <!-- Scrollable Narrative Timeline -->
+    <div #scrollContainer class="timeline-pane" (scroll)="onScroll($event)">
+      <div class="scroll-progress-line" [style.height.%]="(activeSlideIndex() / (slides.length - 1)) * 100"></div>
+      <div class="timeline-track">
+        @for (slide of slides; track $index) {
+          <section class="timeline-section" [class.is-active]="$index === activeSlideIndex()">
+            <div class="story-card">
+              <span class="slide-step">0{{ $index + 1 }} / 0{{ slides.length }}</span>
+              <span class="slide-subtitle">{{ slide.subtitle }}</span>
+              <h2 class="slide-title">{{ slide.title }}</h2>
+              <p class="slide-desc">{{ slide.description }}</p>
+              
+              @if ($index === slides.length - 1) {
+                <div class="outro-actions">
+                  <a href="/3d-showcase" class="action-link primary-action">
+                    Open Configurator <i class="pi pi-sliders-h"></i>
+                  </a>
+                  <a href="/tactile-sound" class="action-link secondary-action">
+                    Test Synthesizer <i class="pi pi-volume-up"></i>
+                  </a>
+                </div>
+              }
+            </div>
+          </section>
+        }
+      </div>
+    </div>
+  </div>
+</div>
