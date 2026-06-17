@@ -157,6 +157,12 @@ function filterProfanity(text) {
   return output;
 }
 
+function sanitizeComment(comment) {
+  if (!comment) return comment;
+  const content = containsProfanity(comment.content) ? filterProfanity(comment.content) : comment.content;
+  return { ...comment, content };
+}
+
 function uid() {
   return `c_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
@@ -180,7 +186,7 @@ export default function handler(req, res) {
 
   // ── GET /api/comments ────────────────────────────────────────
   if (method === 'GET') {
-    return json(res, 200, comments);
+    return json(res, 200, comments.map(sanitizeComment));
   }
 
   // ── DELETE /api/comments ────────────────────────────────────────
@@ -202,7 +208,7 @@ export default function handler(req, res) {
     } else {
       comments[idx] = { ...comments[idx], likes: comments[idx].likes + 1 };
     }
-    return json(res, 200, comments[idx]);
+    return json(res, 200, sanitizeComment(comments[idx]));
   }
 
   // ── POST /api/comments ────────────────────────────────────────
@@ -231,7 +237,7 @@ export default function handler(req, res) {
     // Cap at 500 comments to avoid unbounded memory growth
     if (comments.length > 500) comments = comments.slice(0, 500);
 
-    return json(res, 201, newComment);
+    return json(res, 201, sanitizeComment(newComment));
   }
 
   return json(res, 405, { error: 'Method not allowed' });

@@ -176,7 +176,7 @@ export class CommentService {
       // Load local comments first (to preserve user's own comments if server reset)
       for (const lc of localComments) {
         mergedMap.set(lc.id, {
-          ...lc,
+          ...this.sanitizeComment(lc),
           likedByUser: this.likedIds.has(lc.id)
         });
       }
@@ -197,7 +197,7 @@ export class CommentService {
         }
 
         mergedMap.set(sc.id, {
-          ...sc,
+          ...this.sanitizeComment(sc),
           likes,
           likedByUser
         });
@@ -211,7 +211,7 @@ export class CommentService {
       this.saveLocalComments(mergedList);
     } catch {
       const localComments = this.loadLocalComments().map(c => ({
-        ...c,
+        ...this.sanitizeComment(c),
         likedByUser: this.likedIds.has(c.id)
       }));
       this._comments.set(localComments);
@@ -441,6 +441,15 @@ export class CommentService {
       r = r.replace(p, m => '*'.repeat(m.length));
     }
     return r;
+  }
+
+  private sanitizeComment(comment: Omit<Comment, 'likedByUser'> | Comment): Comment {
+    const content = this.containsProfanity(comment.content) ? this.filterProfanity(comment.content) : comment.content;
+    return {
+      ...comment,
+      content,
+      likedByUser: 'likedByUser' in comment ? comment.likedByUser : false,
+    };
   }
 
   private static escapeRegex(value: string): string {
