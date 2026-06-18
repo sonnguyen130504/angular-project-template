@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { InboxPageComponent } from './inbox-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('InboxPageComponent', () => {
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [InboxPageComponent] }).compileComponents();
+    await TestBed.configureTestingModule({ imports: [InboxPageComponent, getTranslocoModule()] }).compileComponents();
   });
 
   it('renders inbox triage content and filters unread threads', () => {

@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { TeamPageComponent } from './team-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('TeamPageComponent', () => {
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [TeamPageComponent] }).compileComponents();
+    await TestBed.configureTestingModule({ imports: [TeamPageComponent, getTranslocoModule()] }).compileComponents();
   });
 
   it('renders team members and sends an invite', () => {

@@ -13,10 +13,12 @@ type SlidePreset = {
   targetZ: number;
 };
 
+import { TranslocoDirective } from '@jsverse/transloco';
+
 @Component({
   selector: 'app-product-3d-storytelling-page',
   standalone: true,
-  imports: [],
+  imports: [TranslocoDirective],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './product-3d-storytelling-page.component.html',
   styleUrl: './product-3d-storytelling-page.component.scss',

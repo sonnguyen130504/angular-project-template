@@ -2,10 +2,12 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { DomSanitizer } from '@angular/platform-browser';
 import { MobileSimulatorComponent } from '@app/shared/ui/mobile-simulator/mobile-simulator.component';
 
+import { TranslocoDirective } from '@jsverse/transloco';
+
 @Component({
   selector: 'app-mobile-patterns-page',
   standalone: true,
-  imports: [MobileSimulatorComponent],
+  imports: [MobileSimulatorComponent, TranslocoDirective],
   templateUrl: './mobile-patterns-page.component.html',
   styleUrl: './mobile-patterns-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

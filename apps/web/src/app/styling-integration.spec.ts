@@ -34,9 +34,12 @@ import { UiButtonComponent } from './shared/ui/ui-button/ui-button.component';
 import { UiCardComponent } from './shared/ui/ui-card/ui-card.component';
 import { UiStatComponent } from './shared/ui/ui-stat/ui-stat.component';
 
+import { getTranslocoModule } from './transloco-testing.module';
+
 describe('Global Styling Integration Verification', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [getTranslocoModule()],
       providers: [
         provideRouter([]),
         provideNoopAnimations()

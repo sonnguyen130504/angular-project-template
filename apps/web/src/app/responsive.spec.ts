@@ -4,12 +4,14 @@ import { appRoutes } from './app.routes';
 import { AppComponent } from './app.component';
 import { provideAnimations } from '@angular/platform-browser/animations';
 
+import { getTranslocoModule } from './transloco-testing.module';
+
 describe('Global Responsive Layout', () => {
   let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [AppComponent, getTranslocoModule()],
       providers: [provideRouter(appRoutes), provideAnimations()],
     }).compileComponents();
     router = TestBed.inject(Router);

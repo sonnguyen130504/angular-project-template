@@ -2,10 +2,12 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { AppShellComponent } from './app-shell.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('AppShellComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppShellComponent],
+      imports: [AppShellComponent, getTranslocoModule()],
       providers: [provideRouter([])],
     }).compileComponents();
   });

@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { DataVisualizationPageComponent } from './data-visualization-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('DataVisualizationPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DataVisualizationPageComponent],
+      imports: [DataVisualizationPageComponent, getTranslocoModule()],
     }).compileComponents();
   });
 

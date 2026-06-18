@@ -12,10 +12,12 @@ type SetupStep = {
   state: 'Complete' | 'Ready' | 'Blocked';
 };
 
+import { TranslocoDirective } from '@jsverse/transloco';
+
 @Component({
   selector: 'app-setup-page',
   standalone: true,
-  imports: [PageSectionComponent, UiBadgeComponent, UiButtonComponent],
+  imports: [PageSectionComponent, UiBadgeComponent, UiButtonComponent, TranslocoDirective],
   templateUrl: './setup-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './setup-page.component.scss',

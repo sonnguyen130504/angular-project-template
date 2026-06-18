@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { CatalogPageComponent } from './catalog-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('CatalogPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CatalogPageComponent],
+      imports: [CatalogPageComponent, getTranslocoModule()],
     }).compileComponents();
   });
 

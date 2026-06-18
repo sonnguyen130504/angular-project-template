@@ -13,7 +13,6 @@ import { SpinnerLoaderComponent } from '../spinner-loader/spinner-loader.compone
   selector: 'app-component-preview-pane',
   standalone: true,
   imports: [FormsModule, UiBadgeComponent, UiButtonComponent, UiCardComponent, CommandPaletteComponent, SkeletonLoaderComponent, SpinnerLoaderComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './component-preview-pane.component.html',
 })
 export class ComponentPreviewPaneComponent {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, viewChild, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, OnDestroy, viewChild, input, inject, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
@@ -12,12 +12,13 @@ import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
     UiButtonComponent,
     UiCardComponent
 ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './kinetic-typography-panel.component.html',
 })
 export class KineticTypographyPanelComponent implements OnDestroy {
   motionIntensity = input(6);
   simulateReducedMotion = input(false);
+  
+  private readonly cdr = inject(ChangeDetectorRef);
 
   stiffness = 180;
   damping = 12;
@@ -167,6 +168,8 @@ export class KineticTypographyPanelComponent implements OnDestroy {
           return glyphs[Math.floor(Math.random() * glyphs.length)];
         })
         .join('');
+
+      this.cdr.markForCheck();
 
       if (iteration >= target.length) {
         clearInterval(this.scrambleIntervalId);

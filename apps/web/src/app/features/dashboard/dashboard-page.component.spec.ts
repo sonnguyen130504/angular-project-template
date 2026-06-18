@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { DashboardPageComponent } from './dashboard-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('DashboardPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardPageComponent],
+      imports: [DashboardPageComponent, getTranslocoModule()],
     }).compileComponents();
   });
 

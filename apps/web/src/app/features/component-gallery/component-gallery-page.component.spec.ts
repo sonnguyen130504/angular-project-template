@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { ComponentGalleryPageComponent } from './component-gallery-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('ComponentGalleryPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ComponentGalleryPageComponent],
+      imports: [ComponentGalleryPageComponent, getTranslocoModule()],
     }).compileComponents();
   });
 

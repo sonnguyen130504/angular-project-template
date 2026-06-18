@@ -2,10 +2,12 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ProductPageComponent } from './product-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('ProductPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ProductPageComponent],
+      imports: [NoopAnimationsModule, ProductPageComponent, getTranslocoModule()],
     }).compileComponents();
   });
 

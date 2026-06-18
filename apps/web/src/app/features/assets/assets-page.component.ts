@@ -12,10 +12,12 @@ type AssetItem = {
   status: 'Ready' | 'Processing';
 };
 
+import { TranslocoDirective } from '@jsverse/transloco';
+
 @Component({
   selector: 'app-assets-page',
   standalone: true,
-  imports: [FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent],
+  imports: [FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent, TranslocoDirective],
   templateUrl: './assets-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './assets-page.component.scss',

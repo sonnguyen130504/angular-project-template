@@ -27,7 +27,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
   providers: [GalleryStateService],
   templateUrl: './component-gallery-page.component.html',
   styleUrl: './component-gallery-page.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class ComponentGalleryPageComponent {

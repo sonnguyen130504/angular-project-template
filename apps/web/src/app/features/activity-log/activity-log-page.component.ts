@@ -16,10 +16,12 @@ type ActivityEntry = {
   detail: string;
 };
 
+import { TranslocoDirective } from '@jsverse/transloco';
+
 @Component({
   selector: 'app-activity-log-page',
   standalone: true,
-  imports: [FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent],
+  imports: [FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent, TranslocoDirective],
   templateUrl: './activity-log-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './activity-log-page.component.scss',

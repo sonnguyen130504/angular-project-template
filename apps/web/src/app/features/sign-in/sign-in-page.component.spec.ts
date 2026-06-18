@@ -2,10 +2,12 @@ import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { SignInPageComponent } from './sign-in-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('SignInPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SignInPageComponent],
+      imports: [SignInPageComponent, getTranslocoModule()],
       providers: [provideRouter([])],
     }).compileComponents();
   });

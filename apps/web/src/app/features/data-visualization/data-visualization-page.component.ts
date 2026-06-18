@@ -6,11 +6,12 @@ import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.c
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
 import { UiStatComponent } from '@app/shared/ui/ui-stat/ui-stat.component';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-data-visualization-page',
   standalone: true,
-  imports: [ChartModule, FormsModule, PageSectionComponent, TableModule, UiBadgeComponent, UiCardComponent, UiStatComponent],
+  imports: [ChartModule, FormsModule, PageSectionComponent, TableModule, UiBadgeComponent, UiCardComponent, UiStatComponent, TranslocoDirective],
   templateUrl: './data-visualization-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './data-visualization-page.component.scss',

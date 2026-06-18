@@ -2,10 +2,12 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { ForgotPasswordPageComponent } from './forgot-password-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('ForgotPasswordPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ForgotPasswordPageComponent],
+      imports: [ForgotPasswordPageComponent, getTranslocoModule()],
       providers: [provideRouter([])],
     }).compileComponents();
   });

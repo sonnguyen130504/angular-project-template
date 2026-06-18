@@ -1,18 +1,19 @@
-import { Component, ElementRef, OnDestroy, OnInit, viewChild, ViewEncapsulation, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ElementRef, OnDestroy, AfterViewInit, viewChild, ViewEncapsulation, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { ThreeDAudioService } from '../product-3d-showcase/services/three-d-audio.service';
 
+import { TranslocoDirective } from '@jsverse/transloco';
+
 @Component({
   selector: 'app-tactile-sound-page',
   standalone: true,
-  imports: [FormsModule, PageSectionComponent],
+  imports: [FormsModule, PageSectionComponent, TranslocoDirective],
   templateUrl: './tactile-sound-page.component.html',
   styleUrl: './tactile-sound-page.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
-export class TactileSoundPageComponent implements OnInit, OnDestroy {
+export class TactileSoundPageComponent implements AfterViewInit, OnDestroy {
   public audio = inject(ThreeDAudioService);
 
   readonly canvasRef = viewChild<ElementRef<HTMLCanvasElement>>('visualizerCanvas');
@@ -48,7 +49,7 @@ export class TactileSoundPageComponent implements OnInit, OnDestroy {
   isToggleOn = false;
   keyboardInput = '';
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.startVisualizer();
   }
 

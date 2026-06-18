@@ -82,7 +82,7 @@ export class CommentService {
   /* ── Profanity blacklist & filter ───────────────────────────────── */
   private static readonly BASE_BAD_WORDS = [
     'fuck', 'shit', 'asshole', 'bitch', 'bastard', 'dick', 'cunt', 'whore', 'slut', 'nigger', 'nigga', 'pussy', 'crap', 'prick',
-    'dit', 'deo', 'buoi', 'cac', 'lon', 'vcl', 'clgt', 'vl', 'dm', 'dmm', 'cmn', 'dech', 'du'
+    'dit', 'deo', 'buoi', 'cac', 'lon', 'vcl', 'clgt', 'vl', 'dm', 'dmm', 'cmn', 'dech', 'du', 'ocho'
   ];
 
   private static readonly BASE_BAD_PHRASES = [
@@ -137,7 +137,7 @@ export class CommentService {
         return `(?:${escaped.join('|')})+`;
       }).join(CommentService.SEPARATOR));
 
-    return new RegExp(`(?:^|\\W)${parts}(?:$|\\W)`, 'giu');
+    return new RegExp(`(?:^|\\W|\\b)${parts}(?:$|\\W|\\b)`, 'giu');
   }
 
   private static readonly FILTER_LIST: RegExp[] = [

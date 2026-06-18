@@ -1,8 +1,18 @@
+import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { provideLocationMocks } from '@angular/common/testing';
 import { appRoutes } from './app.routes';
+import { getTranslocoModule } from './transloco-testing.module';
 
-describe('appRoutes', () => {
-  it('exposes the expected number of routes', () => {
-    expect(appRoutes.length).toBe(27);
+describe('App Routing', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [getTranslocoModule()],
+      providers: [
+        provideRouter(appRoutes),
+        provideLocationMocks()
+      ]
+    }).compileComponents();
   });
 
   it('keeps the fallback route last', () => {

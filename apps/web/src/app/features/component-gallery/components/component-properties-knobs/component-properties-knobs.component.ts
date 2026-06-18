@@ -8,7 +8,6 @@ import { GalleryStateService } from '../../services/gallery-state.service';
   selector: 'app-component-properties-knobs',
   standalone: true,
   imports: [FormsModule, UiButtonComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './component-properties-knobs.component.html',
 })
 export class ComponentPropertiesKnobsComponent {

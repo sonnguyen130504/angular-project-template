@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { TasksPageComponent } from './tasks-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('TasksPageComponent', () => {
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [TasksPageComponent] }).compileComponents();
+    await TestBed.configureTestingModule({ imports: [TasksPageComponent, getTranslocoModule()] }).compileComponents();
   });
 
   it('renders task board and moves a task forward', () => {

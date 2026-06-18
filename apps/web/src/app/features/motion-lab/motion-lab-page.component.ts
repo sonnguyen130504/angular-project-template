@@ -13,6 +13,8 @@ import { TiltCardPanelComponent } from './components/tilt-card-panel/tilt-card-p
 
 type MotionLabTab = 'physics' | 'interactions' | 'flip' | 'scroll' | 'typography' | 'canvas' | 'advanced';
 
+import { TranslocoDirective } from '@jsverse/transloco';
+
 @Component({
   selector: 'app-motion-lab-page',
   standalone: true,
@@ -26,11 +28,11 @@ type MotionLabTab = 'physics' | 'interactions' | 'flip' | 'scroll' | 'typography
     ScrollStaggerPanelComponent,
     KineticTypographyPanelComponent,
     CanvasSvgPhysicsPanelComponent,
-    TiltCardPanelComponent
-],
+    TiltCardPanelComponent,
+    TranslocoDirective
+  ],
   templateUrl: './motion-lab-page.component.html',
   styleUrl: './motion-lab-page.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
 export class MotionLabPageComponent {

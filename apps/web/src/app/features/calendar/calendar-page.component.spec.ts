@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CalendarPageComponent } from './calendar-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('CalendarPageComponent', () => {
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [CalendarPageComponent] }).compileComponents();
+    await TestBed.configureTestingModule({ imports: [CalendarPageComponent, getTranslocoModule()] }).compileComponents();
   });
 
   it('renders schedule content and resolves a conflict', () => {

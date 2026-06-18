@@ -14,6 +14,8 @@ export type CustomizerColor = {
   hex: string;
 };
 
+import { TranslocoDirective } from '@jsverse/transloco';
+
 @Component({
   selector: 'app-product-3d-showcase-page',
   standalone: true,
@@ -27,6 +29,7 @@ export type CustomizerColor = {
     ProductSwitcherComponent,
     CameraControlsComponent,
     EnvironmentSwitcherComponent,
+    TranslocoDirective
   ],
   templateUrl: './product-3d-showcase-page.component.html',
   styleUrl: './product-3d-showcase-page.component.scss',

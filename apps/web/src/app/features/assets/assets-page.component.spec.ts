@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { AssetsPageComponent } from './assets-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('AssetsPageComponent', () => {
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [AssetsPageComponent] }).compileComponents();
+    await TestBed.configureTestingModule({ imports: [AssetsPageComponent, getTranslocoModule()] }).compileComponents();
   });
 
   it('renders assets and queues an upload', () => {

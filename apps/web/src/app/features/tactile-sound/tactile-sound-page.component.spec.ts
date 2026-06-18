@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { TactileSoundPageComponent } from './tactile-sound-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('TactileSoundPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TactileSoundPageComponent],
+      imports: [TactileSoundPageComponent, getTranslocoModule()],
     }).compileComponents();
   });
 

@@ -2,10 +2,12 @@ import { TestBed } from '@angular/core/testing';
 import { CartOrderSummaryComponent } from './cart-order-summary.component';
 import { CartStateService } from '../../services/cart-state.service';
 
+import { getTranslocoModule } from '../../../../transloco-testing.module';
+
 describe('CartOrderSummaryComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CartOrderSummaryComponent],
+      imports: [CartOrderSummaryComponent, getTranslocoModule()],
       providers: [CartStateService]
     }).compileComponents();
   });

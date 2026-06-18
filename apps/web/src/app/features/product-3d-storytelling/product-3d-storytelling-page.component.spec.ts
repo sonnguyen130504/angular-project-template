@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { Product3DStorytellingPageComponent } from './product-3d-storytelling-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('Product3DStorytellingPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Product3DStorytellingPageComponent],
+      imports: [Product3DStorytellingPageComponent, getTranslocoModule()],
     }).compileComponents();
   });
 

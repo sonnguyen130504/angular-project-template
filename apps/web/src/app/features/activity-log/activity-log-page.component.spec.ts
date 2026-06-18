@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivityLogPageComponent } from './activity-log-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('ActivityLogPageComponent', () => {
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [ActivityLogPageComponent] }).compileComponents();
+    await TestBed.configureTestingModule({ imports: [ActivityLogPageComponent, getTranslocoModule()] }).compileComponents();
   });
 
   it('renders audit log and exports filtered events', () => {

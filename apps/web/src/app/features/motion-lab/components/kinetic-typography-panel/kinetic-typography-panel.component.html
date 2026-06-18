@@ -33,21 +33,21 @@
 
     <!-- Part 2: Matrix Scrambler -->
     <app-ui-card class="lab-card">
-      <div class="card-header-row">
-        <div>
+      <div class="card-header-row" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
+        <div style="flex: 1;">
           <app-ui-badge tone="positive">Scrambler</app-ui-badge>
           <h3 class="lab-section-title">Matrix Scramble Text</h3>
           <p class="lab-section-desc">Hover over the container or click below. A high-tech scramble cipher resolves character arrays step-by-step.</p>
         </div>
+        <app-ui-button variant="secondary" (click)="triggerScramble()" id="btn-trigger-scramble" style="flex-shrink: 0;">
+          Run Scrambler
+        </app-ui-button>
       </div>
 
       <div class="scramble-panel-wrap" (mouseenter)="triggerScramble()">
         <div class="scrambled-text-box">
           <code>{{ scrambledText }}</code>
         </div>
-        <app-ui-button variant="secondary" (click)="triggerScramble()" id="btn-trigger-scramble">
-          Run Scrambler
-        </app-ui-button>
       </div>
     </app-ui-card>
   </div>

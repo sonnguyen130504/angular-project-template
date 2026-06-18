@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { SetupPageComponent } from './setup-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('SetupPageComponent', () => {
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [SetupPageComponent] }).compileComponents();
+    await TestBed.configureTestingModule({ imports: [SetupPageComponent, getTranslocoModule()] }).compileComponents();
   });
 
   it('renders setup checklist and completes the active step', () => {

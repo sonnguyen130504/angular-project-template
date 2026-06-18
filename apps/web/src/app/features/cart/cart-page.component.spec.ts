@@ -2,10 +2,12 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { CartPageComponent } from './cart-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('CartPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CartPageComponent],
+      imports: [CartPageComponent, getTranslocoModule()],
       providers: [provideRouter([])]
     }).compileComponents();
   });

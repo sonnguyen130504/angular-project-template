@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { ProfilePageComponent } from './profile-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('ProfilePageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProfilePageComponent],
+      imports: [ProfilePageComponent, getTranslocoModule()],
     }).compileComponents();
   });
 

@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { MotionLabPageComponent } from './motion-lab-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('MotionLabPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MotionLabPageComponent],
+      imports: [MotionLabPageComponent, getTranslocoModule()],
     }).compileComponents();
   });
 

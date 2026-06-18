@@ -2,10 +2,12 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { SettingsPageComponent } from './settings-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('SettingsPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SettingsPageComponent],
+      imports: [SettingsPageComponent, getTranslocoModule()],
       providers: [provideRouter([])],
     }).compileComponents();
   });

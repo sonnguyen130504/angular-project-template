@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { BillingPageComponent } from './billing-page.component';
 
+import { getTranslocoModule } from '../../transloco-testing.module';
+
 describe('BillingPageComponent', () => {
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ imports: [BillingPageComponent] }).compileComponents();
+    await TestBed.configureTestingModule({ imports: [BillingPageComponent, getTranslocoModule()] }).compileComponents();
   });
 
   it('renders billing plans and toggles interval', () => {
