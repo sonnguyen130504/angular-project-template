@@ -73,6 +73,10 @@
     "storytelling3dNote": "Scroll-driven camera animations",
     "tactileSound": "Tactile Sound",
     "tactileSoundNote": "Web Audio API synthesizers",
+    "audioStudio": "Soundscape Studio",
+    "audioStudioNote": "Neumorphic ambient audio mixer",
+    "physicsLab": "Physics Data Lab",
+    "physicsLabNote": "Colliding particle graph metrics",
     "mobileSimulator": "Mobile Simulator",
     "mobileSimulatorNote": "Device simulation sandbox"
   },

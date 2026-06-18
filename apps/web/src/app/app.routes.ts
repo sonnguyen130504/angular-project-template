@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { Product3DShowcasePageComponent } from '@app/features/product-3d-showcase/product-3d-showcase-page.component';
 import { Product3DStorytellingPageComponent } from '@app/features/product-3d-storytelling/product-3d-storytelling-page.component';
 import { TactileSoundPageComponent } from '@app/features/tactile-sound/tactile-sound-page.component';
+import { AudioStudioPageComponent } from '@app/features/audio-studio/audio-studio-page.component';
+import { PhysicsLabPageComponent } from '@app/features/physics-lab/physics-lab-page.component';
 import { HomePageComponent } from '@app/features/home/home-page.component';
 import { MobilePatternsPageComponent } from '@app/features/mobile-patterns/mobile-patterns-page.component';
 import { CatalogPageComponent } from '@app/features/catalog/catalog-page.component';
@@ -55,6 +57,14 @@ export const appRoutes: Routes = [
   {
     path: 'tactile-sound',
     component: TactileSoundPageComponent,
+  },
+  {
+    path: 'audio-studio',
+    component: AudioStudioPageComponent,
+  },
+  {
+    path: 'physics-lab',
+    component: PhysicsLabPageComponent,
   },
   {
     path: 'cart',

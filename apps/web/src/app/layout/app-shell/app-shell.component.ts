@@ -122,6 +122,8 @@ export class AppShellComponent {
         { key: 'showcase3d', path: '/3d-showcase' },
         { key: 'storytelling3d', path: '/3d-storytelling' },
         { key: 'tactileSound', path: '/tactile-sound' },
+        { key: 'audioStudio', path: '/audio-studio' },
+        { key: 'physicsLab', path: '/physics-lab' },
         { key: 'mobileSimulator', path: '/mobile-patterns' },
       ],
     },

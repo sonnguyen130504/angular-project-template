@@ -1,0 +1,135 @@
+<div class="physics-layout">
+  <!-- Interactive Physics Sandbox Area -->
+  <main class="canvas-panel">
+    <header class="canvas-header">
+      <div class="title-area">
+        <app-ui-badge tone="info">Simulation Active</app-ui-badge>
+        <h2>Physics-based Data Playground</h2>
+        <p>Dynamic 2D particle collision vector space displaying team parameters</p>
+      </div>
+      <!-- Telemetry Info -->
+      <div class="metrics-strip">
+        <div class="metric-item">
+          <span>Active Nodes:</span>
+          <strong>{{ particles().length }}</strong>
+        </div>
+        <div class="metric-item">
+          <span>FPS:</span>
+          <strong>60 fps</strong>
+        </div>
+      </div>
+    </header>
+
+    <!-- Simulation Viewport -->
+    <div 
+      #viewport 
+      class="simulation-viewport"
+      (mousemove)="onViewportMouseMove($event)"
+      (mouseleave)="onViewportMouseLeave()"
+    >
+      <!-- Background blueprint grid lines -->
+      <div class="blueprint-overlay"></div>
+
+      <!-- Render nodes dynamic coordinates -->
+      @for (p of particles(); track p.id) {
+        <div 
+          class="physics-node"
+          [style.left.px]="p.x"
+          [style.top.px]="p.y"
+          [style.width.px]="p.radius * 2"
+          [style.height.px]="p.radius * 2"
+          [style.background]="p.color"
+          (mousedown)="startParticleDrag($event, p)"
+          [class.is-dragging]="draggedParticle() === p"
+        >
+          <div class="node-content">
+            <span class="node-lbl">{{ p.name }}</span>
+            <span class="node-val">{{ p.value }}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Physics Guide Indicator -->
+    <div class="physics-controls-hint">
+      <i class="pi pi-info-circle"></i> Hover to repel nodes &bull; Drag individual bubble nodes to throw them
+    </div>
+  </main>
+
+  <!-- Sidebar Configuration Control Panel -->
+  <aside class="control-sidebar neumorphic-sidebar">
+    <h3>Simulation Configurations</h3>
+    <p class="sidebar-desc">Modify spring solver forces and boundaries</p>
+
+    <!-- Configuration Sliders -->
+    <div class="control-sliders">
+      <label class="slider-group">
+        <div class="slider-header">
+          <span>Speed Factor</span>
+          <strong>{{ (speedFactor() * 100).toFixed(0) }}%</strong>
+        </div>
+        <input 
+          type="range" 
+          min="0.1" 
+          max="2.5" 
+          step="0.1" 
+          [value]="speedFactor()"
+          (input)="updateSpeedFactor($event)" 
+          class="param-slider" 
+        />
+      </label>
+
+      <label class="slider-group">
+        <div class="slider-header">
+          <span>System Friction</span>
+          <strong>{{ friction().toFixed(3) }}</strong>
+        </div>
+        <input 
+          type="range" 
+          min="0.95" 
+          max="1.0" 
+          step="0.005" 
+          [value]="friction()"
+          (input)="updateFriction($event)" 
+          class="param-slider" 
+        />
+      </label>
+
+      <label class="slider-group">
+        <div class="slider-header">
+          <span>Repulsion Strength</span>
+          <strong>{{ gravity() }}</strong>
+        </div>
+        <input 
+          type="range" 
+          min="10" 
+          max="150" 
+          step="5" 
+          [value]="gravity()"
+          (input)="updateGravity($event)" 
+          class="param-slider" 
+        />
+      </label>
+    </div>
+
+    <!-- Active Node Telemetry Matrix Details -->
+    <div class="telemetry-matrix">
+      <h4>System Node Telemetry</h4>
+      <div class="matrix-list">
+        @for (p of particles(); track p.id) {
+          <div class="matrix-row">
+            <span class="dot-indicator" [style.background]="p.color"></span>
+            <span class="p-name">{{ p.name }}</span>
+            <span class="p-vectors">X:{{ p.x.toFixed(0) }}, Y:{{ p.y.toFixed(0) }}</span>
+            <span class="p-speed">V:{{ Math.sqrt(p.vx * p.vx + p.vy * p.vy).toFixed(1) }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Add Node Quick Action Button -->
+    <button type="button" class="add-node-btn" (click)="addNewNode()">
+      <i class="pi pi-plus"></i> Inject Random Node
+    </button>
+  </aside>
+</div>

@@ -1,0 +1,367 @@
+.physics-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 32px;
+  width: 100%;
+  min-height: calc(100vh - 192px);
+  padding: 32px;
+  background: var(--surface);
+  box-sizing: border-box;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 24px;
+  }
+}
+
+/* MAIN SIMULATION VIEWPORT */
+.canvas-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.canvas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+
+  .title-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+
+    h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 850;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+  }
+
+  .metrics-strip {
+    display: flex;
+    gap: 16px;
+  }
+
+  .metric-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+
+    strong {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    
+    .metrics-strip {
+      justify-content: flex-start;
+    }
+  }
+}
+
+/* INTERACTIVE BLUEPRINT BACKGROUND VIEWPORT */
+.simulation-viewport {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  background-color: #030712; /* Space deep dark background */
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: inset 0 4px 20px rgba(0,0,0,0.5);
+
+  @media (max-width: 600px) {
+    height: 400px;
+  }
+}
+
+.blueprint-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* PHYSICS BUBBLE NODE CARDS */
+.physics-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  cursor: grab;
+  user-select: none;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.4),
+    inset 0 4px 6px rgba(255, 255, 255, 0.15),
+    inset 0 -4px 6px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.1s ease;
+
+  &:hover {
+    transform: translate(-50%, -50%) scale(1.05);
+    z-index: 20;
+  }
+
+  &.is-dragging {
+    cursor: grabbing;
+    transform: translate(-50%, -50%) scale(0.95);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    border-color: #ffffff;
+  }
+}
+
+.node-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: 90%;
+  pointer-events: none;
+
+  .node-lbl {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  .node-val {
+    font-size: 0.85rem;
+    font-weight: 900;
+    color: #ffffff;
+    font-family: monospace;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.physics-controls-hint {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* SIDEBAR CONTROLS */
+.neumorphic-sidebar {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-shadow: var(--shadow);
+  box-sizing: border-box;
+
+  h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 850;
+    color: var(--ink);
+  }
+
+  .sidebar-desc {
+    margin: -16px 0 0;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+}
+
+.control-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+
+    strong {
+      color: var(--ink);
+      font-family: monospace;
+    }
+  }
+}
+
+/* Parameter Range Slider */
+.param-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--line);
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--ink);
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.1s;
+
+    &:hover {
+      transform: scale(1.15);
+    }
+  }
+}
+
+/* TELEMETRY MATRIX */
+.telemetry-matrix {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 1px dashed var(--line);
+  padding-top: 20px;
+
+  h4 {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 850;
+    text-transform: uppercase;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+}
+
+.matrix-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 4px;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 999px;
+  }
+}
+
+.matrix-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  background: var(--surface-3, var(--surface));
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+
+  .dot-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .p-name {
+    font-weight: 800;
+    color: var(--ink);
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .p-vectors {
+    font-size: 0.65rem;
+  }
+
+  .p-speed {
+    font-size: 0.65rem;
+    color: var(--accent);
+    min-width: 38px;
+    text-align: right;
+  }
+}
+
+/* ADD NODE QUICK ACTION */
+.add-node-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--ink);
+  color: var(--surface);
+  border: none;
+  font-weight: 800;
+  font-size: 0.8rem;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: inherit;
+
+  &:hover {
+    background: var(--accent);
+    transform: translateY(-1px);
+  }
+}

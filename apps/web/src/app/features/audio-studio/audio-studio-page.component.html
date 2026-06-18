@@ -1,0 +1,163 @@
+<div class="studio-layout">
+  <!-- Left Side: Skeuomorphic Mixer Desk -->
+  <main class="mixer-cabinet">
+    <!-- Cabinet Header -->
+    <header class="cabinet-header">
+      <div class="brand-panel">
+        <span class="brand-badge">Sion Acoustics</span>
+        <h2>Soundscape Synthesizer S-01</h2>
+      </div>
+      <div class="system-power">
+        <button type="button" class="power-btn" [class.is-on]="powerOn()" (click)="togglePower()" aria-label="Power switch">
+          <span class="power-led"></span>
+        </button>
+        <span class="power-lbl">Power</span>
+      </div>
+    </header>
+
+    <div class="control-grid">
+      <!-- Master Deck: Freq/Gain -->
+      <section class="control-card neumorphic-panel">
+        <h3>Master Synthesis</h3>
+        <p class="panel-desc">Primary Oscillator Core Tuning</p>
+        
+        <div class="dials-row">
+          <!-- Frequency Knob -->
+          <div class="dial-container">
+            <span class="dial-label">Frequency</span>
+            <div 
+              class="knob-dial" 
+              [style.transform]="'rotate(' + getKnobRotation(frequency()) + 'deg)'"
+              (mousedown)="startKnobDrag($event, 'frequency')"
+              (touchstart)="startKnobDrag($event, 'frequency')"
+            >
+              <div class="knob-marker"></div>
+            </div>
+            <span class="dial-value">{{ frequency() }} Hz</span>
+          </div>
+
+          <!-- Master Gain Knob -->
+          <div class="dial-container">
+            <span class="dial-label">Volume</span>
+            <div 
+              class="knob-dial" 
+              [style.transform]="'rotate(' + getKnobRotation(masterVolume() * 100) + 'deg)'"
+              (mousedown)="startKnobDrag($event, 'volume')"
+              (touchstart)="startKnobDrag($event, 'volume')"
+            >
+              <div class="knob-marker"></div>
+            </div>
+            <span class="dial-value">{{ (masterVolume() * 100).toFixed(0) }}%</span>
+          </div>
+        </div>
+
+        <!-- Wave Type Selector Toggles -->
+        <div class="osc-select-deck">
+          <span class="deck-lbl">Oscillator Type</span>
+          <div class="osc-options">
+            @for (type of oscTypes; track type) {
+              <button 
+                type="button" 
+                class="osc-btn" 
+                [class.is-active]="selectedOscType() === type"
+                (click)="setOscType(type)"
+              >
+                {{ type | uppercase }}
+              </button>
+            }
+          </div>
+        </div>
+      </section>
+
+      <!-- Ambient Tracks Mixer -->
+      <section class="control-card neumorphic-panel">
+        <h3>Ambient Layers Mixer</h3>
+        <p class="panel-desc">Blend loop nodes for Focus soundscapes</p>
+        
+        <div class="channels-mix-list">
+          @for (channel of ambientChannels(); track channel.id) {
+            <div class="channel-row">
+              <div class="channel-info">
+                <i class="pi" [class]="channel.icon"></i>
+                <span class="channel-name">{{ channel.name }}</span>
+              </div>
+              <div class="channel-controls">
+                <input 
+                  type="range" 
+                  min="0" 
+                  max="1" 
+                  step="0.05" 
+                  [value]="channel.volume" 
+                  (input)="onChannelVolumeChange(channel.id, $event)"
+                  [disabled]="!powerOn()"
+                  class="volume-slider"
+                  aria-label="Channel volume"
+                />
+                <button 
+                  type="button" 
+                  class="mute-channel-btn" 
+                  [class.is-muted]="channel.muted" 
+                  (click)="toggleChannelMute(channel.id)"
+                  [disabled]="!powerOn()"
+                  title="Mute layer"
+                >
+                  <i class="pi" [class]="channel.muted ? 'pi-volume-off' : 'pi-volume-up'"></i>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+
+    <!-- Quick Presets Dock -->
+    <footer class="presets-dock">
+      <span class="presets-title">Studio presets:</span>
+      <div class="presets-list">
+        @for (preset of presets; track preset.name) {
+          <button 
+            type="button" 
+            class="preset-pill-btn" 
+            [class.is-active]="activePreset() === preset.name"
+            (click)="applyPreset(preset)"
+          >
+            {{ preset.name }}
+          </button>
+        }
+      </div>
+    </footer>
+  </main>
+
+  <!-- Right Side: Wave Visualizer Terminal -->
+  <aside class="terminal-cabinet">
+    <div class="crt-overlay"></div>
+    <div class="terminal-screen">
+      <!-- Telemetry Header -->
+      <div class="telemetry-bar">
+        <div class="telemetry-led" [class.is-active]="powerOn()"></div>
+        <span class="telemetry-title">Visual Wave Scope &bull; {{ powerOn() ? 'ACTIVE' : 'STANDBY' }}</span>
+      </div>
+
+      <!-- Live Oscilloscope Canvas -->
+      <div class="visualizer-container">
+        <canvas #visualizerCanvas width="480" height="320"></canvas>
+      </div>
+
+      <!-- Realtime parameters feed -->
+      <div class="telemetry-data">
+        <div class="telemetry-row">
+          <span>Freq output:</span>
+          <strong>{{ powerOn() ? frequency() + ' Hz' : '---' }}</strong>
+        </div>
+        <div class="telemetry-row">
+          <span>Wave pattern:</span>
+          <strong>{{ powerOn() ? (selectedOscType() | uppercase) : '---' }}</strong>
+        </div>
+        <div class="telemetry-row">
+          <span>System DB:</span>
+          <strong>{{ powerOn() ? '-' + (100 - (masterVolume() * 100)).toFixed(0) + ' dB' : '---' }}</strong>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>

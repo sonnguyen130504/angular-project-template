@@ -73,6 +73,10 @@
     "storytelling3dNote": "Hiệu ứng camera theo hành vi cuộn trang",
     "tactileSound": "Âm thanh trực quan",
     "tactileSoundNote": "Bộ tổng hợp Web Audio API",
+    "audioStudio": "Phòng Lab Âm Thanh",
+    "audioStudioNote": "Bộ trộn âm thanh Neumorphic",
+    "physicsLab": "Hộp Cát Vật Lý",
+    "physicsLabNote": "Mô phỏng biểu đồ va chạm tròn",
     "mobileSimulator": "Giả lập di động",
     "mobileSimulatorNote": "Hộp cát mô phỏng thiết bị di động"
   },
