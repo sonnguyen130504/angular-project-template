@@ -14,21 +14,74 @@
           <strong>{{ particles().length }}</strong>
         </div>
         <div class="metric-item">
-          <span>FPS:</span>
-          <strong>60 fps</strong>
+          <span>Spring Links:</span>
+          <strong>{{ links().length }}</strong>
         </div>
       </div>
     </header>
+
+    <!-- Toolbar controls -->
+    <div class="toolbar-panel">
+      <div class="mode-selector">
+        <button 
+          type="button"
+          class="mode-btn" 
+          [class.is-active]="mouseMode() === 'repel'" 
+          (click)="setMouseMode('repel')"
+          title="Push nodes away from mouse pointer"
+        >
+          <i class="pi pi-ban"></i> Repel
+        </button>
+        <button 
+          type="button"
+          class="mode-btn" 
+          [class.is-active]="mouseMode() === 'attract'" 
+          (click)="setMouseMode('attract')"
+          title="Pull nodes towards mouse pointer"
+        >
+          <i class="pi pi-compass"></i> Attract
+        </button>
+        <button 
+          type="button"
+          class="mode-btn" 
+          [class.is-active]="mouseMode() === 'create'" 
+          (click)="setMouseMode('create')"
+          title="Click inside viewport to spawn bubble node"
+        >
+          <i class="pi pi-plus-circle"></i> Click to Spawn
+        </button>
+      </div>
+
+      <button type="button" class="clear-btn" (click)="clearAll()" title="Remove all nodes">
+        <i class="pi pi-trash"></i> Clear All
+      </button>
+    </div>
 
     <!-- Simulation Viewport -->
     <div 
       #viewport 
       class="simulation-viewport"
+      [class.mode-create]="mouseMode() === 'create'"
       (mousemove)="onViewportMouseMove($event)"
       (mouseleave)="onViewportMouseLeave()"
+      (click)="onViewportClick($event)"
     >
       <!-- Background blueprint grid lines -->
       <div class="blueprint-overlay"></div>
+
+      <!-- Spring links rendering SVG overlay -->
+      <svg class="spring-links-svg" xmlns="http://www.w3.org/2000/svg">
+        @for (link of links(); track link.id) {
+          <line 
+            [attr.x1]="link.x1" 
+            [attr.y1]="link.y1" 
+            [attr.x2]="link.x2" 
+            [attr.y2]="link.y2" 
+            [style.stroke]="link.color"
+            class="spring-line"
+          />
+        }
+      </svg>
 
       <!-- Render nodes dynamic coordinates -->
       @for (p of particles(); track p.id) {
@@ -52,7 +105,10 @@
 
     <!-- Physics Guide Indicator -->
     <div class="physics-controls-hint">
-      <i class="pi pi-info-circle"></i> Hover to repel nodes &bull; Drag individual bubble nodes to throw them
+      <i class="pi pi-info-circle"></i> 
+      @if (mouseMode() === 'repel') { Hover to repel nodes &bull; Drag bubble nodes to throw them }
+      @if (mouseMode() === 'attract') { Hover to pull nodes into a gravity orbit &bull; Drag to throw }
+      @if (mouseMode() === 'create') { Click anywhere in the grid to spawn new custom nodes }
     </div>
   </main>
 
@@ -88,7 +144,7 @@
           type="range" 
           min="0.95" 
           max="1.0" 
-          step="0.005" 
+          step="0.002" 
           [value]="friction()"
           (input)="updateFriction($event)" 
           class="param-slider" 
@@ -97,16 +153,60 @@
 
       <label class="slider-group">
         <div class="slider-header">
-          <span>Repulsion Strength</span>
-          <strong>{{ gravity() }}</strong>
+          <span>Mouse Force Radius</span>
+          <strong>{{ gravity() }}px</strong>
         </div>
         <input 
           type="range" 
           min="10" 
-          max="150" 
+          max="200" 
           step="5" 
           [value]="gravity()"
           (input)="updateGravity($event)" 
+          class="param-slider" 
+        />
+      </label>
+
+      <div class="divider"></div>
+
+      <!-- Spring configurations -->
+      <div class="option-row">
+        <label class="checkbox-label">
+          <input type="checkbox" [checked]="enableSprings()" (change)="toggleSprings()" />
+          <span>Elastic Spring Constraints</span>
+        </label>
+      </div>
+
+      @if (enableSprings()) {
+        <label class="slider-group">
+          <div class="slider-header">
+            <span>Spring Elasticity</span>
+            <strong>{{ (springStrength() * 100).toFixed(0) }}%</strong>
+          </div>
+          <input 
+            type="range" 
+            min="0.01" 
+            max="0.10" 
+            step="0.01" 
+            [value]="springStrength()"
+            (input)="updateSpringStrength($event)" 
+            class="param-slider" 
+          />
+        </label>
+      }
+
+      <label class="slider-group">
+        <div class="slider-header">
+          <span>Collision Volume</span>
+          <strong>{{ (collisionSoundVolume() * 100).toFixed(0) }}%</strong>
+        </div>
+        <input 
+          type="range" 
+          min="0" 
+          max="0.4" 
+          step="0.02" 
+          [value]="collisionSoundVolume()"
+          (input)="updateSoundVolume($event)" 
           class="param-slider" 
         />
       </label>

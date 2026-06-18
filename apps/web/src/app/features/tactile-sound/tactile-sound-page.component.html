@@ -1,10 +1,10 @@
 <ng-container *transloco="let t">
 <app-page-section 
   [title]="t('tactileSound.tactile_sound_laboratory')" 
-  sub[title]="t('tactileSound.interactive_programmatically_s')"
+  [subtitle]="t('tactileSound.interactive_programmatically_s')"
 >
   <div class="audio-lab-grid">
-    <!-- Visualizer and Custom Synthesizer Column -->
+    <!-- Visualizer, Synthesizer & Panner Column -->
     <div class="lab-card visualizer-card">
       <div class="card-header">
         <h3>{{ t('tactileSound.waveform_visualizer') }}</h3>
@@ -17,6 +17,7 @@
         <canvas #visualizerCanvas width="600" height="240"></canvas>
       </div>
 
+      <!-- Custom Synth Sandbox -->
       <div class="card-section">
         <h3>{{ t('tactileSound.custom_synth_sandbox') }}</h3>
         <p class="section-desc">{{ t('tactileSound.design_your_own_wave_frequency') }}</p>
@@ -38,7 +39,7 @@
             <label>{{ t('tactileSound.frequency') }}</label>
             <span class="slider-value">{{ frequency }} Hz</span>
           </div>
-          <input type="range" min="60" max="2500" step="10" [(ngModel)]="frequency" />
+          <input type="range" min="60" max="2000" step="10" [(ngModel)]="frequency" />
         </div>
 
         <div class="control-group">
@@ -57,35 +58,128 @@
           <input type="range" min="0.01" max="0.3" step="0.01" [(ngModel)]="volume" />
         </div>
 
-        <button class="play-btn" (click)="playCustom()">
-          <i class="pi pi-play"></i>{{ t('tactileSound.trigger_synthesizer') }}</button>
+        <button type="button" class="play-btn" (click)="playCustom()">
+          <i class="pi pi-play"></i>{{ t('tactileSound.trigger_synthesizer') }}
+        </button>
+      </div>
+
+      <!-- 3D Spatial Audio Panner -->
+      <div class="card-section panner-section">
+        <h3>3D Spatial Audio Panner</h3>
+        <p class="section-desc">Drag the source sound node relative to the listener (center) to experience real-time panning.</p>
+        
+        <div 
+          #pannerPad 
+          class="panner-pad" 
+          (mousedown)="startPannerDrag($event)"
+        >
+          <div class="panner-center-listener">
+            <i class="pi pi-user"></i>
+          </div>
+          <div 
+            class="panner-draggable-source"
+            [style.left.%]="pannerX() + 50"
+            [style.top.%]="pannerY() + 50"
+          >
+            <i class="pi pi-volume-up"></i>
+          </div>
+          <div class="panner-axis-label left">L</div>
+          <div class="panner-axis-label right">R</div>
+        </div>
+
+        <div class="panner-controls">
+          <span>Pan Coordinate: <strong>{{ (pannerX() / 100).toFixed(2) }}</strong></span>
+          <button type="button" class="trigger-btn" (click)="playPanningCustom()">
+            <i class="pi pi-volume-up"></i> Test Spatial Play
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- Presets & Interactive Pads Column -->
+    <!-- Ambient Sequencer & Interactions Column -->
     <div class="lab-card presets-card">
+      <!-- Ambient Step Sequencer Grid -->
       <div class="card-header">
-        <h3>{{ t('tactileSound.standard_interaction_presets') }}</h3>
+        <h3>Ambient Step Sequencer</h3>
       </div>
+      <p class="section-desc">Program a looping synthesizer pattern. Active step nodes trigger sine waves at current BPM tempo.</p>
       
-      <div class="presets-list">
-        @for (preset of presets; track preset.name) {
-          <div class="preset-item">
-            <div class="preset-info">
-              <strong>{{ preset.name }}</strong>
-              <small>{{ preset.desc }}</small>
+      <div class="sequencer-container">
+        <div class="sequencer-matrix">
+          @for (row of [0, 1, 2, 3]; track row) {
+            <div class="seq-row">
+              <span class="note-label">
+                {{ row === 0 ? 'C5' : row === 1 ? 'G4' : row === 2 ? 'E4' : 'C4' }}
+              </span>
+              <div class="cells-row">
+                @for (col of [0, 1, 2, 3, 4, 5, 6, 7]; track col) {
+                  <button
+                    type="button"
+                    class="seq-cell"
+                    [class.is-active]="sequencerGrid()[row][col]"
+                    [class.is-playing]="isPlaying() && currentStep() === col"
+                    (click)="toggleSequencerCell(row, col)"
+                  ></button>
+                }
+              </div>
             </div>
-            <button class="trigger-btn" (click)="preset.action()">
-              <i class="pi pi-volume-up"></i>{{ t('tactileSound.play') }}</button>
+          }
+        </div>
+
+        <div class="sequencer-controls">
+          <button 
+            type="button" 
+            class="seq-play-btn" 
+            [class.seq-active]="isPlaying()"
+            (click)="toggleSequencerPlay()"
+          >
+            <i class="pi" [class.pi-play]="!isPlaying()" [class.pi-pause]="isPlaying()"></i>
+            {{ isPlaying() ? 'Pause Sequencer' : 'Play Sequencer' }}
+          </button>
+          
+          <button type="button" class="seq-clear-btn" (click)="clearSequencer()">
+            <i class="pi pi-refresh"></i> Clear Grid
+          </button>
+
+          <div class="bpm-control">
+            <span class="bpm-label">BPM: <strong>{{ bpm() }}</strong></span>
+            <input 
+              type="range" 
+              min="60" 
+              max="200" 
+              step="5" 
+              [value]="bpm()" 
+              (input)="updateBpm($event)"
+              class="bpm-slider" 
+            />
           </div>
-        }
+        </div>
       </div>
 
+      <!-- Presets list -->
+      <div class="card-section">
+        <h3>{{ t('tactileSound.standard_interaction_presets') }}</h3>
+        <div class="presets-list">
+          @for (preset of presets; track preset.name) {
+            <div class="preset-item">
+              <div class="preset-info">
+                <strong>{{ preset.name }}</strong>
+                <small>{{ preset.desc }}</small>
+              </div>
+              <button type="button" class="trigger-btn" (click)="preset.action()">
+                <i class="pi pi-volume-up"></i>{{ t('tactileSound.play') }}
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Custom fun presets -->
       <div class="card-section">
         <h3>{{ t('tactileSound.dynamic_fun_effects') }}</h3>
         <div class="sound-grid">
           @for (laser of laserPresets; track laser.name) {
-            <button class="sound-pill" (click)="playLaser(laser)">
+            <button type="button" class="sound-pill" (click)="playLaser(laser)">
               <i class="pi pi-bolt"></i>
               <span>{{ laser.name }}</span>
             </button>
@@ -93,6 +187,7 @@
         </div>
       </div>
 
+      <!-- Tactile Zones -->
       <div class="card-section">
         <h3>{{ t('tactileSound.interactive_tactile_zones') }}</h3>
         <p class="section-desc">{{ t('tactileSound.test_real_time_hover_click_suc') }}</p>
@@ -134,6 +229,7 @@
         </div>
       </div>
 
+      <!-- Mechanical typing clicks -->
       <div class="card-section">
         <h3>{{ t('tactileSound.keyboard_sound_simulator') }}</h3>
         <p class="section-desc">{{ t('tactileSound.type_in_the_box_below_to_hear_') }}</p>
@@ -146,7 +242,7 @@
             (input)="onKeypress()"
           />
           @if (keyboardInput) {
-            <button class="clear-typing-btn" (click)="keyboardInput = ''; audio.playDelete()" [title]="t('tactileSound.clear_text')">
+            <button type="button" class="clear-typing-btn" (click)="keyboardInput = ''; audio.playDelete()" [title]="t('tactileSound.clear_text')">
               <i class="pi pi-trash"></i>
             </button>
           }
@@ -155,5 +251,4 @@
     </div>
   </div>
 </app-page-section>
-
 </ng-container>
