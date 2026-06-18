@@ -1,0 +1,189 @@
+{
+  "shell": {
+    "openHome": "Về trang chủ",
+    "subtitle": "Thư viện UI Angular",
+    "searchPages": "Tìm kiếm trang",
+    "searchPagesPlaceholder": "Tìm kiếm trang...",
+    "unmuteSounds": "Bật âm thanh",
+    "muteSounds": "Tắt âm thanh",
+    "switchToDark": "Chuyển sang giao diện tối",
+    "switchToLight": "Chuyển sang giao diện sáng",
+    "toggleNav": "Bật/Tắt thanh điều hướng"
+  },
+  "nav": {
+    "commerce": "Thương mại",
+    "commerceDesc": "Các luồng mua sắm, chi tiết sản phẩm và giỏ hàng.",
+    "home": "Trang chủ",
+    "homeNote": "Tổng quan mẫu giao diện",
+    "catalog": "Danh mục",
+    "catalogNote": "Bộ lọc và danh sách sản phẩm",
+    "product": "Sản phẩm",
+    "productNote": "Các biến thể và hộp mua hàng",
+    "cart": "Giỏ hàng",
+    "cartNote": "Các bước thanh toán và tổng tiền",
+    
+    "operations": "Vận hành",
+    "operationsDesc": "Giao diện quản trị và tài khoản cho ứng dụng sản phẩm.",
+    "dashboard": "Bảng điều khiển",
+    "dashboardNote": "Số liệu, biểu đồ và bảng biểu",
+    "settings": "Cài đặt",
+    "settingsNote": "Các tab và trạng thái biểu mẫu",
+    "profile": "Hồ sơ",
+    "profileNote": "Tài khoản và hoạt động",
+    "billing": "Thanh toán",
+    "billingNote": "Gói dịch vụ, hóa đơn, sử dụng",
+    "activityLog": "Nhật ký hoạt động",
+    "activityLogNote": "Dấu vết kiểm toán và bộ lọc",
+    "setup": "Thiết lập",
+    "setupNote": "Danh sách kiểm tra onboarding",
+
+    "workspace": "Không gian làm việc",
+    "workspaceDesc": "Bề mặt làm việc nhóm ngoài luồng thương mại.",
+    "inbox": "Hộp thư đến",
+    "inboxNote": "Phân loại tin nhắn và luồng",
+    "calendar": "Lịch",
+    "calendarNote": "Lịch trình và xung đột lịch",
+    "tasks": "Nhiệm vụ",
+    "tasksNote": "Trạng thái Kanban và danh sách",
+    "team": "Nhóm",
+    "teamNote": "Vai trò và quyền hạn",
+    "assets": "Tài sản",
+    "assetsNote": "Tệp tin và trạng thái tải lên",
+
+    "referenceKit": "Bộ tham khảo",
+    "referenceKitDesc": "Các mẫu và trạng thái UI có thể tái sử dụng.",
+    "components": "Thành phần",
+    "componentsNote": "Điều khiển và phản hồi",
+    "forms": "Biểu mẫu",
+    "formsNote": "Mẫu xác thực dữ liệu",
+    "charts": "Biểu đồ",
+    "chartsNote": "Bề mặt phân tích dữ liệu",
+    "motion": "Chuyển động",
+    "motionNote": "Chuyển động trạng thái",
+    "empty": "Trống",
+    "emptyNote": "Trạng thái không có dữ liệu và lỗi",
+
+    "auth": "Xác thực",
+    "authDesc": "Màn hình đăng nhập và khôi phục.",
+    "signIn": "Đăng nhập",
+    "signInNote": "Trạng thái xác thực và phiên làm việc",
+    "forgot": "Quên mật khẩu",
+    "forgotNote": "Luồng khôi phục tài khoản",
+
+    "interactive": "Tương tác",
+    "interactiveDesc": "Trình diễn 3D, hiệu ứng cuộn, phòng lab âm thanh và giả lập.",
+    "showcase3d": "Trình diễn 3D",
+    "showcase3dNote": "Trình xem tương tác và biến thể sản phẩm",
+    "storytelling3d": "Kể chuyện 3D",
+    "storytelling3dNote": "Hiệu ứng camera theo hành vi cuộn trang",
+    "tactileSound": "Âm thanh trực quan",
+    "tactileSoundNote": "Bộ tổng hợp Web Audio API",
+    "mobileSimulator": "Giả lập di động",
+    "mobileSimulatorNote": "Hộp cát mô phỏng thiết bị di động"
+  },
+  "home": {
+    "badge": "Sion Studio phiên bản 1.0",
+    "heroTitle": "Phòng thí nghiệm chuyển động &amp; các thành phần UI <em>mô-đun</em>.",
+    "heroDesc": "Các mẫu tham chiếu hiệu năng cao, trực quan giới thiệu các bộ giải quyết spring tuỳ chỉnh, các thành phần morph FLIP và môi trường hộp cát mã nguồn thành phần có thể định cấu hình đầy đủ.",
+    "launchLab": "Mở phòng thí nghiệm",
+    "gallery": "Thư viện thành phần",
+    "marquee": {
+      "solvers": "Giải thuật Spring 60+ FPS",
+      "contrast": "Tỷ lệ tương phản WCAG AA",
+      "snippets": "Sao chép nhanh HTML/TS",
+      "responsive": "Giao diện thích ứng hoàn toàn"
+    },
+    "bento": {
+      "title": "Kiến trúc các mẫu",
+      "subtitle": "Khám phá hai mô-đun tham chiếu chính được thiết kế riêng cho các ứng dụng Angular.",
+      "spacingSandbox": "Hộp cát khoảng cách",
+      "designLab": "Phòng thiết kế Sion",
+      "designLabDesc": "Thử nghiệm với các tham số mật độ UI thời gian thực, trạng thái bo góc và tông màu chủ đạo thương hiệu.",
+      "densityDials": "Mức độ mật độ",
+      "comfortable": "Dễ chịu",
+      "compact": "Tinh gọn",
+      "airy": "Thoáng đãng",
+      "accentTheme": "Tông màu chủ đạo",
+      "clayWarm": "Đất nung ấm",
+      "deepTeal": "Xanh mòng két",
+      "borderRadius": "Độ bo góc",
+      "soft": "Mềm mại (16px)",
+      "pill": "Hình viên thuốc (999px)",
+      "sharp": "Sắc nét (0px)",
+      "livePreview": "Xem trực tiếp",
+      "pouchTitle": "Túi du lịch của Mina",
+      "pouchDesc": "Vải canvas đất nung được chọn lọc kỹ lưỡng với lớp lót chống nước.",
+      "capacityLimit": "Giới hạn dung tích",
+      "interactiveTrigger": "Kích hoạt tương tác",
+      "animationPlayground": "Khu chơi chuyển động",
+      "animationPlaygroundDesc": "Bộ giải quyết spring Định luật Hooke, kéo rê lực hút trực tiếp DOM và bộ tổng hợp Web Audio.",
+      "solverActive": "Bộ giải đang hoạt động",
+      "openPlayground": "Mở khu chơi tương tác",
+      "componentSandbox": "Hộp cát thành phần",
+      "componentSandboxDesc": "Các hộp cát có cấu hình phơi bày các khối mã nguồn HTML và TypeScript sạch sẽ, dễ sao chép.",
+      "primaryKnobs": "Núm vặn chính",
+      "exploreComponents": "Khám phá thành phần"
+    },
+    "directory": {
+      "title": "Khám phá các mẫu cốt lõi",
+      "subtitle": "Kích hoạt hai không gian làm việc chính được thiết kế để làm tài liệu tham khảo cho bố cục, điều khiển và hoạt hình."
+    },
+    "groups": {
+      "animation": {
+        "name": "Khu chơi chuyển động & Phòng lab Vật lý",
+        "summary": "Khám phá các bộ giải vật lý sóng ký tự đàn hồi, các nút từ tính DOM trực tiếp, bộ xáo trộn ma trận mạng và các thẻ cuộn chồng.",
+        "highlight": "Giải thuật Spring & FLIP nâng cao"
+      },
+      "gallery": {
+        "name": "Thư viện thành phần tương tác",
+        "summary": "Tinh chỉnh các biến mã nguồn bằng cách sử dụng các núm xoay điều khiển. Xem trước trực tiếp và các đoạn mã HTML & TypeScript sẵn sàng sao chép cho các nút, thẻ và hộp thoại modal.",
+        "highlight": "Hộp cát mã nguồn cấu hình được"
+      }
+    },
+    "testimonial": {
+      "quote": "Các thành phần của Sion Studio đã giúp chúng tôi tiết kiệm hàng tuần làm việc để thống nhất thiết kế. Mã nguồn rất sạch sẽ, tương thích tốt và cực kỳ dễ thích nghi.",
+      "attribution": "Trưởng bộ phận Thiết kế · Vanguard Labs"
+    },
+    "physics": {
+      "badge": "Phòng lab Vật lý",
+      "title": "Trải nghiệm vật lý spring & chuyển đổi bố cục FLIP.",
+      "desc": "Thử nghiệm các trường nút từ tính tương tác, mô phỏng tiến trình tải dữ liệu, bố cục FLIP và các thẻ xếp chồng dính khi cuộn trong phòng thí nghiệm chuyển động mới của chúng tôi.",
+      "cta": "Mở phòng thí nghiệm vật lý",
+      "interactiveSpace": "Không gian tương tác"
+    },
+    "gatesSection": {
+      "title": "Chất lượng kỹ thuật",
+      "subtitle": "Mỗi mẫu thiết kế đều được kiểm toán nghiêm ngặt để đáp ứng các tiêu chuẩn kỹ thuật hàng đầu."
+    },
+    "gates": {
+      "motion": {
+        "title": "Chuyển động & Vật lý hiệu năng cao",
+        "desc": "Các tương tác spring xúc giác chạy lập trình bên ngoài Angular Zone để khóa cứng mức 60+ FPS, hỗ trợ fallback mượt mà khi người dùng giảm chuyển động.",
+        "tag": "Hoạt họa"
+      },
+      "sandbox": {
+        "title": "API hộp cát cấu hình được",
+        "desc": "Giao diện núm điều chỉnh để thay đổi kích thước, biến thể, biểu tượng và hiệu ứng chuyển trạng thái, phơi bày các khối mã nguồn HTML/TS dùng được ngay.",
+        "tag": "Tham chiếu"
+      },
+      "contrast": {
+        "title": "Tỷ lệ tương phản AA",
+        "desc": "Tất cả các thành phần tiền cảnh đều đạt độ tương phản tối thiểu 4.5:1 so với nền để có độ đọc tối đa.",
+        "tag": "Khả năng tiếp cận"
+      },
+      "responsive": {
+        "title": "Kiến trúc thích ứng responsive",
+        "desc": "Các bố cục, hệ thống lưới grid và wrapper hộp thoại snap chuẩn xác mượt mà qua các kích thước màn hình phổ thông (từ 640px đến 1530px).",
+        "tag": "Bố cục"
+      }
+    },
+    "footer": {
+      "newsletterTitle": "Luôn cập nhật thông tin.",
+      "newsletterDesc": "Nhận thông báo khi có các nút điều chỉnh khoảng cách mới hoặc hộp cát vật lý mới được thêm vào Sion Studio.",
+      "emailLabel": "Địa chỉ Email",
+      "emailPlaceholder": "Nhập địa chỉ email của bạn",
+      "subscribe": "Đăng ký",
+      "copyright": "© 2026 Sion. Bảo tồn mọi quyền."
+    }
+  }
+}

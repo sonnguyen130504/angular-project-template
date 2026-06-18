@@ -1,0 +1,189 @@
+{
+  "shell": {
+    "openHome": "Open home",
+    "subtitle": "Angular UI kit",
+    "searchPages": "Search pages",
+    "searchPagesPlaceholder": "Search pages...",
+    "unmuteSounds": "Unmute sounds",
+    "muteSounds": "Mute sounds",
+    "switchToDark": "Switch to dark mode",
+    "switchToLight": "Switch to light mode",
+    "toggleNav": "Toggle navigation menu"
+  },
+  "nav": {
+    "commerce": "Commerce",
+    "commerceDesc": "Shopping, product detail, and cart flows.",
+    "home": "Home",
+    "homeNote": "Template overview",
+    "catalog": "Catalog",
+    "catalogNote": "Filters and listing states",
+    "product": "Product",
+    "productNote": "Variants and buy box",
+    "cart": "Cart",
+    "cartNote": "Checkout steps and totals",
+    
+    "operations": "Operations",
+    "operationsDesc": "Admin and account surfaces for product apps.",
+    "dashboard": "Dashboard",
+    "dashboardNote": "Metrics, chart, table",
+    "settings": "Settings",
+    "settingsNote": "Tabs and form states",
+    "profile": "Profile",
+    "profileNote": "Account and activity",
+    "billing": "Billing",
+    "billingNote": "Plans, invoices, usage",
+    "activityLog": "Activity Log",
+    "activityLogNote": "Audit trail and filters",
+    "setup": "Setup",
+    "setupNote": "Onboarding checklist",
+
+    "workspace": "Workspace",
+    "workspaceDesc": "Team work surfaces beyond commerce flows.",
+    "inbox": "Inbox",
+    "inboxNote": "Message triage and threads",
+    "calendar": "Calendar",
+    "calendarNote": "Schedule and conflicts",
+    "tasks": "Tasks",
+    "tasksNote": "Kanban and list states",
+    "team": "Team",
+    "teamNote": "Roles and permissions",
+    "assets": "Assets",
+    "assetsNote": "Files and upload states",
+
+    "referenceKit": "Reference Kit",
+    "referenceKitDesc": "Reusable UI patterns and states.",
+    "components": "Components",
+    "componentsNote": "Controls and feedback",
+    "forms": "Forms",
+    "formsNote": "Validation patterns",
+    "charts": "Charts",
+    "chartsNote": "Analytics surfaces",
+    "motion": "Motion",
+    "motionNote": "State motion",
+    "empty": "Empty",
+    "emptyNote": "No-data and error states",
+
+    "auth": "Auth",
+    "authDesc": "Entry and recovery screens.",
+    "signIn": "Sign In",
+    "signInNote": "Validation and session states",
+    "forgot": "Forgot Password",
+    "forgotNote": "Recovery flow",
+
+    "interactive": "Interactive",
+    "interactiveDesc": "3D showcases, scroll animations, audio labs, and simulators.",
+    "showcase3d": "3D Showcase",
+    "showcase3dNote": "Interactive viewer and variants",
+    "storytelling3d": "3D Storytelling",
+    "storytelling3dNote": "Scroll-driven camera animations",
+    "tactileSound": "Tactile Sound",
+    "tactileSoundNote": "Web Audio API synthesizers",
+    "mobileSimulator": "Mobile Simulator",
+    "mobileSimulatorNote": "Device simulation sandbox"
+  },
+  "home": {
+    "badge": "Sion Studio v1.0",
+    "heroTitle": "Crafted animation labs & <em>modular</em> UI components.",
+    "heroDesc": "Clean, high-performance reference templates showcasing custom spring solvers, FLIP morph elements, and fully configurable component code sandbox environments.",
+    "launchLab": "Launch Animation Lab",
+    "gallery": "Component gallery",
+    "marquee": {
+      "solvers": "60+ FPS Spring Solvers",
+      "contrast": "WCAG AA Contrast Ratios",
+      "snippets": "Copy-Paste HTML/TS Snips",
+      "responsive": "Fully Responsive Layouts"
+    },
+    "bento": {
+      "title": "Template Architecture",
+      "subtitle": "Investigate the two primary reference modules designed for Angular applications.",
+      "spacingSandbox": "Spacing Sandbox",
+      "designLab": "Sion Design Lab",
+      "designLabDesc": "Experiment with real-time UI density parameters, border-radius states, and brand theme accents.",
+      "densityDials": "Density Dials",
+      "comfortable": "Comfortable",
+      "compact": "Compact",
+      "airy": "Airy",
+      "accentTheme": "Accent Theme",
+      "clayWarm": "Clay Warm",
+      "deepTeal": "Deep Teal",
+      "borderRadius": "Border Radius",
+      "soft": "Soft (16px)",
+      "pill": "Pill (999px)",
+      "sharp": "Sharp (0px)",
+      "livePreview": "Live Preview",
+      "pouchTitle": "Mina's Travel Pouch",
+      "pouchDesc": "Curated clay canvas with water-resistant lining.",
+      "capacityLimit": "Capacity Limit",
+      "interactiveTrigger": "Interactive Trigger",
+      "animationPlayground": "Animation Playground",
+      "animationPlaygroundDesc": "Hooke's Law spring solvers, direct DOM magnetic hover drag, and Web Audio synthesizers.",
+      "solverActive": "Solver Active",
+      "openPlayground": "Open playground",
+      "componentSandbox": "Component Sandbox",
+      "componentSandboxDesc": "Configurable sandboxes exposing clean, copyable HTML and TypeScript markup blocks.",
+      "primaryKnobs": "Primary Knobs",
+      "exploreComponents": "Explore components"
+    },
+    "directory": {
+      "title": "Explore Core Templates",
+      "subtitle": "Launch the two major workspaces designed to serve as references for layout, controls, and animations."
+    },
+    "groups": {
+      "animation": {
+        "name": "Animation Playground & Physics Lab",
+        "summary": "Explore elastic character wave physics solvers, direct DOM magnetic buttons, cyber matrix scramblers, and scroll stack cards.",
+        "highlight": "Advanced Spring Solvers & FLIP"
+      },
+      "gallery": {
+        "name": "Interactive Component Gallery",
+        "summary": "Tweak code variables using control knobs. Live previews and ready-to-copy HTML & TypeScript snippets for buttons, cards, and modal dialogs.",
+        "highlight": "Configurable Code Sandbox"
+      }
+    },
+    "testimonial": {
+      "quote": "Sion Studio's components saved us weeks of design alignment. The code is clean, responsive, and extremely adaptable.",
+      "attribution": "Lead Designer · Vanguard Labs"
+    },
+    "physics": {
+      "badge": "Physics Lab",
+      "title": "Experience spring physics & FLIP layout morphs.",
+      "desc": "Test interactive magnetic button fields, simulated loading pipelines, FLIP layouts, and scroll sticky card stacks in our new animation laboratory.",
+      "cta": "Launch Animation Playground",
+      "interactiveSpace": "Interactive Space"
+    },
+    "gatesSection": {
+      "title": "Engineered Quality",
+      "subtitle": "Every pattern is audited to meet rigorous technical design standards."
+    },
+    "gates": {
+      "motion": {
+        "title": "Performance Motion & Physics",
+        "desc": "Tactile spring-based interactions running programmatically outside the Angular Zone to lock 60+ FPS, with instant prefers-reduced-motion fallback.",
+        "tag": "Animation"
+      },
+      "sandbox": {
+        "title": "Configurable Sandbox API",
+        "desc": "Knobs interface to toggle sizes, variants, icons, and state transitions, exposing instantly copy-pasteable HTML/TS markup blocks.",
+        "tag": "Reference"
+      },
+      "contrast": {
+        "title": "AA Contrast Ratio",
+        "desc": "All foreground elements meet a minimum 4.5:1 contrast against their background for maximum readability.",
+        "tag": "Accessibility"
+      },
+      "responsive": {
+        "title": "Responsive Architecture",
+        "desc": "Layouts, grid frameworks, and dialog wrappers snap fluidly across standard breakpoints (640px to 1530px).",
+        "tag": "Layout"
+      }
+    },
+    "footer": {
+      "newsletterTitle": "Stay in sync.",
+      "newsletterDesc": "Receive notifications when new spacing controls or physics sandboxes are added to Sion Studio.",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "Enter your email address",
+      "subscribe": "Subscribe",
+      "copyright": "© 2026 Sion. All rights reserved."
+    }
+  }
+}

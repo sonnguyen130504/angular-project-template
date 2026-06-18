@@ -1,0 +1,11 @@
+<button
+  type="button"
+  class="lang-toggle"
+  (click)="toggleLanguage()"
+  [attr.aria-label]="isVietnamese ? 'Switch to English' : 'Chuyển sang Tiếng Việt'"
+  [attr.title]="isVietnamese ? 'Switch to English' : 'Chuyển sang Tiếng Việt'"
+>
+  <span class="lang-option" [class.is-active]="!isVietnamese">EN</span>
+  <span class="lang-divider">/</span>
+  <span class="lang-option" [class.is-active]="isVietnamese">VI</span>
+</button>

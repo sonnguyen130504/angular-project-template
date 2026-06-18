@@ -1,15 +1,16 @@
+<ng-container *transloco="let t">
 <main class="home-container">
   <!-- Section 1: Hero -->
   <section class="hero-section" aria-labelledby="hero-title">
     <div class="hero-content">
-      <app-ui-badge tone="info">Sion Studio v1.0</app-ui-badge>
-      <h1 id="hero-title">Crafted animation labs & <em>modular</em> UI components.</h1>
+      <app-ui-badge tone="info">{{ t('home.badge') }}</app-ui-badge>
+      <h1 id="hero-title" [innerHTML]="t('home.heroTitle')">Crafted animation labs & <em>modular</em> UI components.</h1>
       <p class="hero-description">
-        Clean, high-performance reference templates showcasing custom spring solvers, FLIP morph elements, and fully configurable component code sandbox environments.
+        {{ t('home.heroDesc') }}
       </p>
       <div class="hero-actions">
-        <a class="button-link primary" routerLink="/motion-lab">Launch Animation Lab</a>
-        <a class="button-link secondary" routerLink="/component-gallery">Component gallery</a>
+        <a class="button-link primary" routerLink="/motion-lab">{{ t('home.launchLab') }}</a>
+        <a class="button-link secondary" routerLink="/component-gallery">{{ t('home.gallery') }}</a>
       </div>
     </div>
 
@@ -21,22 +22,22 @@
   <!-- Section 2: Trust Marquee -->
   <div class="trust-marquee-container">
     <div class="marquee-track">
-      <span><i class="pi pi-bolt"></i> 60+ FPS Spring Solvers</span>
-      <span><i class="pi pi-eye"></i> WCAG AA Contrast Ratios</span>
-      <span><i class="pi pi-code"></i> Copy-Paste HTML/TS Snips</span>
-      <span><i class="pi pi-mobile"></i> Fully Responsive Layouts</span>
-      <span><i class="pi pi-bolt"></i> 60+ FPS Spring Solvers</span>
-      <span><i class="pi pi-eye"></i> WCAG AA Contrast Ratios</span>
-      <span><i class="pi pi-code"></i> Copy-Paste HTML/TS Snips</span>
-      <span><i class="pi pi-mobile"></i> Fully Responsive Layouts</span>
+      <span><i class="pi pi-bolt"></i> {{ t('home.marquee.solvers') }}</span>
+      <span><i class="pi pi-eye"></i> {{ t('home.marquee.contrast') }}</span>
+      <span><i class="pi pi-code"></i> {{ t('home.marquee.snippets') }}</span>
+      <span><i class="pi pi-mobile"></i> {{ t('home.marquee.responsive') }}</span>
+      <span><i class="pi pi-bolt"></i> {{ t('home.marquee.solvers') }}</span>
+      <span><i class="pi pi-eye"></i> {{ t('home.marquee.contrast') }}</span>
+      <span><i class="pi pi-code"></i> {{ t('home.marquee.snippets') }}</span>
+      <span><i class="pi pi-mobile"></i> {{ t('home.marquee.responsive') }}</span>
     </div>
   </div>
 
   <!-- Section 3: Bento Showcase & Interactive Sion Lab -->
   <section class="bento-section" aria-labelledby="bento-title">
     <div class="section-header">
-      <h2 id="bento-title">Template Architecture</h2>
-      <p>Investigate the two primary reference modules designed for Angular applications.</p>
+      <h2 id="bento-title">{{ t('home.bento.title') }}</h2>
+      <p>{{ t('home.bento.subtitle') }}</p>
     </div>
 
     <div class="bento-grid">
@@ -44,38 +45,38 @@
       <div class="bento-cell double-width workbench-cell">
         <div class="cell-body">
           <div class="badge-row">
-            <app-ui-badge tone="positive">Spacing Sandbox</app-ui-badge>
+            <app-ui-badge tone="positive">{{ t('home.bento.spacingSandbox') }}</app-ui-badge>
           </div>
-          <h3>Sion Design Lab</h3>
-          <p>Experiment with real-time UI density parameters, border-radius states, and brand theme accents.</p>
+          <h3>{{ t('home.bento.designLab') }}</h3>
+          <p>{{ t('home.bento.designLabDesc') }}</p>
           
           <div class="workbench-controls">
             <!-- Density Dials -->
             <div class="control-group">
-              <span class="control-label">Density Dials</span>
+              <span class="control-label">{{ t('home.bento.densityDials') }}</span>
               <div class="pill-options">
-                <button type="button" [class.active]="labDensity === 'comfortable'" (click)="labDensity = 'comfortable'">Comfortable</button>
-                <button type="button" [class.active]="labDensity === 'compact'" (click)="labDensity = 'compact'">Compact</button>
-                <button type="button" [class.active]="labDensity === 'airy'" (click)="labDensity = 'airy'">Airy</button>
+                <button type="button" [class.active]="labDensity === 'comfortable'" (click)="labDensity = 'comfortable'">{{ t('home.bento.comfortable') }}</button>
+                <button type="button" [class.active]="labDensity === 'compact'" (click)="labDensity = 'compact'">{{ t('home.bento.compact') }}</button>
+                <button type="button" [class.active]="labDensity === 'airy'" (click)="labDensity = 'airy'">{{ t('home.bento.airy') }}</button>
               </div>
             </div>
 
             <!-- Accent Color -->
             <div class="control-group">
-              <span class="control-label">Accent Theme</span>
+              <span class="control-label">{{ t('home.bento.accentTheme') }}</span>
               <div class="pill-options">
-                <button type="button" [class.active]="labAccent === 'clay'" (click)="labAccent = 'clay'">Clay Warm</button>
-                <button type="button" [class.active]="labAccent === 'teal'" (click)="labAccent = 'teal'">Deep Teal</button>
+                <button type="button" [class.active]="labAccent === 'clay'" (click)="labAccent = 'clay'">{{ t('home.bento.clayWarm') }}</button>
+                <button type="button" [class.active]="labAccent === 'teal'" (click)="labAccent = 'teal'">{{ t('home.bento.deepTeal') }}</button>
               </div>
             </div>
 
             <!-- Radius Shape -->
             <div class="control-group">
-              <span class="control-label">Border Radius</span>
+              <span class="control-label">{{ t('home.bento.borderRadius') }}</span>
               <div class="pill-options">
-                <button type="button" [class.active]="labRadius === 'soft'" (click)="labRadius = 'soft'">Soft (16px)</button>
-                <button type="button" [class.active]="labRadius === 'pill'" (click)="labRadius = 'pill'">Pill (999px)</button>
-                <button type="button" [class.active]="labRadius === 'none'" (click)="labRadius = 'none'">Sharp (0px)</button>
+                <button type="button" [class.active]="labRadius === 'soft'" (click)="labRadius = 'soft'">{{ t('home.bento.soft') }}</button>
+                <button type="button" [class.active]="labRadius === 'pill'" (click)="labRadius = 'pill'">{{ t('home.bento.pill') }}</button>
+                <button type="button" [class.active]="labRadius === 'none'" (click)="labRadius = 'none'">{{ t('home.bento.sharp') }}</button>
               </div>
             </div>
           </div>
@@ -85,20 +86,20 @@
           <div class="preview-card-container">
             <div class="lab-preview-card" [class]="'density-' + labDensity + ' accent-' + labAccent + ' radius-' + labRadius">
               <div class="card-badge-row">
-                <span class="preview-badge">Live Preview</span>
+                <span class="preview-badge">{{ t('home.bento.livePreview') }}</span>
               </div>
-              <h4 class="preview-title">Mina's Travel Pouch</h4>
-              <p class="preview-desc">Curated clay canvas with water-resistant lining.</p>
+              <h4 class="preview-title">{{ t('home.bento.pouchTitle') }}</h4>
+              <p class="preview-desc">{{ t('home.bento.pouchDesc') }}</p>
               
               <div class="preview-slider-wrap">
                 <div class="slider-info">
-                  <span>Capacity Limit</span>
+                  <span>{{ t('home.bento.capacityLimit') }}</span>
                   <strong>{{ labSliderValue }}%</strong>
                 </div>
                 <p-slider [(ngModel)]="labSliderValue" [min]="0" [max]="100" class="lab-slider" />
               </div>
               
-              <button class="preview-btn">Interactive Trigger</button>
+              <button class="preview-btn">{{ t('home.bento.interactiveTrigger') }}</button>
             </div>
           </div>
         </div>
@@ -107,38 +108,38 @@
       <!-- Cell 2: Animation Lab Card -->
       <div class="bento-cell standard-bg">
         <div class="cell-body">
-          <h3>Animation Playground</h3>
-          <p>Hooke's Law spring solvers, direct DOM magnetic hover drag, and Web Audio synthesizers.</p>
+          <h3>{{ t('home.bento.animationPlayground') }}</h3>
+          <p>{{ t('home.bento.animationPlaygroundDesc') }}</p>
         </div>
         
         <div class="mini-preview animation-preview-box">
           <div class="bubble-element">
             <i class="pi pi-bolt" aria-hidden="true"></i>
           </div>
-          <span class="preview-label">Solver Active</span>
+          <span class="preview-label">{{ t('home.bento.solverActive') }}</span>
         </div>
         
         <div class="cell-footer">
-          <a routerLink="/motion-lab" class="bento-link">Open playground <i class="pi pi-arrow-up-right"></i></a>
+          <a routerLink="/motion-lab" class="bento-link">{{ t('home.bento.openPlayground') }} <i class="pi pi-arrow-up-right"></i></a>
         </div>
       </div>
 
       <!-- Cell 3: Component Sandbox Card -->
       <div class="bento-cell standard-bg">
         <div class="cell-body">
-          <h3>Component Sandbox</h3>
-          <p>Configurable sandboxes exposing clean, copyable HTML and TypeScript markup blocks.</p>
+          <h3>{{ t('home.bento.componentSandbox') }}</h3>
+          <p>{{ t('home.bento.componentSandboxDesc') }}</p>
         </div>
         
         <div class="mini-preview component-preview-box">
           <div class="mock-card">
             <span class="badge-mock">badge-outline</span>
-            <button class="button-mock">Primary Knobs</button>
+            <button class="button-mock">{{ t('home.bento.primaryKnobs') }}</button>
           </div>
         </div>
 
         <div class="cell-footer">
-          <a routerLink="/component-gallery" class="bento-link">Explore components <i class="pi pi-arrow-up-right"></i></a>
+          <a routerLink="/component-gallery" class="bento-link">{{ t('home.bento.exploreComponents') }} <i class="pi pi-arrow-up-right"></i></a>
         </div>
       </div>
     </div>
@@ -147,8 +148,8 @@
   <!-- Route Directory -->
   <section class="route-directory" aria-labelledby="routes-title">
     <div class="section-header">
-      <h2 id="routes-title">Explore Core Templates</h2>
-      <p>Launch the two major workspaces designed to serve as references for layout, controls, and animations.</p>
+      <h2 id="routes-title">{{ t('home.directory.title') }}</h2>
+      <p>{{ t('home.directory.subtitle') }}</p>
     </div>
     <div class="route-grid">
       @for (group of groups; track group.name) {
@@ -165,10 +166,10 @@
   <section class="testimonial-section" aria-label="Customer testimonials">
     <div class="testimonial-carousel-container">
       <blockquote>
-        <p class="quote-text">“Sion Studio's components saved us weeks of design alignment. The code is clean, responsive, and extremely adaptable.”</p>
+        <p class="quote-text">“{{ t('home.testimonial.quote') }}”</p>
         <cite class="quote-attribution">
           <strong>Elena Rostova</strong>
-          <span>Lead Designer · Vanguard Labs</span>
+          <span>{{ t('home.testimonial.attribution') }}</span>
         </cite>
       </blockquote>
     </div>
@@ -178,13 +179,13 @@
   <section class="animation-highlight-section" aria-labelledby="anim-highlight-title">
     <div class="highlight-wrapper">
       <div class="highlight-info">
-        <app-ui-badge tone="positive">Physics Lab</app-ui-badge>
-        <h2 id="anim-highlight-title">Experience spring physics & FLIP layout morphs.</h2>
+        <app-ui-badge tone="positive">{{ t('home.physics.badge') }}</app-ui-badge>
+        <h2 id="anim-highlight-title">{{ t('home.physics.title') }}</h2>
         <p class="highlight-desc">
-          Test interactive magnetic button fields, simulated loading pipelines, FLIP layouts, and scroll sticky card stacks in our new animation laboratory.
+          {{ t('home.physics.desc') }}
         </p>
         <div class="highlight-actions">
-          <a class="button-link primary" routerLink="/motion-lab">Launch Animation Playground</a>
+          <a class="button-link primary" routerLink="/motion-lab">{{ t('home.physics.cta') }}</a>
         </div>
       </div>
       
@@ -193,7 +194,7 @@
           <div class="sandbox-dot-grid" aria-hidden="true"></div>
           <div class="sandbox-magnet-bubble">
             <i class="pi pi-bolt" aria-hidden="true"></i>
-            <span>Interactive Space</span>
+            <span>{{ t('home.physics.interactiveSpace') }}</span>
           </div>
         </div>
       </div>
@@ -203,8 +204,8 @@
   <!-- Section 6: Upgraded Spec Grid (Quality Gates) -->
   <section class="gates-section" aria-labelledby="gates-title">
     <div class="section-header">
-      <h2 id="gates-title">Engineered Quality</h2>
-      <p>Every pattern is audited to meet rigorous technical design standards.</p>
+      <h2 id="gates-title">{{ t('home.gatesSection.title') }}</h2>
+      <p>{{ t('home.gatesSection.subtitle') }}</p>
     </div>
 
     <div class="gates-grid">
@@ -226,18 +227,19 @@
   <!-- Section 7: Newsletter & Footer -->
   <footer class="newsletter-footer">
     <div class="footer-cta">
-      <h2>Stay in sync.</h2>
-      <p>Receive notifications when new spacing controls or physics sandboxes are added to Sion Studio.</p>
+      <h2>{{ t('home.footer.newsletterTitle') }}</h2>
+      <p>{{ t('home.footer.newsletterDesc') }}</p>
       <form class="newsletter-form">
-        <label for="email-input" class="sr-only">Email address</label>
-        <input type="email" id="email-input" placeholder="Enter your email address" required />
-        <button type="submit" class="submit-btn">Subscribe</button>
+        <label for="email-input" class="sr-only">{{ t('home.footer.emailLabel') }}</label>
+        <input type="email" id="email-input" [placeholder]="t('home.footer.emailPlaceholder')" required />
+        <button type="submit" class="submit-btn">{{ t('home.footer.subscribe') }}</button>
       </form>
     </div>
     
     <div class="footer-meta">
       <span class="brand-text">Sion Studio.</span>
-      <span class="copyright">&copy; 2026 Sion. All rights reserved.</span>
+      <span class="copyright">{{ t('home.footer.copyright') }}</span>
     </div>
   </footer>
 </main>
+</ng-container>

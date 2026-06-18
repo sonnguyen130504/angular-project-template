@@ -1,10 +1,11 @@
+<ng-container *transloco="let t">
 <div class="shell">
   <header class="topbar">
-    <a class="brand" routerLink="/" aria-label="Open home">
+    <a class="brand" routerLink="/" [attr.aria-label]="t('shell.openHome')">
       <div class="brand-mark">O</div>
       <div>
         <div class="brand-name">Sion Studio</div>
-        <div class="brand-subtitle">Angular UI kit</div>
+        <div class="brand-subtitle">{{ t('shell.subtitle') }}</div>
       </div>
     </a>
 
@@ -18,11 +19,11 @@
             [attr.aria-expanded]="openGroup === group.label"
             (click)="toggleGroup(group.label)"
           >
-            {{ group.label }}
+            {{ t('nav.' + group.key) }}
           </button>
           @if (openGroup === group.label) {
             <div class="menu-panel">
-              <p>{{ group.description }}</p>
+              <p>{{ t('nav.' + group.key + 'Desc') }}</p>
               @for (link of group.links; track link.path) {
                 <a
                   [routerLink]="link.path"
@@ -30,8 +31,8 @@
                   [routerLinkActiveOptions]="{ exact: link.exact ?? false }"
                   (click)="closeMenus()"
                 >
-                  <span>{{ link.label }}</span>
-                  <small>{{ link.note }}</small>
+                  <span>{{ t('nav.' + link.key) }}</span>
+                  <small>{{ t('nav.' + link.key + 'Note') }}</small>
                 </a>
               }
             </div>
@@ -43,14 +44,15 @@
     <div class="header-actions desktop-actions">
       <div class="route-search" aria-label="Route search shortcut">
         <i class="pi pi-search" aria-hidden="true"></i>
-        <span>Search pages</span>
+        <span>{{ t('shell.searchPages') }}</span>
         <kbd>/</kbd>
       </div>
+      <app-language-switcher />
       <button
         type="button"
         class="theme-toggle"
         (click)="audioService.toggleMute()"
-        [attr.title]="audioService.isMuted() ? 'Unmute sounds' : 'Mute sounds'"
+        [attr.title]="audioService.isMuted() ? t('shell.unmuteSounds') : t('shell.muteSounds')"
       >
         <i class="pi" [class.pi-volume-up]="!audioService.isMuted()" [class.pi-volume-off]="audioService.isMuted()"></i>
       </button>
@@ -58,7 +60,7 @@
         type="button"
         class="theme-toggle"
         (click)="themeService.toggleTheme()"
-        [attr.aria-label]="'Switch to ' + (themeService.theme() === 'light' ? 'dark' : 'light') + ' mode'"
+        [attr.aria-label]="t(themeService.theme() === 'light' ? 'shell.switchToDark' : 'shell.switchToLight')"
       >
         <i class="pi" [class.pi-moon]="themeService.theme() === 'light'" [class.pi-sun]="themeService.theme() === 'dark'"></i>
       </button>
@@ -66,11 +68,12 @@
 
     <!-- Mobile Actions -->
     <div class="mobile-actions">
+      <app-language-switcher />
       <button
         type="button"
         class="theme-toggle"
         (click)="audioService.toggleMute()"
-        [attr.title]="audioService.isMuted() ? 'Unmute sounds' : 'Mute sounds'"
+        [attr.title]="audioService.isMuted() ? t('shell.unmuteSounds') : t('shell.muteSounds')"
       >
         <i class="pi" [class.pi-volume-up]="!audioService.isMuted()" [class.pi-volume-off]="audioService.isMuted()"></i>
       </button>
@@ -78,7 +81,7 @@
         type="button"
         class="theme-toggle"
         (click)="themeService.toggleTheme()"
-        [attr.aria-label]="'Switch to ' + (themeService.theme() === 'light' ? 'dark' : 'light') + ' mode'"
+        [attr.aria-label]="t(themeService.theme() === 'light' ? 'shell.switchToDark' : 'shell.switchToLight')"
       >
         <i class="pi" [class.pi-moon]="themeService.theme() === 'light'" [class.pi-sun]="themeService.theme() === 'dark'"></i>
       </button>
@@ -88,7 +91,7 @@
         class="mobile-menu-toggle"
         (click)="toggleMobileMenu()"
         [attr.aria-expanded]="isMobileMenuOpen"
-        aria-label="Toggle navigation menu"
+        [attr.aria-label]="t('shell.toggleNav')"
       >
         <i class="pi" [class.pi-bars]="!isMobileMenuOpen" [class.pi-times]="isMobileMenuOpen"></i>
       </button>
@@ -99,7 +102,7 @@
       <div class="mobile-drawer">
         <div class="mobile-search-bar" aria-label="Route search mobile">
           <i class="pi pi-search" aria-hidden="true"></i>
-          <input type="text" placeholder="Search pages..." disabled style="cursor: not-allowed; border: 0; background: transparent; width: 100%; font: inherit; padding: 0 4px;" />
+          <input type="text" [placeholder]="t('shell.searchPagesPlaceholder')" disabled style="cursor: not-allowed; border: 0; background: transparent; width: 100%; font: inherit; padding: 0 4px;" />
         </div>
 
         <nav class="mobile-nav" aria-label="Mobile navigation">
@@ -110,12 +113,12 @@
                 class="mobile-group-trigger"
                 (click)="toggleMobileGroup(group.label)"
               >
-                <span>{{ group.label }}</span>
+                <span>{{ t('nav.' + group.key) }}</span>
                 <i class="pi" [class.pi-chevron-down]="openMobileGroup !== group.label" [class.pi-chevron-up]="openMobileGroup === group.label"></i>
               </button>
               @if (openMobileGroup === group.label) {
                 <div class="mobile-menu-panel">
-                  <p class="group-description">{{ group.description }}</p>
+                  <p class="group-description">{{ t('nav.' + group.key + 'Desc') }}</p>
                   <div class="group-links">
                     @for (link of group.links; track link.path) {
                       <a
@@ -124,8 +127,8 @@
                         [routerLinkActiveOptions]="{ exact: link.exact ?? false }"
                         (click)="closeMobileMenu()"
                       >
-                        <strong>{{ link.label }}</strong>
-                        <small>{{ link.note }}</small>
+                        <strong>{{ t('nav.' + link.key) }}</strong>
+                        <small>{{ t('nav.' + link.key + 'Note') }}</small>
                       </a>
                     }
                   </div>
@@ -145,3 +148,4 @@
 
   <app-feedback-widget />
 </div>
+</ng-container>

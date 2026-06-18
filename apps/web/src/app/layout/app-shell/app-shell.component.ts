@@ -1,20 +1,22 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { ThemeService } from '../../shared/services/theme.service';
 import { FeedbackWidgetComponent } from '../../shared/ui/feedback-widget/feedback-widget.component';
+import { LanguageSwitcherComponent } from '../../shared/ui/language-switcher/language-switcher.component';
 import { ThreeDAudioService } from '../../features/product-3d-showcase/services/three-d-audio.service';
 
 type NavGroup = {
   label: string;
-  description: string;
-  links: Array<{ label: string; path: string; exact?: boolean; note: string }>;
+  key: string;
+  links: Array<{ key: string; path: string; exact?: boolean }>;
 };
 
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, RouterOutlet, FeedbackWidgetComponent],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, FeedbackWidgetComponent, LanguageSwitcherComponent, TranslocoDirective],
   templateUrl: './app-shell.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './app-shell.component.scss',
@@ -63,65 +65,66 @@ export class AppShellComponent {
   readonly navGroups: NavGroup[] = [
     {
       label: 'Commerce',
-      description: 'Shopping, product detail, and cart flows.',
+      key: 'commerce',
       links: [
-        { label: 'Home', path: '/', exact: true, note: 'Template overview' },
-        { label: 'Catalog', path: '/catalog', note: 'Filters and listing states' },
-        { label: 'Product', path: '/product', note: 'Variants and buy box' },
-        { label: 'Cart', path: '/cart', note: 'Checkout steps and totals' },
+        { key: 'home', path: '/', exact: true },
+        { key: 'catalog', path: '/catalog' },
+        { key: 'product', path: '/product' },
+        { key: 'cart', path: '/cart' },
       ],
     },
     {
       label: 'Operations',
-      description: 'Admin and account surfaces for product apps.',
+      key: 'operations',
       links: [
-        { label: 'Dashboard', path: '/dashboard', note: 'Metrics, chart, table' },
-        { label: 'Settings', path: '/settings', note: 'Tabs and form states' },
-        { label: 'Profile', path: '/profile', note: 'Account and activity' },
-        { label: 'Billing', path: '/billing', note: 'Plans, invoices, usage' },
-        { label: 'Activity Log', path: '/activity-log', note: 'Audit trail and filters' },
-        { label: 'Setup', path: '/setup', note: 'Onboarding checklist' },
+        { key: 'dashboard', path: '/dashboard' },
+        { key: 'settings', path: '/settings' },
+        { key: 'profile', path: '/profile' },
+        { key: 'billing', path: '/billing' },
+        { key: 'activityLog', path: '/activity-log' },
+        { key: 'setup', path: '/setup' },
       ],
     },
     {
       label: 'Workspace',
-      description: 'Team work surfaces beyond commerce flows.',
+      key: 'workspace',
       links: [
-        { label: 'Inbox', path: '/inbox', note: 'Message triage and threads' },
-        { label: 'Calendar', path: '/calendar', note: 'Schedule and conflicts' },
-        { label: 'Tasks', path: '/tasks', note: 'Kanban and list states' },
-        { label: 'Team', path: '/team', note: 'Roles and permissions' },
-        { label: 'Assets', path: '/assets', note: 'Files and upload states' },
+        { key: 'inbox', path: '/inbox' },
+        { key: 'calendar', path: '/calendar' },
+        { key: 'tasks', path: '/tasks' },
+        { key: 'team', path: '/team' },
+        { key: 'assets', path: '/assets' },
       ],
     },
     {
       label: 'Reference Kit',
-      description: 'Reusable UI patterns and states.',
+      key: 'referenceKit',
       links: [
-        { label: 'Components', path: '/component-gallery', note: 'Controls and feedback' },
-        { label: 'Forms', path: '/forms', note: 'Validation patterns' },
-        { label: 'Charts', path: '/data-visualization', note: 'Analytics surfaces' },
-        { label: 'Motion', path: '/motion-lab', note: 'State motion' },
-        { label: 'Empty', path: '/empty-state', note: 'No-data and error states' },
+        { key: 'components', path: '/component-gallery' },
+        { key: 'forms', path: '/forms' },
+        { key: 'charts', path: '/data-visualization' },
+        { key: 'motion', path: '/motion-lab' },
+        { key: 'empty', path: '/empty-state' },
       ],
     },
     {
       label: 'Auth',
-      description: 'Entry and recovery screens.',
+      key: 'auth',
       links: [
-        { label: 'Sign in', path: '/sign-in', note: 'Validation and session states' },
-        { label: 'Forgot', path: '/forgot-password', note: 'Recovery flow' },
+        { key: 'signIn', path: '/sign-in' },
+        { key: 'forgot', path: '/forgot-password' },
       ],
     },
     {
       label: 'Interactive',
-      description: '3D showcases, scroll animations, audio labs, and simulators.',
+      key: 'interactive',
       links: [
-        { label: '3D Showcase', path: '/3d-showcase', note: 'Interactive viewer and variants' },
-        { label: '3D Storytelling', path: '/3d-storytelling', note: 'Scroll-driven camera animations' },
-        { label: 'Tactile Sound', path: '/tactile-sound', note: 'Web Audio API synthesizers' },
-        { label: 'Mobile Simulator', path: '/mobile-patterns', note: 'Device simulation sandbox' },
+        { key: 'showcase3d', path: '/3d-showcase' },
+        { key: 'storytelling3d', path: '/3d-storytelling' },
+        { key: 'tactileSound', path: '/tactile-sound' },
+        { key: 'mobileSimulator', path: '/mobile-patterns' },
       ],
     },
   ];
 }
+

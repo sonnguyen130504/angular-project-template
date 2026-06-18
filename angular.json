@@ -23,6 +23,11 @@
                 "glob": "**/*",
                 "input": "apps/web/public",
                 "output": "/"
+              },
+              {
+                "glob": "**/*",
+                "input": "apps/web/src/assets/i18n",
+                "output": "/assets/i18n"
               }
             ],
             "styles": [

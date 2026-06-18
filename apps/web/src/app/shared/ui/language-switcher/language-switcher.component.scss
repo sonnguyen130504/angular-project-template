@@ -1,0 +1,40 @@
+:host {
+  display: inline-flex;
+}
+
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: transparent;
+  border: 1px solid var(--border, rgba(128, 128, 128, 0.2));
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary, #888);
+  transition: border-color 0.2s, background 0.2s;
+
+  &:hover {
+    border-color: var(--text-primary, #ccc);
+    background: var(--surface-hover, rgba(128, 128, 128, 0.06));
+  }
+}
+
+.lang-option {
+  padding: 1px 3px;
+  border-radius: 3px;
+  transition: color 0.2s, background 0.2s;
+
+  &.is-active {
+    color: var(--text-primary, #fff);
+    background: var(--accent, rgba(99, 102, 241, 0.15));
+  }
+}
+
+.lang-divider {
+  opacity: 0.3;
+  font-weight: 400;
+}
