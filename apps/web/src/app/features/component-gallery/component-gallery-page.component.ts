@@ -9,6 +9,8 @@ import { ComponentPropertiesKnobsComponent } from './components/component-proper
 import { ComponentPreviewPaneComponent } from './components/component-preview-pane/component-preview-pane.component';
 import { GalleryStateService } from './services/gallery-state.service';
 
+import { TranslocoDirective } from '@jsverse/transloco';
+
 @Component({
   selector: 'app-component-gallery-page',
   standalone: true,
@@ -19,8 +21,9 @@ import { GalleryStateService } from './services/gallery-state.service';
     UiButtonComponent,
     CarbonTerminalComponent,
     ComponentPropertiesKnobsComponent,
-    ComponentPreviewPaneComponent
-],
+    ComponentPreviewPaneComponent,
+    TranslocoDirective
+  ],
   providers: [GalleryStateService],
   templateUrl: './component-gallery-page.component.html',
   styleUrl: './component-gallery-page.component.scss',
