@@ -1,41 +1,42 @@
-<app-page-section subtitle="Data Visualization" title="Analytics reference">
+<ng-container *transloco="let t">
+<app-page-section sub[title]="t('dataVisualization.data_visualization')" [title]="t('dataVisualization.analytics_reference')">
   <div sectionActions>
     <div class="viz-actions">
-      <select [(ngModel)]="selectedRange" aria-label="Date range">
+      <select [(ngModel)]="selectedRange" [aria-label]="t('dataVisualization.date_range')">
         @for (range of rangeOptions; track range) {
           <option>{{ range }}</option>
         }
       </select>
-      <div class="state-switcher" aria-label="Chart states">
-        <button type="button" [class.is-active]="chartState === 'ready'" (click)="setChartState('ready')">Ready</button>
-        <button type="button" [class.is-active]="chartState === 'loading'" (click)="setChartState('loading')">Loading</button>
-        <button type="button" [class.is-active]="chartState === 'empty'" (click)="setChartState('empty')">Empty</button>
-        <button type="button" [class.is-active]="chartState === 'error'" (click)="setChartState('error')">Error</button>
+      <div class="state-switcher" [aria-label]="t('dataVisualization.chart_states')">
+        <button type="button" [class.is-active]="chartState === 'ready'" (click)="setChartState('ready')">{{ t('dataVisualization.ready') }}</button>
+        <button type="button" [class.is-active]="chartState === 'loading'" (click)="setChartState('loading')">{{ t('dataVisualization.loading') }}</button>
+        <button type="button" [class.is-active]="chartState === 'empty'" (click)="setChartState('empty')">{{ t('dataVisualization.empty') }}</button>
+        <button type="button" [class.is-active]="chartState === 'error'" (click)="setChartState('error')">{{ t('dataVisualization.error') }}</button>
       </div>
     </div>
   </div>
 
   <div class="kpi-strip">
     <div class="kpi-cell">
-      <div class="kpi-label">Total Revenue</div>
-      <div class="kpi-num">$42k</div>
+      <div class="kpi-label">{{ t('dataVisualization.total_revenue') }}</div>
+      <div class="kpi-num">{{ t('dataVisualization.42k') }}</div>
       <span class="kpi-badge is-up"><i class="pi pi-arrow-up-right"></i> +18%</span>
     </div>
     <div class="kpi-divider"></div>
     <div class="kpi-cell">
-      <div class="kpi-label">Gross Margin</div>
+      <div class="kpi-label">{{ t('dataVisualization.gross_margin') }}</div>
       <div class="kpi-num">51%</div>
       <span class="kpi-badge is-up"><i class="pi pi-arrow-up-right"></i> +3.2%</span>
     </div>
     <div class="kpi-divider"></div>
     <div class="kpi-cell">
-      <div class="kpi-label">Repeat Rate</div>
+      <div class="kpi-label">{{ t('dataVisualization.repeat_rate') }}</div>
       <div class="kpi-num">38%</div>
-      <span class="kpi-badge is-flat"><i class="pi pi-minus"></i> Stable</span>
+      <span class="kpi-badge is-flat"><i class="pi pi-minus"></i>{{ t('dataVisualization.stable') }}</span>
     </div>
     <div class="kpi-divider"></div>
     <div class="kpi-cell">
-      <div class="kpi-label">Avg. Order</div>
+      <div class="kpi-label">{{ t('dataVisualization.avg_order') }}</div>
       <div class="kpi-num">$109</div>
       <span class="kpi-badge is-down"><i class="pi pi-arrow-down-right"></i> -1.4%</span>
     </div>
@@ -45,14 +46,12 @@
     <div class="chart-card wide">
       <div class="chart-card-head">
         <div>
-          <app-ui-badge tone="info">Trend</app-ui-badge>
-          <h3>Revenue by channel</h3>
-          <p>Line chart with channel comparison and accessible state controls.</p>
+          <app-ui-badge tone="info">{{ t('dataVisualization.trend') }}</app-ui-badge>
+          <h3>{{ t('dataVisualization.revenue_by_channel') }}</h3>
+          <p>{{ t('dataVisualization.line_chart_with_channel_compar') }}</p>
         </div>
         <div class="chart-legend">
-          <span class="legend-dot" style="background: #235565"></span> Online
-          <span class="legend-dot" style="background: #2f6f4e; margin-left: 12px"></span> Retail
-        </div>
+          <span class="legend-dot" style="background: #235565"></span>{{ t('dataVisualization.online') }}<span class="legend-dot" style="background: #2f6f4e; margin-left: 12px"></span>{{ t('dataVisualization.retail') }}</div>
       </div>
 
       @if (chartState === 'ready') {
@@ -66,14 +65,14 @@
       } @else if (chartState === 'empty') {
         <div class="chart-state">
           <i class="pi pi-chart-line"></i>
-          <strong>No chart data yet</strong>
-          <p>Pick a longer date range or connect a data source.</p>
+          <strong>{{ t('dataVisualization.no_chart_data_yet') }}</strong>
+          <p>{{ t('dataVisualization.pick_a_longer_date_range_or_co') }}</p>
         </div>
       } @else {
         <div class="chart-state error-state">
           <i class="pi pi-exclamation-triangle"></i>
-          <strong>Chart failed to load</strong>
-          <p>Retry the request or inspect the analytics connector.</p>
+          <strong>{{ t('dataVisualization.chart_failed_to_load') }}</strong>
+          <p>{{ t('dataVisualization.retry_the_request_or_inspect_t') }}</p>
         </div>
       }
     </div>
@@ -81,9 +80,9 @@
     <div class="chart-card">
       <div class="chart-card-head">
         <div>
-          <app-ui-badge>Category Mix</app-ui-badge>
-          <h3>Category share</h3>
-          <p>Donut with explicit values, not color alone.</p>
+          <app-ui-badge>{{ t('dataVisualization.category_mix') }}</app-ui-badge>
+          <h3>{{ t('dataVisualization.category_share') }}</h3>
+          <p>{{ t('dataVisualization.donut_with_explicit_values_not') }}</p>
         </div>
       </div>
       <p-chart type="doughnut" [data]="mixChart" [options]="chartOptions" height="240px" />
@@ -101,9 +100,9 @@
     <div class="chart-card wide">
       <div class="chart-card-head">
         <div>
-          <app-ui-badge tone="positive">Stacked</app-ui-badge>
-          <h3>Customer mix by category</h3>
-          <p>Stacked bar chart for new vs returning customer behavior.</p>
+          <app-ui-badge tone="positive">{{ t('dataVisualization.stacked') }}</app-ui-badge>
+          <h3>{{ t('dataVisualization.customer_mix_by_category') }}</h3>
+          <p>{{ t('dataVisualization.stacked_bar_chart_for_new_vs_r') }}</p>
         </div>
       </div>
       <p-chart type="bar" [data]="stackedChart" [options]="stackedOptions" height="300px" />
@@ -112,9 +111,9 @@
     <div class="chart-card">
       <div class="chart-card-head">
         <div>
-          <app-ui-badge tone="warning">Anomalies</app-ui-badge>
-          <h3>Signal queue</h3>
-          <p>Analytics pages need callouts that tell teams what to inspect.</p>
+          <app-ui-badge tone="warning">{{ t('dataVisualization.anomalies') }}</app-ui-badge>
+          <h3>{{ t('dataVisualization.signal_queue') }}</h3>
+          <p>{{ t('dataVisualization.analytics_pages_need_callouts_') }}</p>
         </div>
       </div>
       <div class="anomaly-list">
@@ -134,8 +133,8 @@
   <div class="segment-panel">
     <div class="segment-head">
       <div>
-        <app-ui-badge tone="positive">Segment table</app-ui-badge>
-        <h3>Segment performance</h3>
+        <app-ui-badge tone="positive">{{ t('dataVisualization.segment_table') }}</app-ui-badge>
+        <h3>{{ t('dataVisualization.segment_performance') }}</h3>
       </div>
       <p>{{ selectedRange }} · revenue, share, health, and trend deltas.</p>
     </div>
@@ -144,11 +143,11 @@
       <table class="segment-table">
         <thead>
           <tr>
-            <th>Segment</th>
-            <th>Revenue</th>
-            <th>Change</th>
-            <th>Share</th>
-            <th>Health</th>
+            <th>{{ t('dataVisualization.segment') }}</th>
+            <th>{{ t('dataVisualization.revenue') }}</th>
+            <th>{{ t('dataVisualization.change') }}</th>
+            <th>{{ t('dataVisualization.share') }}</th>
+            <th>{{ t('dataVisualization.health') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -176,3 +175,5 @@
     </div>
   </div>
 </app-page-section>
+
+</ng-container>

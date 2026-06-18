@@ -1,15 +1,14 @@
-<app-page-section title="Motion Lab & Animation Showcase" subtitle="Sion Studio UI Reference">
+<ng-container *transloco="let t">
+<app-page-section [title]="t('motionLab.motion_lab_animation_showcase')" sub[title]="t('motionLab.sion_studio_ui_reference')">
   <div class="playground-header-row">
     <div class="intro-block">
-      <p class="intro-text">
-        A workbench showcasing physics solvers, micro-interactions, layout morphs, and scroll choreography. Built with performance and accessibility at the core.
-      </p>
+      <p class="intro-text">{{ t('motionLab.a_workbench_showcasing_physics') }}</p>
     </div>
     
     <!-- Global Control Center -->
     <div class="global-settings-panel">
       <div class="setting-item">
-        <label for="intensity-slider">Global Motion Intensity</label>
+        <label for="intensity-slider">{{ t('motionLab.global_motion_intensity') }}</label>
         <div class="slider-val-row">
           <p-slider id="intensity-slider" [(ngModel)]="motionIntensity" [min]="1" [max]="10"></p-slider>
           <span class="val-indicator">{{ motionIntensity }}/10</span>
@@ -19,14 +18,14 @@
         <label class="toggle-control" for="a11y-motion-toggle">
           <input type="checkbox" id="a11y-motion-toggle" [(ngModel)]="simulateReducedMotion" />
           <span class="toggle-indicator"></span>
-          <span>Simulate <code>reduced-motion</code></span>
+          <span>{{ t('motionLab.simulate') }}<code>{{ t('motionLab.reduced_motion') }}</code></span>
         </label>
       </div>
     </div>
   </div>
 
   <!-- Tabbed Interface -->
-  <div class="local-tabs" role="tablist" aria-label="Animation categories">
+  <div class="local-tabs" role="tablist" [aria-label]="t('motionLab.animation_categories')">
     <button
       type="button"
       role="tab"
@@ -35,9 +34,7 @@
       [attr.aria-selected]="activeTab === 'physics'"
       aria-controls="panel-physics"
       (click)="switchTab('physics')"
-    >
-      Physics & Springs
-    </button>
+    >{{ t('motionLab.physics_springs') }}</button>
     <button
       type="button"
       role="tab"
@@ -46,9 +43,7 @@
       [attr.aria-selected]="activeTab === 'interactions'"
       aria-controls="panel-interactions"
       (click)="switchTab('interactions')"
-    >
-      Micro-Interactions
-    </button>
+    >{{ t('motionLab.micro_interactions') }}</button>
     <button
       type="button"
       role="tab"
@@ -57,9 +52,7 @@
       [attr.aria-selected]="activeTab === 'flip'"
       aria-controls="panel-flip"
       (click)="switchTab('flip')"
-    >
-      FLIP Layouts
-    </button>
+    >{{ t('motionLab.flip_layouts') }}</button>
     <button
       type="button"
       role="tab"
@@ -68,9 +61,7 @@
       [attr.aria-selected]="activeTab === 'scroll'"
       aria-controls="panel-scroll"
       (click)="switchTab('scroll')"
-    >
-      Scroll & Stagger
-    </button>
+    >{{ t('motionLab.scroll_stagger') }}</button>
     <button
       type="button"
       role="tab"
@@ -79,9 +70,7 @@
       [attr.aria-selected]="activeTab === 'typography'"
       aria-controls="panel-typography"
       (click)="switchTab('typography')"
-    >
-      Kinetic Typography
-    </button>
+    >{{ t('motionLab.kinetic_typography') }}</button>
     <button
       type="button"
       role="tab"
@@ -90,9 +79,7 @@
       [attr.aria-selected]="activeTab === 'canvas'"
       aria-controls="panel-canvas"
       (click)="switchTab('canvas')"
-    >
-      Canvas & SVG Physics
-    </button>
+    >{{ t('motionLab.canvas_svg_physics') }}</button>
     <button
       type="button"
       role="tab"
@@ -101,9 +88,7 @@
       [attr.aria-selected]="activeTab === 'advanced'"
       aria-controls="panel-advanced"
       (click)="switchTab('advanced')"
-    >
-      3D & Advanced Effects
-    </button>
+    >{{ t('motionLab.3d_advanced_effects') }}</button>
   </div>
 
   <div class="tab-panel-container">
@@ -152,3 +137,5 @@
     }
   </div>
 </app-page-section>
+
+</ng-container>

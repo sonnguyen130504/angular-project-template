@@ -1,12 +1,13 @@
+<ng-container *transloco="let t">
 <app-page-section 
-  title="Tactile Sound Laboratory" 
-  subtitle="Interactive programmatically synthesized sound effects using the Web Audio API."
+  [title]="t('tactileSound.tactile_sound_laboratory')" 
+  sub[title]="t('tactileSound.interactive_programmatically_s')"
 >
   <div class="audio-lab-grid">
     <!-- Visualizer and Custom Synthesizer Column -->
     <div class="lab-card visualizer-card">
       <div class="card-header">
-        <h3>Waveform Visualizer</h3>
+        <h3>{{ t('tactileSound.waveform_visualizer') }}</h3>
         <span class="badge" [class.badge-active]="!audio.isMuted()">
           {{ audio.isMuted() ? 'Muted' : 'Live Output' }}
         </span>
@@ -17,24 +18,24 @@
       </div>
 
       <div class="card-section">
-        <h3>Custom Synth Sandbox</h3>
-        <p class="section-desc">Design your own wave frequency sweeps and envelope parameters.</p>
+        <h3>{{ t('tactileSound.custom_synth_sandbox') }}</h3>
+        <p class="section-desc">{{ t('tactileSound.design_your_own_wave_frequency') }}</p>
         
         <div class="control-group">
-          <label>Oscillator Type</label>
+          <label>{{ t('tactileSound.oscillator_type') }}</label>
           <div class="custom-select-wrapper">
             <select [(ngModel)]="oscillatorType">
-              <option value="sine">Sine (Soft/Tactile)</option>
-              <option value="triangle">Triangle (Warm/Retro)</option>
-              <option value="sawtooth">Sawtooth (Bright/Electronic)</option>
-              <option value="square">Square (Chiptune/Digital)</option>
+              <option value="sine">{{ t('tactileSound.sine_soft_tactile') }}</option>
+              <option value="triangle">{{ t('tactileSound.triangle_warm_retro') }}</option>
+              <option value="sawtooth">{{ t('tactileSound.sawtooth_bright_electronic') }}</option>
+              <option value="square">{{ t('tactileSound.square_chiptune_digital') }}</option>
             </select>
           </div>
         </div>
 
         <div class="control-group">
           <div class="slider-header">
-            <label>Frequency</label>
+            <label>{{ t('tactileSound.frequency') }}</label>
             <span class="slider-value">{{ frequency }} Hz</span>
           </div>
           <input type="range" min="60" max="2500" step="10" [(ngModel)]="frequency" />
@@ -42,7 +43,7 @@
 
         <div class="control-group">
           <div class="slider-header">
-            <label>Decay Duration</label>
+            <label>{{ t('tactileSound.decay_duration') }}</label>
             <span class="slider-value">{{ duration }} s</span>
           </div>
           <input type="range" min="0.02" max="1.5" step="0.01" [(ngModel)]="duration" />
@@ -50,22 +51,21 @@
 
         <div class="control-group">
           <div class="slider-header">
-            <label>Volume / Amplitude</label>
+            <label>{{ t('tactileSound.volume_amplitude') }}</label>
             <span class="slider-value">{{ (volume * 100).toFixed(0) }}%</span>
           </div>
           <input type="range" min="0.01" max="0.3" step="0.01" [(ngModel)]="volume" />
         </div>
 
         <button class="play-btn" (click)="playCustom()">
-          <i class="pi pi-play"></i> Trigger Synthesizer
-        </button>
+          <i class="pi pi-play"></i>{{ t('tactileSound.trigger_synthesizer') }}</button>
       </div>
     </div>
 
     <!-- Presets & Interactive Pads Column -->
     <div class="lab-card presets-card">
       <div class="card-header">
-        <h3>Standard Interaction Presets</h3>
+        <h3>{{ t('tactileSound.standard_interaction_presets') }}</h3>
       </div>
       
       <div class="presets-list">
@@ -76,14 +76,13 @@
               <small>{{ preset.desc }}</small>
             </div>
             <button class="trigger-btn" (click)="preset.action()">
-              <i class="pi pi-volume-up"></i> Play
-            </button>
+              <i class="pi pi-volume-up"></i>{{ t('tactileSound.play') }}</button>
           </div>
         }
       </div>
 
       <div class="card-section">
-        <h3>Dynamic Fun Effects</h3>
+        <h3>{{ t('tactileSound.dynamic_fun_effects') }}</h3>
         <div class="sound-grid">
           @for (laser of laserPresets; track laser.name) {
             <button class="sound-pill" (click)="playLaser(laser)">
@@ -95,8 +94,8 @@
       </div>
 
       <div class="card-section">
-        <h3>Interactive Tactile Zones</h3>
-        <p class="section-desc">Test real-time hover, click, success, and error feedback.</p>
+        <h3>{{ t('tactileSound.interactive_tactile_zones') }}</h3>
+        <p class="section-desc">{{ t('tactileSound.test_real_time_hover_click_suc') }}</p>
         
         <div class="pads-row">
           <div 
@@ -104,24 +103,24 @@
             (mouseenter)="onPadHover()"
             (click)="onPadClick()"
           >
-            <span>Hover & Click</span>
-            <small>Tactile feedback</small>
+            <span>{{ t('tactileSound.hover_click') }}</span>
+            <small>{{ t('tactileSound.tactile_feedback') }}</small>
           </div>
 
           <div 
             class="tactile-pad success-pad" 
             (click)="onPadSuccess()"
           >
-            <span>Success Zone</span>
-            <small>Arpeggio chime</small>
+            <span>{{ t('tactileSound.success_zone') }}</span>
+            <small>{{ t('tactileSound.arpeggio_chime') }}</small>
           </div>
 
           <div 
             class="tactile-pad error-pad" 
             (click)="onPadError()"
           >
-            <span>Error Zone</span>
-            <small>Sawtooth buzz</small>
+            <span>{{ t('tactileSound.error_zone') }}</span>
+            <small>{{ t('tactileSound.sawtooth_buzz') }}</small>
           </div>
 
           <div 
@@ -129,25 +128,25 @@
             [class.toggle-active]="isToggleOn"
             (click)="onToggleChange()"
           >
-            <span>Toggle State</span>
+            <span>{{ t('tactileSound.toggle_state') }}</span>
             <small>{{ isToggleOn ? 'Status: ON' : 'Status: OFF' }}</small>
           </div>
         </div>
       </div>
 
       <div class="card-section">
-        <h3>Keyboard Sound Simulator</h3>
-        <p class="section-desc">Type in the box below to hear mechanical key clicks.</p>
+        <h3>{{ t('tactileSound.keyboard_sound_simulator') }}</h3>
+        <p class="section-desc">{{ t('tactileSound.type_in_the_box_below_to_hear_') }}</p>
         <div class="typing-box-wrapper">
           <input 
             type="text" 
             class="typing-input" 
-            placeholder="Type anything here..." 
+            [placeholder]="t('tactileSound.type_anything_here')" 
             [(ngModel)]="keyboardInput"
             (input)="onKeypress()"
           />
           @if (keyboardInput) {
-            <button class="clear-typing-btn" (click)="keyboardInput = ''; audio.playDelete()" title="Clear text">
+            <button class="clear-typing-btn" (click)="keyboardInput = ''; audio.playDelete()" [title]="t('tactileSound.clear_text')">
               <i class="pi pi-trash"></i>
             </button>
           }
@@ -156,3 +155,5 @@
     </div>
   </div>
 </app-page-section>
+
+</ng-container>

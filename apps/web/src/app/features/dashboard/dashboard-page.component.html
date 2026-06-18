@@ -1,6 +1,7 @@
+<ng-container *transloco="let t">
 <p-toast />
 
-<app-page-section subtitle="Operations" title="Dashboard">
+<app-page-section [subtitle]="t('dashboard.subtitle')" [title]="t('dashboard.title')">
   <div sectionActions>
     <div class="header-actions">
       <div class="filter-pill-group">
@@ -11,13 +12,13 @@
             [class.active]="selectedRange === range"
             (click)="selectedRange = range; refresh()"
           >
-            {{ range }}
+            {{ t('dashboard.ranges.' + range) }}
           </button>
         }
       </div>
       <select class="channel-select" [(ngModel)]="selectedChannel">
         @for (channel of channels; track channel) {
-          <option>{{ channel }}</option>
+          <option [value]="channel">{{ t('dashboard.channelOptions.' + channel) }}</option>
         }
       </select>
     </div>
@@ -28,11 +29,11 @@
 
     <!-- KPI HERO: Revenue (2×1 span) -->
     <div class="bento-cell bento-kpi hero-kpi">
-      <div class="kpi-label">Total Revenue</div>
+      <div class="kpi-label">{{ t('dashboard.kpis.totalRevenue') }}</div>
       <div class="kpi-value">$24.8k</div>
       <div class="kpi-delta is-up">
         <i class="pi pi-arrow-up-right"></i>
-        <span>+12.4% vs last week</span>
+        <span>+12.4% {{ t('dashboard.kpis.vsLastWeek') }}</span>
       </div>
       <div class="kpi-sparkline">
         <svg viewBox="0 0 120 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="sparkline-svg">
@@ -50,7 +51,7 @@
 
     <!-- KPI: Orders -->
     <div class="bento-cell bento-kpi">
-      <div class="kpi-label">Orders</div>
+      <div class="kpi-label">{{ t('dashboard.kpis.orders') }}</div>
       <div class="kpi-value">384</div>
       <div class="kpi-delta is-up">
         <i class="pi pi-arrow-up-right"></i>
@@ -60,7 +61,7 @@
 
     <!-- KPI: Conversion -->
     <div class="bento-cell bento-kpi">
-      <div class="kpi-label">Conversion</div>
+      <div class="kpi-label">{{ t('dashboard.kpis.conversion') }}</div>
       <div class="kpi-value">4.2%</div>
       <div class="kpi-delta is-down">
         <i class="pi pi-arrow-down-right"></i>
@@ -70,7 +71,7 @@
 
     <!-- KPI: AOV -->
     <div class="bento-cell bento-kpi">
-      <div class="kpi-label">Avg. Order</div>
+      <div class="kpi-label">{{ t('dashboard.kpis.avgOrder') }}</div>
       <div class="kpi-value">$64</div>
       <div class="kpi-delta is-up">
         <i class="pi pi-arrow-up-right"></i>
@@ -80,11 +81,11 @@
 
     <!-- KPI: Returns (flat) -->
     <div class="bento-cell bento-kpi">
-      <div class="kpi-label">Returns</div>
+      <div class="kpi-label">{{ t('dashboard.kpis.returns') }}</div>
       <div class="kpi-value">1.1%</div>
       <div class="kpi-delta is-flat">
         <i class="pi pi-minus"></i>
-        <span>Stable</span>
+        <span>{{ t('dashboard.kpis.stable') }}</span>
       </div>
     </div>
 
@@ -92,10 +93,10 @@
     <div class="bento-cell bento-chart">
       <div class="cell-head">
         <div>
-          <div class="cell-label">Revenue & Orders Trend</div>
-          <div class="cell-sub">7-day comparison with daily breakdown</div>
+          <div class="cell-label">{{ t('dashboard.charts.revenueAndOrders') }}</div>
+          <div class="cell-sub">{{ t('dashboard.charts.7dayComparison') }}</div>
         </div>
-        <app-ui-badge tone="positive">{{ selectedRange }}</app-ui-badge>
+        <app-ui-badge tone="positive">{{ t('dashboard.ranges.' + selectedRange) }}</app-ui-badge>
       </div>
       @if (showSkeleton) {
         <div class="chart-skeleton"></div>
@@ -107,12 +108,12 @@
     <!-- BENTO: Fulfillment -->
     <div class="bento-cell bento-fulfillment">
       <div class="cell-head">
-        <div class="cell-label">Fulfillment Health</div>
+        <div class="cell-label">{{ t('dashboard.charts.fulfillmentHealth') }}</div>
       </div>
       <div class="fulfillment-bars">
         <div class="bar-row">
           <div class="bar-meta">
-            <span>Packed</span>
+            <span>{{ t('dashboard.charts.packed') }}</span>
             <strong>78%</strong>
           </div>
           <div class="bar-track">
@@ -121,7 +122,7 @@
         </div>
         <div class="bar-row">
           <div class="bar-meta">
-            <span>Ready to ship</span>
+            <span>{{ t('dashboard.charts.readyToShip') }}</span>
             <strong>54%</strong>
           </div>
           <div class="bar-track">
@@ -130,7 +131,7 @@
         </div>
         <div class="bar-row">
           <div class="bar-meta">
-            <span>Awaiting pickup</span>
+            <span>{{ t('dashboard.charts.awaitingPickup') }}</span>
             <strong>22%</strong>
           </div>
           <div class="bar-track">
@@ -141,10 +142,10 @@
       <div class="inventory-list">
         @for (item of inventory; track item.item) {
           <div class="inv-row">
-            <span class="inv-name">{{ item.item }}</span>
-            <span class="inv-qty">{{ item.value }} units</span>
+            <span class="inv-name">{{ t('dashboard.inventoryItems.' + item.item) || item.item }}</span>
+            <span class="inv-qty">{{ item.value }} {{ t('dashboard.charts.units') }}</span>
             <span class="inv-status" [class.is-warn]="item.status === 'Reorder'" [class.is-watch]="item.status === 'Watch'">
-              {{ item.status }}
+              {{ t('dashboard.inventoryStatus.' + item.status) }}
             </span>
           </div>
         }
@@ -154,23 +155,23 @@
     <!-- BENTO: Activity Feed -->
     <div class="bento-cell bento-activity">
       <div class="cell-head">
-        <div class="cell-label">Activity Feed</div>
-        <span class="cell-sub">Live events</span>
+        <div class="cell-label">{{ t('dashboard.feed.activityFeed') }}</div>
+        <span class="cell-sub">{{ t('dashboard.feed.liveEvents') }}</span>
       </div>
       <ul class="activity-feed">
         @for (item of activity; track item.label) {
           <li class="feed-item" [class]="'feed-' + item.tone">
             <span class="feed-dot"></span>
-            <span class="feed-text">{{ item.label }}</span>
+            <span class="feed-text">{{ t('dashboard.activityLabels.' + item.label) || item.label }}</span>
           </li>
         }
       </ul>
       <div class="quick-actions">
         <button type="button" class="qa-btn" (click)="refresh()">
-          <i class="pi pi-refresh"></i> Refresh
+          <i class="pi pi-refresh"></i> {{ t('dashboard.feed.refresh') }}
         </button>
         <button type="button" class="qa-btn export">
-          <i class="pi pi-download"></i> Export
+          <i class="pi pi-download"></i> {{ t('dashboard.feed.export') }}
         </button>
       </div>
     </div>
@@ -178,18 +179,18 @@
     <div class="bento-cell bento-channel">
       <div class="cell-head">
         <div>
-          <div class="cell-label">Channel Mix</div>
-          <div class="cell-sub">Revenue contribution by route</div>
+          <div class="cell-label">{{ t('dashboard.channels.mixTitle') }}</div>
+          <div class="cell-sub">{{ t('dashboard.channels.mixSub') }}</div>
         </div>
       </div>
       <div class="channel-stack">
         @for (channel of channelsOverview; track channel.name) {
           <div class="channel-row">
             <div>
-              <strong>{{ channel.name }}</strong>
+              <strong>{{ t('dashboard.channelOptions.' + channel.name) || channel.name }}</strong>
               <span>{{ channel.value }}</span>
             </div>
-            <div class="channel-bar" [attr.aria-label]="channel.name + ' share ' + channel.share + '%'">
+            <div class="channel-bar" [attr.aria-label]="(t('dashboard.channelOptions.' + channel.name) || channel.name) + ' ' + t('dashboard.channels.share') + ' ' + channel.share + '%'">
               <span [style.width.%]="channel.share"></span>
             </div>
             <b>{{ channel.share }}%</b>
@@ -201,15 +202,15 @@
     <div class="bento-cell bento-funnel">
       <div class="cell-head">
         <div>
-          <div class="cell-label">Conversion Funnel</div>
-          <div class="cell-sub">Sessions through paid orders</div>
+          <div class="cell-label">{{ t('dashboard.funnel.title') }}</div>
+          <div class="cell-sub">{{ t('dashboard.funnel.sub') }}</div>
         </div>
       </div>
       <div class="funnel-stack">
         @for (step of funnel; track step.stage) {
           <div class="funnel-row">
             <div>
-              <strong>{{ step.stage }}</strong>
+              <strong>{{ t('dashboard.funnelStages.' + step.stage) || step.stage }}</strong>
               <span>{{ step.value }}</span>
             </div>
             <div class="funnel-track">
@@ -223,14 +224,14 @@
     <div class="bento-cell bento-sla">
       <div class="cell-head">
         <div>
-          <div class="cell-label">Service Levels</div>
-          <div class="cell-sub">Targets that operators can act on</div>
+          <div class="cell-label">{{ t('dashboard.sla.title') }}</div>
+          <div class="cell-sub">{{ t('dashboard.sla.sub') }}</div>
         </div>
       </div>
       <div class="sla-grid">
         @for (item of serviceLevels; track item.label) {
           <div class="sla-card">
-            <span>{{ item.label }}</span>
+            <span>{{ t('dashboard.slaLabels.' + item.label) || item.label }}</span>
             <strong>{{ item.value }}%</strong>
             <div class="bar-track"><div class="bar-fill" [style.width.%]="item.value"></div></div>
           </div>
@@ -241,18 +242,18 @@
     <div class="bento-cell bento-alerts">
       <div class="cell-head">
         <div>
-          <div class="cell-label">Exception Queue</div>
-          <div class="cell-sub">Items that need a human decision</div>
+          <div class="cell-label">{{ t('dashboard.exceptions.title') }}</div>
+          <div class="cell-sub">{{ t('dashboard.exceptions.sub') }}</div>
         </div>
       </div>
       <div class="alert-list">
         @for (alert of alerts; track alert.label) {
           <div class="alert-row" [class.is-high]="alert.level === 'High'">
             <div>
-              <strong>{{ alert.label }}</strong>
-              <span>{{ alert.owner }}</span>
+              <strong>{{ t('dashboard.alertLabels.' + alert.label) || alert.label }}</strong>
+              <span>{{ t('dashboard.alertOwners.' + alert.owner) || alert.owner }}</span>
             </div>
-            <b>{{ alert.level }}</b>
+            <b>{{ t('dashboard.alertLevels.' + alert.level) || alert.level }}</b>
           </div>
         }
       </div>
@@ -262,12 +263,12 @@
     <div class="bento-cell bento-orders">
       <div class="cell-head">
         <div>
-          <div class="cell-label">Recent Orders</div>
-          <div class="cell-sub">{{ filteredOrders.length }} orders · {{ selectedChannel }}</div>
+          <div class="cell-label">{{ t('dashboard.orders.recentOrders') }}</div>
+          <div class="cell-sub">{{ filteredOrders.length }} {{ t('dashboard.orders.ordersText') }} · {{ t('dashboard.channelOptions.' + selectedChannel) || selectedChannel }}</div>
         </div>
         <select class="status-select" [(ngModel)]="statusFilter">
           @for (status of statuses; track status) {
-            <option>{{ status }}</option>
+            <option [value]="status">{{ t('dashboard.statuses.' + status) }}</option>
           }
         </select>
       </div>
@@ -277,12 +278,12 @@
           <table class="orders-table">
             <thead>
               <tr>
-                <th>Order</th>
-                <th>Customer</th>
-                <th>Channel</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Risk</th>
+                <th>{{ t('dashboard.orders.table.order') }}</th>
+                <th>{{ t('dashboard.orders.table.customer') }}</th>
+                <th>{{ t('dashboard.orders.table.channel') }}</th>
+                <th>{{ t('dashboard.orders.table.total') }}</th>
+                <th>{{ t('dashboard.orders.table.status') }}</th>
+                <th>{{ t('dashboard.orders.table.risk') }}</th>
                 <th></th>
               </tr>
             </thead>
@@ -291,20 +292,20 @@
                 <tr>
                   <td class="order-id">{{ order.id }}</td>
                   <td class="order-customer">{{ order.customer }}</td>
-                  <td class="order-channel">{{ order.channel }}</td>
+                  <td class="order-channel">{{ t('dashboard.channelOptions.' + order.channel) || order.channel }}</td>
                   <td class="order-total">{{ order.total }}</td>
                   <td>
                     <span class="status-badge" [class]="'status-' + order.status.toLowerCase()">
-                      {{ order.status }}
+                      {{ t('dashboard.statuses.' + order.status) || order.status }}
                     </span>
                   </td>
                   <td>
                     <span class="risk-badge" [class]="'risk-' + order.risk.toLowerCase()">
-                      <span class="risk-dot"></span>{{ order.risk }}
+                      <span class="risk-dot"></span>{{ t('dashboard.risk.' + order.risk) || order.risk }}
                     </span>
                   </td>
                   <td>
-                    <button type="button" class="review-btn">Review</button>
+                    <button type="button" class="review-btn">{{ t('dashboard.orders.table.review') }}</button>
                   </td>
                 </tr>
               }
@@ -314,10 +315,12 @@
       } @else {
         <div class="orders-empty">
           <i class="pi pi-inbox"></i>
-          <p>No orders match "{{ statusFilter }}"</p>
+          <p>{{ t('dashboard.orders.noOrdersMatch') }} "{{ t('dashboard.statuses.' + statusFilter) }}"</p>
         </div>
       }
     </div>
 
   </div>
 </app-page-section>
+</ng-container>
+

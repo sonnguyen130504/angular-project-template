@@ -1,254 +1,256 @@
-<app-page-section subtitle="Product detail" title="Field Jacket">
-  <ng-template #sectionActions>
-    <app-ui-badge [tone]="selectedStock <= lowStockThreshold ? 'warning' : 'positive'">
-      {{ selectedStock <= lowStockThreshold ? 'Low stock' : 'In stock' }}
-    </app-ui-badge>
-  </ng-template>
+<ng-container *transloco="let t">
+  <app-page-section [subtitle]="t('product.productDetail')" [title]="t('product.fieldJacket')">
+    <ng-template #sectionActions>
+      <app-ui-badge [tone]="selectedStock <= lowStockThreshold ? 'warning' : 'positive'">
+        {{ selectedStock <= lowStockThreshold ? t('product.lowStock') : t('product.inStock') }}
+      </app-ui-badge>
+    </ng-template>
 
-  <div class="product-layout">
-    <!-- Gallery -->
-    <div class="gallery-wrapper">
-      <button class="hero-image-btn" type="button" (click)="previewOpen = true" aria-label="Zoom in product image">
-        <img [src]="selectedImage.image" [alt]="selectedImage.label" class="gallery-hero-img" />
-        <div class="zoom-indicator"><i class="pi pi-search-plus"></i> Click to Zoom</div>
-      </button>
+    <div class="product-layout">
+      <!-- Gallery -->
+      <div class="gallery-wrapper">
+        <button class="hero-image-btn" type="button" (click)="previewOpen = true" [attr.aria-label]="t('product.aria.zoomImage')">
+          <img [src]="selectedImage.image" [alt]="t(selectedImage.label)" class="gallery-hero-img" />
+          <div class="zoom-indicator"><i class="pi pi-search-plus"></i> {{ t('product.clickToZoom') }}</div>
+        </button>
 
-      <div class="thumbs" aria-label="Product media thumbnails">
-        @for (image of images; track image.label) {
-          <button
-            type="button"
-            class="thumb"
-            [class.is-active]="selectedImage.label === image.label"
-            (click)="selectImage(image)"
-          >
-            <img [src]="image.image" [alt]="image.label" class="thumb-img" />
-          </button>
-        }
-      </div>
-    </div>
-
-    <!-- Buy Box -->
-    <aside class="buy-box">
-      <div class="title-row">
-        <div class="kicker-group">
-          <p class="kicker">Outerwear / Travel Layer</p>
-          <h2>Field Jacket</h2>
-        </div>
-        <strong class="price">{{ price | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
-      </div>
-
-      <p class="lead">
-        Structured enough for city days, light enough for compact packing, made from organic heavy-duty cotton canvas. Features custom hardware, water-resistant treatment, and dual-direction utility zippers.
-      </p>
-
-      <div class="rating-strip">
-        <span class="rating-val"><i class="pi pi-star-fill"></i> 4.8</span>
-        <span class="reviews-count">128 reviews</span>
-        <span class="delivery-time"><i class="pi pi-truck"></i> Ships in 2 business days</span>
-      </div>
-
-      <!-- Color Family Selection -->
-      <section class="option-section">
-        <div class="option-head">
-          <span>Color family:</span>
-          <strong>{{ selectedColorName }}</strong>
-        </div>
-        <div class="swatches">
-          @for (color of colors; track color.value) {
+        <div class="thumbs" [attr.aria-label]="t('product.aria.mediaThumbnails')">
+          @for (image of images; track image.label) {
             <button
               type="button"
-              class="color-dot"
-              [class.active]="selectedColor === color.value"
-              [style.background-color]="color.value"
-              [attr.aria-label]="color.label"
-              (click)="selectedColor = color.value"
-            ></button>
+              class="thumb"
+              [class.is-active]="selectedImage.label === image.label"
+              (click)="selectImage(image)"
+            >
+              <img [src]="image.image" [alt]="t(image.label)" class="thumb-img" />
+            </button>
           }
-        </div>
-      </section>
-
-      <!-- Size Selection -->
-      <section class="option-section">
-        <div class="option-head">
-          <span>Selected size:</span>
-          <button type="button" class="link-button">Size guide</button>
-        </div>
-        <div class="sizes">
-          @for (size of sizes; track size) {
-            <button 
-              type="button" 
-              class="size-btn"
-              [class.is-active]="selectedSize === size" 
-              (click)="selectedSize = size"
-            >{{ size }}</button>
-          }
-        </div>
-      </section>
-
-      <!-- Stepper and Action -->
-      <div class="purchase-row">
-        <div class="stepper" aria-label="Quantity selector">
-          <button type="button" (click)="decrement()" aria-label="Decrease quantity">-</button>
-          <span class="qty-val">{{ quantity }}</span>
-          <button type="button" (click)="increment()" aria-label="Increase quantity">+</button>
-        </div>
-        
-        <div class="totals-col">
-          <span class="totals-lbl">Total Price</span>
-          <strong class="total-price">{{ total | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
         </div>
       </div>
 
-      <div class="actions">
-        <button 
-          class="buy-now-btn" 
-          (click)="addToCart()" 
-          [disabled]="isAdding"
-          [class.adding]="isAdding"
-        >
-          @if (isAdding) {
-            <i class="pi pi-spin pi-spinner"></i> Adding to cart...
-          } @else {
-            Add to cart
-          }
-        </button>
-        <button class="save-btn"><i class="pi pi-heart"></i> Save product</button>
-      </div>
-
-      @if (addedToCart) {
-        <div class="success-state" role="status">
-          <i class="pi pi-check-circle"></i> Added {{ quantity }} Field Jacket ({{ selectedSize }}) to your cart!
+      <!-- Buy Box -->
+      <aside class="buy-box">
+        <div class="title-row">
+          <div class="kicker-group">
+            <p class="kicker">{{ t('product.outerwearTravelLayer') }}</p>
+            <h2>{{ t('product.fieldJacket') }}</h2>
+          </div>
+          <strong class="price">{{ price | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
         </div>
-      }
-    </aside>
-  </div>
 
-  <!-- Trust Badges Section -->
-  <div class="commerce-grid">
-    <app-ui-card class="service-card">
-      <div class="service-icon"><i class="pi pi-calendar"></i></div>
-      <h4>Delivery Estimate</h4>
-      <p>Arrives Jun 14-17. Free standard delivery over $150. Store pickup available.</p>
-    </app-ui-card>
-    
-    <app-ui-card class="service-card">
-      <div class="service-icon"><i class="pi pi-exclamation-triangle"></i></div>
-      <h4>Stock Confidence</h4>
-      <p>{{ selectedStock }} left in {{ selectedColorName }}. Secure your choice before it sells out.</p>
-    </app-ui-card>
-    
-    <app-ui-card class="service-card">
-      <div class="service-icon"><i class="pi pi-refresh"></i></div>
-      <h4>Returns Policy</h4>
-      <p>30-day returns. Prepaid mailing label provided. Easy size exchanges.</p>
-    </app-ui-card>
-  </div>
+        <p class="lead">
+          {{ t('product.productDescriptionLead') }}
+        </p>
 
-  <!-- Bundle and Details Accordion -->
-  <div class="detail-panels">
-    <div class="accordion-col">
-      <p-accordion [value]="['0']" [multiple]="true" class="spec-accordion">
-        <p-accordion-panel value="0">
-          <p-accordion-header>Product Description</p-accordion-header>
-          <p-accordion-content>
-            <p>
-              Designed as a durable layer for changeable climates, the Field Jacket features a water-resistant organic cotton shell, detailed flat matte brass closures, two-way zipper layout, storm hood collar, and modular pockets.
-            </p>
-          </p-accordion-content>
-        </p-accordion-panel>
-        <p-accordion-panel value="1">
-          <p-accordion-header>Shipping & Returns</p-accordion-header>
-          <p-accordion-content>
-            <p>
-              We package and ship in plastic-free recycled boxes. Standard shipping takes 3-5 business days. Express overnight options available at checkout.
-            </p>
-          </p-accordion-content>
-        </p-accordion-panel>
-        <p-accordion-panel value="2">
-          <p-accordion-header>Material Care</p-accordion-header>
-          <p-accordion-content>
-            <p>
-              Machine wash cold with like colors. Do not bleach. Lay flat to dry or tumble dry low. Apply waterproofing canvas spray every 6 months to maintain water resistance.
-            </p>
-          </p-accordion-content>
-        </p-accordion-panel>
-      </p-accordion>
+        <div class="rating-strip">
+          <span class="rating-val"><i class="pi pi-star-fill"></i> 4.8</span>
+          <span class="reviews-count">128 {{ t('product.reviews') }}</span>
+          <span class="delivery-time"><i class="pi pi-truck"></i> {{ t('product.shipsIn') }}</span>
+        </div>
+
+        <!-- Color Family Selection -->
+        <section class="option-section">
+          <div class="option-head">
+            <span>{{ t('product.colorFamily') }}</span>
+            <strong>{{ t(selectedColorName) }}</strong>
+          </div>
+          <div class="swatches">
+            @for (color of colors; track color.value) {
+              <button
+                type="button"
+                class="color-dot"
+                [class.active]="selectedColor === color.value"
+                [style.background-color]="color.value"
+                [attr.aria-label]="t(color.label)"
+                (click)="selectedColor = color.value"
+              ></button>
+            }
+          </div>
+        </section>
+
+        <!-- Size Selection -->
+        <section class="option-section">
+          <div class="option-head">
+            <span>{{ t('product.selectedSize') }}</span>
+            <button type="button" class="link-button">{{ t('product.sizeGuide') }}</button>
+          </div>
+          <div class="sizes">
+            @for (size of sizes; track size) {
+              <button 
+                type="button" 
+                class="size-btn"
+                [class.is-active]="selectedSize === size" 
+                (click)="selectedSize = size"
+              >{{ size }}</button>
+            }
+          </div>
+        </section>
+
+        <!-- Stepper and Action -->
+        <div class="purchase-row">
+          <div class="stepper" [attr.aria-label]="t('product.aria.qtySelector')">
+            <button type="button" (click)="decrement()" [attr.aria-label]="t('product.aria.decreaseQty')">-</button>
+            <span class="qty-val">{{ quantity }}</span>
+            <button type="button" (click)="increment()" [attr.aria-label]="t('product.aria.increaseQty')">+</button>
+          </div>
+          
+          <div class="totals-col">
+            <span class="totals-lbl">{{ t('product.totalPrice') }}</span>
+            <strong class="total-price">{{ total | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button 
+            class="buy-now-btn" 
+            (click)="addToCart()" 
+            [disabled]="isAdding"
+            [class.adding]="isAdding"
+          >
+            @if (isAdding) {
+              <i class="pi pi-spin pi-spinner"></i> {{ t('product.addingToCart') }}
+            } @else {
+              {{ t('product.addToCart') }}
+            }
+          </button>
+          <button class="save-btn"><i class="pi pi-heart"></i> {{ t('product.saveProduct') }}</button>
+        </div>
+
+        @if (addedToCart) {
+          <div class="success-state" role="status">
+            <i class="pi pi-check-circle"></i> {{ t('product.addedToCartSuccess', { quantity: quantity, itemName: t('product.item.fieldJacket'), size: selectedSize }) }}
+          </div>
+        }
+      </aside>
     </div>
 
-    <!-- Frequently Bought Together Bundle Builder -->
-    <div class="bundle-col">
-      <app-ui-card class="bundle-card">
-        <h3>Bundle & Save 10%</h3>
-        <p class="bundle-sub">Frequently bought together. Check to customize your bundle setup.</p>
-        
-        <div class="bundle-list">
-          @for (item of bundle; track item.name; let idx = $index) {
-            <div class="bundle-row" [class.checked]="item.included">
-              <label class="bundle-item-label">
-                <input 
-                  type="checkbox" 
-                  [checked]="item.included" 
-                  [disabled]="item.disabled" 
-                  (change)="toggleBundleItem(idx)"
-                />
-                <span>{{ item.name }}</span>
-              </label>
-              <strong class="bundle-item-price">{{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
-            </div>
-          }
-        </div>
-        
-        <div class="bundle-total">
-          <div class="total-row">
-            <span>Bundle total</span>
-            <strong>{{ bundleTotal | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
-          </div>
-          <app-ui-button class="bundle-buy-btn">Buy Bundle</app-ui-button>
-        </div>
+    <!-- Trust Badges Section -->
+    <div class="commerce-grid">
+      <app-ui-card class="service-card">
+        <div class="service-icon"><i class="pi pi-calendar"></i></div>
+        <h4>{{ t('product.deliveryEstimate') }}</h4>
+        <p>{{ t('product.deliveryEstimateDesc') }}</p>
+      </app-ui-card>
+      
+      <app-ui-card class="service-card">
+        <div class="service-icon"><i class="pi pi-exclamation-triangle"></i></div>
+        <h4>{{ t('product.stockConfidence') }}</h4>
+        <p>{{ t('product.stockConfidenceDesc', { stock: selectedStock, color: t(selectedColorName) }) }}</p>
+      </app-ui-card>
+      
+      <app-ui-card class="service-card">
+        <div class="service-icon"><i class="pi pi-refresh"></i></div>
+        <h4>{{ t('product.returnsPolicy') }}</h4>
+        <p>{{ t('product.returnsPolicyDesc') }}</p>
       </app-ui-card>
     </div>
-  </div>
 
-  <!-- Related Recommendations -->
-  <section class="related" aria-labelledby="related-title">
-    <div class="section-title">
-      <h3 id="related-title">Complete your travel setup</h3>
-      <p>Recommended accessories matching the Field Jacket theme.</p>
-    </div>
-    
-    <div class="related-grid">
-      @for (item of recommendations; track item.name) {
-        <app-ui-card class="related-card">
-          <div class="related-media-container">
-            <img [src]="item.image" [alt]="item.name" class="related-img" />
+    <!-- Bundle and Details Accordion -->
+    <div class="detail-panels">
+      <div class="accordion-col">
+        <p-accordion [value]="['0']" [multiple]="true" class="spec-accordion">
+          <p-accordion-panel value="0">
+            <p-accordion-header>{{ t('product.productDescriptionTab') }}</p-accordion-header>
+            <p-accordion-content>
+              <p>
+                {{ t('product.productDescriptionTabDesc') }}
+              </p>
+            </p-accordion-content>
+          </p-accordion-panel>
+          <p-accordion-panel value="1">
+            <p-accordion-header>{{ t('product.shippingReturnsTab') }}</p-accordion-header>
+            <p-accordion-content>
+              <p>
+                {{ t('product.shippingReturnsTabDesc') }}
+              </p>
+            </p-accordion-content>
+          </p-accordion-panel>
+          <p-accordion-panel value="2">
+            <p-accordion-header>{{ t('product.materialCareTab') }}</p-accordion-header>
+            <p-accordion-content>
+              <p>
+                {{ t('product.materialCareTabDesc') }}
+              </p>
+            </p-accordion-content>
+          </p-accordion-panel>
+        </p-accordion>
+      </div>
+
+      <!-- Frequently Bought Together Bundle Builder -->
+      <div class="bundle-col">
+        <app-ui-card class="bundle-card">
+          <h3>{{ t('product.bundleSave') }}</h3>
+          <p class="bundle-sub">{{ t('product.bundleSaveDesc') }}</p>
+          
+          <div class="bundle-list">
+            @for (item of bundle; track item.name; let idx = $index) {
+              <div class="bundle-row" [class.checked]="item.included">
+                <label class="bundle-item-label">
+                  <input 
+                    type="checkbox" 
+                    [checked]="item.included" 
+                    [disabled]="item.disabled" 
+                    (change)="toggleBundleItem(idx)"
+                  />
+                  <span>{{ t(item.name) }}</span>
+                </label>
+                <strong class="bundle-item-price">{{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+              </div>
+            }
           </div>
-          <div class="related-details">
-            <h4>{{ item.name }}</h4>
-            <strong>{{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+          
+          <div class="bundle-total">
+            <div class="total-row">
+              <span>{{ t('product.bundleTotal') }}</span>
+              <strong>{{ bundleTotal | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+            </div>
+            <app-ui-button class="bundle-buy-btn">{{ t('product.buyBundle') }}</app-ui-button>
           </div>
-          <app-ui-button variant="secondary" class="related-add-btn">Add</app-ui-button>
         </app-ui-card>
-      }
-    </div>
-  </section>
-
-  <!-- Sticky Mobile Buy Bar -->
-  <div class="mobile-buy-bar">
-    <div class="mobile-meta">
-      <strong>Field Jacket</strong>
-      <span>{{ selectedSize }} &middot; {{ selectedColorName }}</span>
-    </div>
-    <app-ui-button (click)="addToCart()" [loading]="isAdding">Add {{ total | currency: 'USD' : 'symbol' : '1.0-0' }}</app-ui-button>
-  </div>
-
-  <!-- Zoom Dialog -->
-  <p-dialog header="Product Zoom View" [(visible)]="previewOpen" [modal]="true" [style]="{ width: 'min(92vw, 840px)' }">
-    <div class="dialog-preview-wrapper">
-      <img [src]="selectedImage.image" [alt]="selectedImage.label" class="dialog-zoom-img" />
-      <div class="zoom-desc">
-        <h4>{{ selectedImage.label }}</h4>
-        <p>{{ selectedImage.note }}</p>
       </div>
     </div>
-  </p-dialog>
-</app-page-section>
+
+    <!-- Related Recommendations -->
+    <section class="related" aria-labelledby="related-title">
+      <div class="section-title">
+        <h3 id="related-title">{{ t('product.relatedTitle') }}</h3>
+        <p>{{ t('product.relatedDesc') }}</p>
+      </div>
+      
+      <div class="related-grid">
+        @for (item of recommendations; track item.name) {
+          <app-ui-card class="related-card">
+            <div class="related-media-container">
+              <img [src]="item.image" [alt]="t(item.name)" class="related-img" />
+            </div>
+            <div class="related-details">
+              <h4>{{ t(item.name) }}</h4>
+              <strong>{{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+            </div>
+            <app-ui-button variant="secondary" class="related-add-btn">{{ t('product.add') }}</app-ui-button>
+          </app-ui-card>
+        }
+      </div>
+    </section>
+
+    <!-- Sticky Mobile Buy Bar -->
+    <div class="mobile-buy-bar">
+      <div class="mobile-meta">
+        <strong>{{ t('product.item.fieldJacket') }}</strong>
+        <span>{{ selectedSize }} &middot; {{ t(selectedColorName) }}</span>
+      </div>
+      <app-ui-button (click)="addToCart()" [loading]="isAdding">{{ t('product.add') }} {{ total | currency: 'USD' : 'symbol' : '1.0-0' }}</app-ui-button>
+    </div>
+
+    <!-- Zoom Dialog -->
+    <p-dialog [header]="t('product.productZoomView')" [(visible)]="previewOpen" [modal]="true" [style]="{ width: 'min(92vw, 840px)' }">
+      <div class="dialog-preview-wrapper">
+        <img [src]="selectedImage.image" [alt]="t(selectedImage.label)" class="dialog-zoom-img" />
+        <div class="zoom-desc">
+          <h4>{{ t(selectedImage.label) }}</h4>
+          <p>{{ t(selectedImage.note) }}</p>
+        </div>
+      </div>
+    </p-dialog>
+  </app-page-section>
+</ng-container>

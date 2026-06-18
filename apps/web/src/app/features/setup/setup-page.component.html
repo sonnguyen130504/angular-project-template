@@ -1,18 +1,19 @@
-<app-page-section subtitle="Operations" title="Setup checklist">
+<ng-container *transloco="let t">
+<app-page-section sub[title]="t('setup.operations')" [title]="t('setup.setup_checklist')">
   <div class="setup-hero">
     <div>
       <app-ui-badge tone="positive">{{ progress }}% complete</app-ui-badge>
-      <h3>Clone-ready onboarding flow</h3>
-      <p>Setup reference for activation, required checks, blocked steps, completion progress, restart flow, and launch readiness.</p>
+      <h3>{{ t('setup.clone_ready_onboarding_flow') }}</h3>
+      <p>{{ t('setup.setup_reference_for_activation') }}</p>
     </div>
     <div class="progress-ring" [style.--progress.%]="progress">
       <strong>{{ progress }}%</strong>
-      <span>Done</span>
+      <span>{{ t('setup.done') }}</span>
     </div>
   </div>
 
   <div class="setup-layout">
-    <aside class="step-list" aria-label="Setup steps">
+    <aside class="step-list" [aria-label]="t('setup.setup_steps')">
       @for (step of steps; track step.id) {
         <button type="button" [class.active]="activeStepId === step.id" [class.done]="step.done" (click)="activeStepId = step.id">
           <span>{{ step.id }}</span>
@@ -27,22 +28,22 @@
       <h3>{{ activeStep.title }}</h3>
       <p>{{ activeStep.body }}</p>
       <dl>
-        <div><dt>Owner</dt><dd>{{ activeStep.owner }}</dd></div>
-        <div><dt>State</dt><dd>{{ activeStep.state }}</dd></div>
+        <div><dt>{{ t('setup.owner') }}</dt><dd>{{ activeStep.owner }}</dd></div>
+        <div><dt>{{ t('setup.state') }}</dt><dd>{{ activeStep.state }}</dd></div>
       </dl>
       <div class="state-preview">
-        <strong>Implementation note</strong>
-        <span>Each setup step should show a clear action, completion state, and next step.</span>
+        <strong>{{ t('setup.implementation_note') }}</strong>
+        <span>{{ t('setup.each_setup_step_should_show_a_') }}</span>
       </div>
       <div class="setup-actions">
-        <app-ui-button (click)="completeActive()">Complete step</app-ui-button>
-        <app-ui-button variant="secondary" (click)="restart()">Restart checklist</app-ui-button>
+        <app-ui-button (click)="completeActive()">{{ t('setup.complete_step') }}</app-ui-button>
+        <app-ui-button variant="secondary" (click)="restart()">{{ t('setup.restart_checklist') }}</app-ui-button>
       </div>
     </section>
 
     <aside class="health-panel">
-      <app-ui-badge tone="info">Environment</app-ui-badge>
-      <h3>Launch checks</h3>
+      <app-ui-badge tone="info">{{ t('setup.environment') }}</app-ui-badge>
+      <h3>{{ t('setup.launch_checks') }}</h3>
       @for (check of environmentChecks; track check.label) {
         <div [class.ok]="check.ok">
           <strong>{{ check.label }}</strong>
@@ -52,3 +53,5 @@
     </aside>
   </div>
 </app-page-section>
+
+</ng-container>

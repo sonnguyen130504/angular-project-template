@@ -1,18 +1,20 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
+import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-billing-page',
   standalone: true,
-  imports: [CurrencyPipe, PageSectionComponent, UiBadgeComponent, UiButtonComponent],
+  imports: [CurrencyPipe, PageSectionComponent, UiBadgeComponent, UiButtonComponent, TranslocoDirective],
   templateUrl: './billing-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './billing-page.component.scss',
 })
 export class BillingPageComponent {
+  private transloco = inject(TranslocoService);
   interval: 'monthly' | 'annual' = 'monthly';
   failedPayment = true;
   readonly plans = [
@@ -21,14 +23,14 @@ export class BillingPageComponent {
     { name: 'Scale', monthly: 149, annual: 1490, current: false },
   ];
   readonly usage = [
-    { label: 'Orders', value: 74 },
-    { label: 'Seats', value: 62 },
-    { label: 'Storage', value: 48 },
+    { label: 'orders', value: 74 },
+    { label: 'seats', value: 62 },
+    { label: 'storage', value: 48 },
   ];
   readonly planFeatures = [
-    { label: 'Team seats', Starter: '3', Growth: '12', Scale: '40' },
-    { label: 'Automation runs', Starter: '1k', Growth: '20k', Scale: '100k' },
-    { label: 'Support SLA', Starter: 'Email', Growth: 'Priority', Scale: 'Dedicated' },
+    { label: 'teamSeats', Starter: '3', Growth: '12', Scale: '40' },
+    { label: 'automationRuns', Starter: '1k', Growth: '20k', Scale: '100k' },
+    { label: 'supportSla', Starter: 'email', Growth: 'priority', Scale: 'dedicated' },
   ];
   readonly invoices = [
     { id: 'INV-2048', date: 'Jun 1, 2026', amount: 79, status: 'Paid' },
@@ -53,6 +55,3 @@ export class BillingPageComponent {
     return this.price(current);
   }
 }
-
-
-

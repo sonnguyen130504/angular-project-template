@@ -1,16 +1,17 @@
-<app-page-section subtitle="Workspace" title="Assets">
+<ng-container *transloco="let t">
+<app-page-section sub[title]="t('assets.workspace')" [title]="t('assets.assets')">
   <div sectionActions>
-    <app-ui-button (click)="simulateUpload()">Queue upload</app-ui-button>
+    <app-ui-button (click)="simulateUpload()">{{ t('assets.queue_upload') }}</app-ui-button>
   </div>
 
-  <section class="assets-brief" aria-label="Asset library summary">
+  <section class="assets-brief" [aria-label]="t('assets.asset_library_summary')">
     <div>
-      <app-ui-badge tone="info">File manager</app-ui-badge>
+      <app-ui-badge tone="info">{{ t('assets.file_manager') }}</app-ui-badge>
       <h3>{{ assets.length }} assets across {{ folders.length }} folders</h3>
-      <p>Asset reference for folder navigation, dropzone state, selected-file metadata, processing queues, and empty folders.</p>
+      <p>{{ t('assets.asset_reference_for_folder_nav') }}</p>
     </div>
     <div class="storage-card">
-      <span>Storage</span>
+      <span>{{ t('assets.storage') }}</span>
       <strong>{{ totalSizeLabel }}</strong>
       <small>{{ processingAssets.length }} processing</small>
     </div>
@@ -18,7 +19,7 @@
 
   <div class="assets-layout">
     <aside class="folder-panel">
-      <app-ui-badge>Folders</app-ui-badge>
+      <app-ui-badge>{{ t('assets.folders') }}</app-ui-badge>
       @for (folder of folders; track folder) {
         <button type="button" [class.active]="selectedFolder === folder" (click)="selectFolder(folder)">
           <i class="pi pi-folder"></i>
@@ -32,7 +33,7 @@
       <div class="dropzone">
         <i class="pi pi-cloud-upload"></i>
         <strong>{{ uploadState }}</strong>
-        <span>Mock upload state only, no backend required.</span>
+        <span>{{ t('assets.mock_upload_state_only_no_back') }}</span>
       </div>
       @if (visibleAssets.length) {
         <div class="asset-grid">
@@ -48,34 +49,36 @@
       } @else {
         <div class="empty-folder">
           <i class="pi pi-folder-open"></i>
-          <strong>This folder is empty</strong>
-          <span>Use this state for file managers and media libraries.</span>
+          <strong>{{ t('assets.this_folder_is_empty') }}</strong>
+          <span>{{ t('assets.use_this_state_for_file_manage') }}</span>
         </div>
       }
     </section>
 
     <aside class="detail-panel">
-      <app-ui-badge tone="info">Details</app-ui-badge>
+      <app-ui-badge tone="info">{{ t('assets.details') }}</app-ui-badge>
       @if (selectedAsset) {
         <h3>{{ selectedAsset.name }}</h3>
         <dl>
-          <div><dt>Type</dt><dd>{{ selectedAsset.type }}</dd></div>
-          <div><dt>Size</dt><dd>{{ selectedAsset.size }}</dd></div>
-          <div><dt>Status</dt><dd>{{ selectedAsset.status }}</dd></div>
-          <div><dt>Folder</dt><dd>{{ selectedAsset.folder }}</dd></div>
+          <div><dt>{{ t('assets.type') }}</dt><dd>{{ selectedAsset.type }}</dd></div>
+          <div><dt>{{ t('assets.size') }}</dt><dd>{{ selectedAsset.size }}</dd></div>
+          <div><dt>{{ t('assets.status') }}</dt><dd>{{ selectedAsset.status }}</dd></div>
+          <div><dt>{{ t('assets.folder') }}</dt><dd>{{ selectedAsset.folder }}</dd></div>
         </dl>
       } @else {
-        <h3>No asset selected</h3>
-        <p>Select or upload a file to inspect metadata.</p>
+        <h3>{{ t('assets.no_asset_selected') }}</h3>
+        <p>{{ t('assets.select_or_upload_a_file_to_ins') }}</p>
       }
       <div class="processing-panel">
-        <strong>Processing queue</strong>
+        <strong>{{ t('assets.processing_queue') }}</strong>
         @for (asset of processingAssets; track asset.name) {
           <span>{{ asset.name }}</span>
         } @empty {
-          <span>No files processing.</span>
+          <span>{{ t('assets.no_files_processing') }}</span>
         }
       </div>
     </aside>
   </div>
 </app-page-section>
+
+</ng-container>

@@ -1,4 +1,5 @@
-<app-page-section subtitle="Account" title="Profile">
+<ng-container *transloco="let t">
+<app-page-section [subtitle]="t('profile.account')" [title]="t('profile.title')">
   <div class="profile-layout">
     <!-- Left Column: Summary Card -->
     <div class="profile-sidebar">
@@ -6,17 +7,17 @@
         <div class="profile-head">
           <div class="avatar">MT</div>
           <div class="head-info">
-            <app-ui-badge tone="positive">Verified Customer</app-ui-badge>
+            <app-ui-badge tone="positive">{{ t('profile.verifiedCustomer') }}</app-ui-badge>
             <h3>Mina Tran</h3>
             <p class="email">mina.tran&#64;example.com</p>
-            <p class="meta">Gold member · Since 2024</p>
+            <p class="meta">{{ t('profile.goldMemberSince') }}</p>
           </div>
         </div>
 
         <div class="loyalty-strip">
           <div class="loyalty-header">
-            <strong>Gold Loyalty Tier</strong>
-            <span>420 pts to Platinum</span>
+            <strong>{{ t('profile.goldTier') }}</strong>
+            <span>{{ t('profile.pointsToPlatinum') }}</span>
           </div>
           <div class="progress-bar">
             <span class="progress-fill" style="width: 68%"></span>
@@ -24,9 +25,9 @@
         </div>
 
         <div class="profile-stats">
-          <app-ui-stat label="Orders">18</app-ui-stat>
-          <app-ui-stat label="Saved items">9</app-ui-stat>
-          <app-ui-stat label="Addresses">2</app-ui-stat>
+          <app-ui-stat [label]="t('profile.orders')">18</app-ui-stat>
+          <app-ui-stat [label]="t('profile.savedItems')">9</app-ui-stat>
+          <app-ui-stat [label]="t('profile.addresses')">2</app-ui-stat>
         </div>
       </div>
     </div>
@@ -36,26 +37,26 @@
       <!-- Edit Details -->
       <div class="content-block">
         <div class="block-header">
-          <h3>Editable details</h3>
-          <p>Update your personal information and contact details.</p>
+          <h3>{{ t('profile.editableDetails') }}</h3>
+          <p>{{ t('profile.updateInfo') }}</p>
         </div>
         <form (submit)="saveProfile(); $event.preventDefault()" class="details-form">
           <div class="form-grid">
             <label class="form-field">
-              <span>Full Name</span>
+              <span>{{ t('profile.fullName') }}</span>
               <input type="text" value="Mina Tran" required />
             </label>
             <label class="form-field">
-              <span>Email Address</span>
+              <span>{{ t('profile.emailAddress') }}</span>
               <input type="email" value="mina.tran@example.com" required />
             </label>
             <label class="form-field">
-              <span>Phone Number</span>
+              <span>{{ t('profile.phoneNumber') }}</span>
               <input type="tel" value="+1 555 0104" required />
             </label>
           </div>
           <div class="form-actions">
-            <app-ui-button type="submit">Save changes</app-ui-button>
+            <app-ui-button type="submit">{{ t('profile.saveChanges') }}</app-ui-button>
             @if (savedMessage) {
               <span class="success-message"><i class="pi pi-check-circle"></i> {{ savedMessage }}</span>
             }
@@ -66,19 +67,19 @@
       <!-- Order History -->
       <div class="content-block">
         <div class="block-header">
-          <h3>Order History</h3>
-          <p>Manage and track your recent studio orders.</p>
+          <h3>{{ t('profile.orderHistory') }}</h3>
+          <p>{{ t('profile.manageOrders') }}</p>
         </div>
         <div class="orders-list">
           @for (order of orders; track order.id) {
             <div class="order-row">
               <div class="order-meta">
                 <span class="order-id">{{ order.id }}</span>
-                <span class="order-item">{{ order.item }}</span>
+                <span class="order-item">{{ t('profile.items.' + order.item) }}</span>
               </div>
               <div class="order-pricing">
                 <strong>{{ order.total }}</strong>
-                <span class="order-status-badge" [class]="order.status.toLowerCase().replace(' ', '-')">{{ order.status }}</span>
+                <span class="order-status-badge" [class]="order.status.toLowerCase().replace(' ', '-')">{{ t('profile.statuses.' + order.status) }}</span>
               </div>
             </div>
           }
@@ -88,14 +89,14 @@
       <!-- Wishlist -->
       <div class="content-block">
         <div class="block-header">
-          <h3>My Wishlist</h3>
-          <p>Items saved for later purchase.</p>
+          <h3>{{ t('profile.myWishlist') }}</h3>
+          <p>{{ t('profile.itemsSaved') }}</p>
         </div>
         <div class="wish-list">
           @for (item of wishlist; track item) {
             <div class="list-item-row">
-              <span>{{ item }}</span>
-              <button type="button" class="action-btn">Move to cart</button>
+              <span>{{ t('profile.wishlistItems.' + item) }}</span>
+              <button type="button" class="action-btn">{{ t('profile.moveToCart') }}</button>
             </div>
           }
         </div>
@@ -105,13 +106,13 @@
       <div class="half-grid">
         <div class="content-block">
           <div class="block-header">
-            <h3>Address Book</h3>
+            <h3>{{ t('profile.addressBook') }}</h3>
           </div>
           <div class="small-list">
             @for (address of addresses; track address) {
               <div class="list-item-row">
-                <span class="address-text">{{ address }}</span>
-                <button type="button" class="text-action-btn">Edit</button>
+                <span class="address-text">{{ t('profile.addressItems.' + address) }}</span>
+                <button type="button" class="text-action-btn">{{ t('profile.edit') }}</button>
               </div>
             }
           </div>
@@ -119,13 +120,13 @@
 
         <div class="content-block">
           <div class="block-header">
-            <h3>Saved Payments</h3>
+            <h3>{{ t('profile.savedPayments') }}</h3>
           </div>
           <div class="small-list">
             @for (payment of payments; track payment) {
               <div class="list-item-row">
-                <span>{{ payment }}</span>
-                <button type="button" class="text-action-btn">Manage</button>
+                <span>{{ t('profile.paymentItems.' + payment) }}</span>
+                <button type="button" class="text-action-btn">{{ t('profile.manage') }}</button>
               </div>
             }
           </div>
@@ -135,22 +136,22 @@
       <!-- Preferences -->
       <div class="content-block">
         <div class="block-header">
-          <h3>Preferences</h3>
-          <p>Manage how Sion Studio communicates with you.</p>
+          <h3>{{ t('profile.preferences') }}</h3>
+          <p>{{ t('profile.manageCommunications') }}</p>
         </div>
         <div class="preferences-toggles">
           <label class="toggle-row">
             <span class="toggle-label-wrap">
-              <strong>Marketing Emails</strong>
-              <small>Receive updates on new collections and special promotions.</small>
+              <strong>{{ t('profile.marketingEmails') }}</strong>
+              <small>{{ t('profile.marketingEmailsDesc') }}</small>
             </span>
             <input type="checkbox" [(ngModel)]="marketingEmails" />
             <i class="switch-ui" aria-hidden="true"></i>
           </label>
           <label class="toggle-row">
             <span class="toggle-label-wrap">
-              <strong>SMS Notifications</strong>
-              <small>Receive instant delivery updates directly on your phone.</small>
+              <strong>{{ t('profile.smsNotifications') }}</strong>
+              <small>{{ t('profile.smsNotificationsDesc') }}</small>
             </span>
             <input type="checkbox" [(ngModel)]="orderSms" />
             <i class="switch-ui" aria-hidden="true"></i>
@@ -161,8 +162,8 @@
       <!-- Active Sessions -->
       <div class="content-block">
         <div class="block-header">
-          <h3>Active Sessions</h3>
-          <p>Manage and sign out of active devices currently using your account.</p>
+          <h3>{{ t('profile.activeSessions') }}</h3>
+          <p>{{ t('profile.manageSessions') }}</p>
         </div>
         <div class="sessions-list">
           @for (session of sessions; track session.device) {
@@ -176,9 +177,9 @@
               </div>
               <div class="session-action">
                 @if (session.current) {
-                  <span class="active-pill">Current Session</span>
+                  <span class="active-pill">{{ t('profile.currentSession') }}</span>
                 } @else {
-                  <button type="button" class="revoke-btn" (click)="revokeSession(session.device)">Revoke</button>
+                  <button type="button" class="revoke-btn" (click)="revokeSession(session.device)">{{ t('profile.revoke') }}</button>
                 }
               </div>
             </div>
@@ -188,3 +189,4 @@
     </div>
   </div>
 </app-page-section>
+</ng-container>

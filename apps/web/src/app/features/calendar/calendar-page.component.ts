@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 type CalendarEvent = {
   id: number;
@@ -21,7 +22,7 @@ type CalendarEvent = {
 @Component({
   selector: 'app-calendar-page',
   standalone: true,
-  imports: [DatePipe, FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent],
+  imports: [DatePipe, FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent, TranslocoDirective],
   templateUrl: './calendar-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './calendar-page.component.scss',
@@ -33,17 +34,17 @@ export class CalendarPageComponent {
   readonly days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
   readonly slots = ['09:00', '10:30', '13:00', '15:30'];
   readonly events: CalendarEvent[] = [
-    { id: 201, title: 'Launch readiness', owner: 'Operations', date: '2026-06-09', time: '09:00', room: 'Studio A', conflict: false, type: 'Meeting', duration: '45m', attendees: 6 },
-    { id: 202, title: 'Inventory review', owner: 'Warehouse', date: '2026-06-09', time: '10:30', room: 'Ops room', conflict: true, type: 'Review', duration: '30m', attendees: 4 },
-    { id: 203, title: 'Design QA', owner: 'Product', date: '2026-06-10', time: '13:00', room: 'Remote', conflict: false, type: 'Review', duration: '60m', attendees: 5 },
-    { id: 204, title: 'Support retro', owner: 'Support', date: '2026-06-11', time: '15:30', room: 'Studio B', conflict: false, type: 'Meeting', duration: '45m', attendees: 7 },
-    { id: 205, title: 'Quiet focus block', owner: 'Design', date: '2026-06-12', time: '13:00', room: 'Focus', conflict: false, type: 'Hold', duration: '120m', attendees: 1 },
+    { id: 201, title: 'launchReadiness', owner: 'Operations', date: '2026-06-09', time: '09:00', room: 'studioA', conflict: false, type: 'Meeting', duration: '45m', attendees: 6 },
+    { id: 202, title: 'inventoryReview', owner: 'Warehouse', date: '2026-06-09', time: '10:30', room: 'opsRoom', conflict: true, type: 'Review', duration: '30m', attendees: 4 },
+    { id: 203, title: 'designQA', owner: 'Product', date: '2026-06-10', time: '13:00', room: 'remote', conflict: false, type: 'Review', duration: '60m', attendees: 5 },
+    { id: 204, title: 'supportRetro', owner: 'Support', date: '2026-06-11', time: '15:30', room: 'studioB', conflict: false, type: 'Meeting', duration: '45m', attendees: 7 },
+    { id: 205, title: 'quietFocusBlock', owner: 'Design', date: '2026-06-12', time: '13:00', room: 'focus', conflict: false, type: 'Hold', duration: '120m', attendees: 1 },
   ];
 
   readonly rooms = [
-    { name: 'Studio A', load: 72 },
-    { name: 'Ops room', load: 88 },
-    { name: 'Remote', load: 42 },
+    { name: 'studioA', load: 72 },
+    { name: 'opsRoom', load: 88 },
+    { name: 'remote', load: 42 },
   ];
 
   get visibleEvents(): CalendarEvent[] {
@@ -76,6 +77,3 @@ export class CalendarPageComponent {
     selected.conflict = false;
   }
 }
-
-
-

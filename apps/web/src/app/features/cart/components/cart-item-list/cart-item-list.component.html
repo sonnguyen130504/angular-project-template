@@ -1,3 +1,4 @@
+<ng-container *transloco="let t">
           <div class="cart-items">
             @for (item of state.items; track item.id) {
               <app-ui-card class="cart-item-card">
@@ -20,17 +21,17 @@
                   </div>
                   
                   <div class="action-links">
-                    <button type="button" (click)="state.saveForLater(item)" class="link-btn">Save for later</button>
-                    <button type="button" (click)="state.remove(item.id)" class="link-btn danger">Remove</button>
+                    <button type="button" (click)="state.saveForLater(item)" class="link-btn">{{ t('cart.itemList.saveForLater') }}</button>
+                    <button type="button" (click)="state.remove(item.id)" class="link-btn danger">{{ t('cart.itemList.remove') }}</button>
                   </div>
                 </div>
               </app-ui-card>
             } @empty {
               <app-ui-card class="empty-cart-card">
                 <i class="pi pi-shopping-bag empty-icon"></i>
-                <h4>Your shopping bag is empty</h4>
-                <p>Browse Sion Studio's high-fidelity catalog pages and add some premium travel layers.</p>
-                <app-ui-button variant="primary" routerLink="/catalog">View Catalog</app-ui-button>
+                <h4>{{ t('cart.itemList.emptyHeading') }}</h4>
+                <p>{{ t('cart.itemList.emptyBody') }}</p>
+                <app-ui-button variant="primary" routerLink="/catalog">{{ t('cart.itemList.viewCatalogBtn') }}</app-ui-button>
               </app-ui-card>
             }
           </div>
@@ -38,7 +39,7 @@
           <!-- Save for later -->
           @if (state.savedForLater.length > 0) {
             <div class="saved-later-section">
-              <h3>Saved for Later ({{ state.savedForLater.length }} items)</h3>
+              <h3>{{ t('cart.itemList.savedForLaterHeading', { count: state.savedForLater.length }) }}</h3>
               <div class="saved-items">
                 @for (item of state.savedForLater; track item.id) {
                   <app-ui-card class="saved-item-card">
@@ -51,10 +52,11 @@
                       <strong>{{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
                     </div>
                     <div class="saved-item-action">
-                      <button type="button" (click)="state.moveToCart(item)" class="move-btn">Move to bag</button>
+                      <button type="button" (click)="state.moveToCart(item)" class="move-btn">{{ t('cart.itemList.moveToBag') }}</button>
                     </div>
                   </app-ui-card>
                 }
               </div>
             </div>
           }
+</ng-container>

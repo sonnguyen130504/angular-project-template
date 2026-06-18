@@ -1,8 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
+import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
 
 type Member = {
   name: string;
@@ -14,14 +15,15 @@ type Member = {
 @Component({
   selector: 'app-team-page',
   standalone: true,
-  imports: [FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent],
+  imports: [FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent, TranslocoDirective],
   templateUrl: './team-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './team-page.component.scss',
 })
 export class TeamPageComponent {
+  private transloco = inject(TranslocoService);
   inviteEmail = '';
-  inviteState = 'No invite drafted';
+  inviteState = this.transloco.translate('team.noInviteDrafted');
   roleFilter: 'All' | Member['role'] = 'All';
   members: Member[] = [
     { name: 'Mina Tran', email: 'mina@example.com', role: 'Owner', status: 'Active' },
@@ -31,16 +33,16 @@ export class TeamPageComponent {
   ];
 
   readonly permissions = [
-    { label: 'Manage billing', Owner: true, Admin: false, Editor: false, Viewer: false },
-    { label: 'Publish catalog', Owner: true, Admin: true, Editor: true, Viewer: false },
-    { label: 'View analytics', Owner: true, Admin: true, Editor: true, Viewer: true },
-    { label: 'Invite teammates', Owner: true, Admin: true, Editor: false, Viewer: false },
-    { label: 'Export audit log', Owner: true, Admin: true, Editor: false, Viewer: false },
+    { label: 'manageBilling', Owner: true, Admin: false, Editor: false, Viewer: false },
+    { label: 'publishCatalog', Owner: true, Admin: true, Editor: true, Viewer: false },
+    { label: 'viewAnalytics', Owner: true, Admin: true, Editor: true, Viewer: true },
+    { label: 'inviteTeammates', Owner: true, Admin: true, Editor: false, Viewer: false },
+    { label: 'exportAuditLog', Owner: true, Admin: true, Editor: false, Viewer: false },
   ];
 
   readonly accessReviews = [
-    { label: 'Owner actions locked', detail: 'Owner role cannot be downgraded from this table.' },
-    { label: 'Viewer invite pending', detail: 'An Le has not accepted the workspace invite.' },
+    { label: 'ownerActionsLocked', detail: 'ownerDowngradeDetail' },
+    { label: 'viewerInvitePending', detail: 'invitePendingDetail' },
   ];
 
   get visibleMembers(): Member[] {
@@ -57,14 +59,11 @@ export class TeamPageComponent {
 
   sendInvite(): void {
     if (!this.inviteEmail.includes('@')) {
-      this.inviteState = 'Enter a valid email before sending.';
+      this.inviteState = this.transloco.translate('team.enterValidEmail');
       return;
     }
-    this.members = [...this.members, { name: 'Pending user', email: this.inviteEmail, role: 'Viewer', status: 'Invited' }];
-    this.inviteState = `Invite sent to ${this.inviteEmail}.`;
+    this.members = [...this.members, { name: this.transloco.translate('team.pendingUser'), email: this.inviteEmail, role: 'Viewer', status: 'Invited' }];
+    this.inviteState = this.transloco.translate('team.inviteSentTo', { email: this.inviteEmail });
     this.inviteEmail = '';
   }
 }
-
-
-

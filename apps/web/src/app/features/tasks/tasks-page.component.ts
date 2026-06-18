@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 type TaskStatus = 'Backlog' | 'Doing' | 'Review' | 'Done';
 
@@ -23,7 +24,7 @@ type TaskItem = {
 @Component({
   selector: 'app-tasks-page',
   standalone: true,
-  imports: [FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent],
+  imports: [FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent, TranslocoDirective],
   templateUrl: './tasks-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './tasks-page.component.scss',
@@ -36,20 +37,20 @@ export class TasksPageComponent {
   tasks: TaskItem[] = [
     {
       id: 301,
-      title: 'Polish invoice table states',
+      title: 'task1.title',
       owner: 'Nora',
       status: 'Backlog',
       priority: 'High',
       type: 'UI',
-      due: 'Today',
+      due: 'due.today',
       estimate: '3 pts',
       comments: 6,
       blocked: true,
-      summary: 'Invoice rows need failed, refunded, and pending states before billing can be reused.',
+      summary: 'task1.summary',
     },
     {
       id: 302,
-      title: 'Add keyboard focus to command menu',
+      title: 'task2.title',
       owner: 'Minh',
       status: 'Doing',
       priority: 'Normal',
@@ -58,11 +59,11 @@ export class TasksPageComponent {
       estimate: '2 pts',
       comments: 3,
       blocked: false,
-      summary: 'Command search should keep visible focus, close stale menus, and support keyboard paths.',
+      summary: 'task2.summary',
     },
     {
       id: 303,
-      title: 'Review asset empty folder copy',
+      title: 'task3.title',
       owner: 'Ari',
       status: 'Review',
       priority: 'Low',
@@ -71,37 +72,37 @@ export class TasksPageComponent {
       estimate: '1 pt',
       comments: 1,
       blocked: false,
-      summary: 'File manager empty copy should explain next action without sounding like documentation.',
+      summary: 'task3.summary',
     },
     {
       id: 304,
-      title: 'Publish setup checklist examples',
+      title: 'task4.title',
       owner: 'Linh',
       status: 'Done',
       priority: 'Normal',
       type: 'UI',
-      due: 'Done',
+      due: 'due.done',
       estimate: '2 pts',
       comments: 4,
       blocked: false,
-      summary: 'Setup now has completion, restart, and next-step examples for clone users.',
+      summary: 'task4.summary',
     },
     {
       id: 305,
-      title: 'Model analytics empty chart states',
+      title: 'task5.title',
       owner: 'Nora',
       status: 'Backlog',
       priority: 'High',
       type: 'Data',
-      due: 'Tomorrow',
+      due: 'due.tomorrow',
       estimate: '5 pts',
       comments: 8,
       blocked: false,
-      summary: 'Charts need loading, no data, and error panels that still preserve layout height.',
+      summary: 'task5.summary',
     },
     {
       id: 306,
-      title: 'Tighten mobile task filters',
+      title: 'task6.title',
       owner: 'Minh',
       status: 'Doing',
       priority: 'Normal',
@@ -110,7 +111,7 @@ export class TasksPageComponent {
       estimate: '2 pts',
       comments: 2,
       blocked: false,
-      summary: 'Filters should collapse without horizontal overflow and keep tap targets comfortable.',
+      summary: 'task6.summary',
     },
   ];
 
@@ -146,6 +147,3 @@ export class TasksPageComponent {
     this.selectedTaskId = task.id;
   }
 }
-
-
-

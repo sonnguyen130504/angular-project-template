@@ -1,29 +1,30 @@
-<app-page-section subtitle="A complete account area with tabs, toggles, and guardrail states." title="Settings">
+<ng-container *transloco="let t">
+<app-page-section [subtitle]="t('settings.subtitle')" [title]="t('settings.title')">
   <div class="settings-layout">
     <!-- Sidebar Tabs Navigation -->
     <div class="settings-sidebar">
       <div class="sidebar-header">
-        <app-ui-stat label="Workspace">Sion Studio</app-ui-stat>
-        <app-ui-stat label="Plan">Growth</app-ui-stat>
+        <app-ui-stat [label]="t('settings.workspace')">Sion Studio</app-ui-stat>
+        <app-ui-stat [label]="t('settings.plan')">{{ t('settings.growth') }}</app-ui-stat>
       </div>
-      <div class="vertical-tabs" role="tablist" aria-label="Settings categories">
+      <div class="vertical-tabs" role="tablist" [attr.aria-label]="t('settings.categories')">
         <button type="button" class="tab-btn" [class.is-active]="activeTab === 'general'" (click)="activeTab = 'general'">
-          <i class="pi pi-cog"></i> General
+          <i class="pi pi-cog"></i> {{ t('settings.tabs.general') }}
         </button>
         <button type="button" class="tab-btn" [class.is-active]="activeTab === 'notifications'" (click)="activeTab = 'notifications'">
-          <i class="pi pi-bell"></i> Notifications
+          <i class="pi pi-bell"></i> {{ t('settings.tabs.notifications') }}
         </button>
         <button type="button" class="tab-btn" [class.is-active]="activeTab === 'security'" (click)="activeTab = 'security'">
-          <i class="pi pi-shield"></i> Security
+          <i class="pi pi-shield"></i> {{ t('settings.tabs.security') }}
         </button>
         <button type="button" class="tab-btn" [class.is-active]="activeTab === 'billing'" (click)="activeTab = 'billing'">
-          <i class="pi pi-credit-card"></i> Billing
+          <i class="pi pi-credit-card"></i> {{ t('settings.tabs.billing') }}
         </button>
         <button type="button" class="tab-btn" [class.is-active]="activeTab === 'integrations'" (click)="activeTab = 'integrations'">
-          <i class="pi pi-share-alt"></i> Integrations
+          <i class="pi pi-share-alt"></i> {{ t('settings.tabs.integrations') }}
         </button>
         <button type="button" class="tab-btn danger-tab" [class.is-active]="activeTab === 'danger'" (click)="activeTab = 'danger'">
-          <i class="pi pi-exclamation-triangle"></i> Danger Zone
+          <i class="pi pi-exclamation-triangle"></i> {{ t('settings.tabs.danger') }}
         </button>
       </div>
     </div>
@@ -34,26 +35,26 @@
       @if (activeTab === 'general') {
         <div class="settings-panel">
           <div class="panel-header">
-            <app-ui-badge>Brand and theme</app-ui-badge>
-            <h3>Workspace Details</h3>
-            <p>Manage the visual presentation and contact information for your store workspace.</p>
+            <app-ui-badge>{{ t('settings.brandTheme') }}</app-ui-badge>
+            <h3>{{ t('settings.workspaceDetails') }}</h3>
+            <p>{{ t('settings.workspaceDesc') }}</p>
           </div>
           
           <form (submit)="saveSettings(); $event.preventDefault()" class="settings-form">
             <label class="input-field">
-              <span>Store Name</span>
+              <span>{{ t('settings.storeName') }}</span>
               <input [(ngModel)]="storeName" name="storeName" required />
             </label>
             <label class="input-field">
-              <span>Support Email Address</span>
+              <span>{{ t('settings.supportEmail') }}</span>
               <input [(ngModel)]="supportEmail" name="supportEmail" type="email" required />
             </label>
 
             <div class="toggle-control-card">
               <label class="switch-row">
                 <span class="label-desc">
-                  <strong>Compact Workspace Layout</strong>
-                  <small>Adjust data density of tables and charts automatically.</small>
+                  <strong>{{ t('settings.compactLayout') }}</strong>
+                  <small>{{ t('settings.compactLayoutDesc') }}</small>
                 </span>
                 <input type="checkbox" [(ngModel)]="compactMode" name="compactMode" />
                 <i class="switch-ui" aria-hidden="true"></i>
@@ -61,8 +62,8 @@
             </div>
 
             <div class="form-actions">
-              <app-ui-button (click)="saveSettings()">Save settings</app-ui-button>
-              @if (savedMessage && savedMessage !== 'No unsaved changes') {
+              <app-ui-button (click)="saveSettings()">{{ t('settings.saveSettings') }}</app-ui-button>
+              @if (savedMessage && savedMessage !== t('settings.noUnsavedChanges')) {
                 <span class="success-message"><i class="pi pi-check-circle"></i> {{ savedMessage }}</span>
               }
             </div>
@@ -70,13 +71,13 @@
 
           <!-- Store Preview Card -->
           <div class="preview-card-wrap">
-            <span class="preview-title-tag">Live Layout Preview</span>
+            <span class="preview-title-tag">{{ t('settings.livePreview') }}</span>
             <div class="preview-box" [class.is-compact]="compactMode">
               <div class="preview-avatar">S</div>
               <div class="preview-meta">
                 <strong>{{ storeName }}</strong>
                 <span>{{ supportEmail }}</span>
-                <span>{{ compactMode ? 'Compact mode enabled' : 'Comfortable mode enabled' }}</span>
+                <span>{{ compactMode ? t('settings.compactEnabled') : t('settings.comfortableEnabled') }}</span>
               </div>
             </div>
           </div>
@@ -87,16 +88,16 @@
       @if (activeTab === 'notifications') {
         <div class="settings-panel">
           <div class="panel-header">
-            <app-ui-badge tone="warning">Alert Rules</app-ui-badge>
-            <h3>Notification Subscriptions</h3>
-            <p>Define which system alerts trigger workspace-wide dispatch.</p>
+            <app-ui-badge tone="warning">{{ t('settings.alertRules') }}</app-ui-badge>
+            <h3>{{ t('settings.notifSubscriptions') }}</h3>
+            <p>{{ t('settings.notifDesc') }}</p>
           </div>
 
           <div class="toggle-list">
             <label class="switch-row border-card">
               <span class="label-desc">
-                <strong>Order Alerts</strong>
-                <small>Notify operations team when a new transaction is processed.</small>
+                <strong>{{ t('settings.orderAlerts') }}</strong>
+                <small>{{ t('settings.orderAlertsDesc') }}</small>
               </span>
               <input type="checkbox" [(ngModel)]="orderAlerts" name="orderAlerts" />
               <i class="switch-ui" aria-hidden="true"></i>
@@ -104,8 +105,8 @@
 
             <label class="switch-row border-card">
               <span class="label-desc">
-                <strong>Inventory Warning Alerts</strong>
-                <small>Send alerts to product team when catalog counts run low.</small>
+                <strong>{{ t('settings.inventoryAlerts') }}</strong>
+                <small>{{ t('settings.inventoryAlertsDesc') }}</small>
               </span>
               <input type="checkbox" [(ngModel)]="productAlerts" name="productAlerts" />
               <i class="switch-ui" aria-hidden="true"></i>
@@ -118,16 +119,16 @@
       @if (activeTab === 'security') {
         <div class="settings-panel">
           <div class="panel-header">
-            <app-ui-badge tone="positive">Security & Authorization</app-ui-badge>
-            <h3>Account Protection</h3>
-            <p>Manage security protocols, recovery keys, and multi-factor configuration.</p>
+            <app-ui-badge tone="positive">{{ t('settings.securityAuth') }}</app-ui-badge>
+            <h3>{{ t('settings.accountProtection') }}</h3>
+            <p>{{ t('settings.accountProtectionDesc') }}</p>
           </div>
 
           <div class="toggle-list">
             <label class="switch-row border-card">
               <span class="label-desc">
-                <strong>Two-Factor Authentication (2FA)</strong>
-                <small>Require physical security keys or authenticator codes on login.</small>
+                <strong>{{ t('settings.2fa') }}</strong>
+                <small>{{ t('settings.2faDesc') }}</small>
               </span>
               <input type="checkbox" [(ngModel)]="twoFactor" name="twoFactor" />
               <i class="switch-ui" aria-hidden="true"></i>
@@ -135,7 +136,7 @@
           </div>
 
           <div class="extra-actions">
-            <app-ui-button variant="secondary">Rotate Backup Recovery Codes</app-ui-button>
+            <app-ui-button variant="secondary">{{ t('settings.rotateBackup') }}</app-ui-button>
           </div>
         </div>
       }
@@ -144,16 +145,16 @@
       @if (activeTab === 'billing') {
         <div class="settings-panel">
           <div class="panel-header">
-            <app-ui-badge tone="info">Subscription Preferences</app-ui-badge>
-            <h3>Billing & Invoices</h3>
-            <p>Manage receipts and view plan quotas for Sion Studio.</p>
+            <app-ui-badge tone="info">{{ t('settings.subPreferences') }}</app-ui-badge>
+            <h3>{{ t('settings.billingInvoices') }}</h3>
+            <p>{{ t('settings.billingDesc') }}</p>
           </div>
 
           <div class="toggle-list">
             <label class="switch-row border-card">
               <span class="label-desc">
-                <strong>Automatic Invoice Delivery</strong>
-                <small>Deliver electronic invoices to accounting admins upon renewal.</small>
+                <strong>{{ t('settings.autoInvoice') }}</strong>
+                <small>{{ t('settings.autoInvoiceDesc') }}</small>
               </span>
               <input type="checkbox" [(ngModel)]="invoiceEmails" name="invoiceEmails" />
               <i class="switch-ui" aria-hidden="true"></i>
@@ -162,14 +163,14 @@
 
           <div class="grid-2col">
             <div class="stat-card">
-              <span>Usage Guardrail</span>
-              <h3>Seat invite warning</h3>
-              <p>Triggers notification thresholds before active limits are hit.</p>
+              <span>{{ t('settings.usageGuardrail') }}</span>
+              <h3>{{ t('settings.seatInviteWarning') }}</h3>
+              <p>{{ t('settings.seatInviteDesc') }}</p>
             </div>
             <div class="stat-card action-card">
-              <span>Upgrade / Manage Plan</span>
-              <p>Navigate to complete billing details dashboard.</p>
-              <app-ui-button routerLink="/billing">Open billing page</app-ui-button>
+              <span>{{ t('settings.upgradePlan') }}</span>
+              <p>{{ t('settings.upgradePlanDesc') }}</p>
+              <app-ui-button routerLink="/billing">{{ t('settings.openBilling') }}</app-ui-button>
             </div>
           </div>
         </div>
@@ -179,16 +180,16 @@
       @if (activeTab === 'integrations') {
         <div class="settings-panel">
           <div class="panel-header">
-            <app-ui-badge tone="info">Workspace Integrations</app-ui-badge>
-            <h3>Connected Applications</h3>
-            <p>Sync operations with external messaging channels and development services.</p>
+            <app-ui-badge tone="info">{{ t('settings.integrations') }}</app-ui-badge>
+            <h3>{{ t('settings.connectedApps') }}</h3>
+            <p>{{ t('settings.connectedAppsDesc') }}</p>
           </div>
 
           <div class="toggle-list">
             <label class="switch-row border-card">
               <span class="label-desc">
-                <strong>Slack Synchronization</strong>
-                <small>Push orders and status details to workspace channels.</small>
+                <strong>{{ t('settings.slackSync') }}</strong>
+                <small>{{ t('settings.slackSyncDesc') }}</small>
               </span>
               <input type="checkbox" [(ngModel)]="slackSync" name="slackSync" />
               <i class="switch-ui" aria-hidden="true"></i>
@@ -196,8 +197,8 @@
 
             <label class="switch-row border-card">
               <span class="label-desc">
-                <strong>GitHub Synchronization</strong>
-                <small>Auto-create repository issues when system logs trace warnings.</small>
+                <strong>{{ t('settings.githubSync') }}</strong>
+                <small>{{ t('settings.githubSyncDesc') }}</small>
               </span>
               <input type="checkbox" [(ngModel)]="githubSync" name="githubSync" />
               <i class="switch-ui" aria-hidden="true"></i>
@@ -210,20 +211,20 @@
       @if (activeTab === 'danger') {
         <div class="settings-panel danger-panel">
           <div class="panel-header">
-            <app-ui-badge tone="negative">Destructive Action Zone</app-ui-badge>
-            <h3>Delete Workspace</h3>
-            <p>Permanently remove the Sion Studio store workspace, billing profile, and assets.</p>
+            <app-ui-badge tone="negative">{{ t('settings.destructiveZone') }}</app-ui-badge>
+            <h3>{{ t('settings.deleteWorkspace') }}</h3>
+            <p>{{ t('settings.deleteWorkspaceDesc') }}</p>
           </div>
 
           <div class="danger-block">
             <p class="warning-text">
-              Warning: Deleting a workspace deletes all databases, templates, and logs. This process is irreversible.
+              {{ t('settings.deleteWarning') }}
             </p>
 
             <label class="switch-row border-card danger-card">
               <span class="label-desc">
-                <strong>Arm Deletion Mechanism</strong>
-                <small>Acknowledge policy constraints to enable the destructive request trigger.</small>
+                <strong>{{ t('settings.armDeletion') }}</strong>
+                <small>{{ t('settings.armDeletionDesc') }}</small>
               </span>
               <input type="checkbox" [(ngModel)]="deletionArmed" name="deletionArmed" />
               <i class="switch-ui" aria-hidden="true"></i>
@@ -231,7 +232,7 @@
 
             <div class="action-row">
               <button type="button" class="destructive-btn" [disabled]="!deletionArmed">
-                <i class="pi pi-trash"></i> Delete Workspace Permanently
+                <i class="pi pi-trash"></i> {{ t('settings.deleteConfirmBtn') }}
               </button>
             </div>
           </div>
@@ -240,3 +241,4 @@
     </div>
   </div>
 </app-page-section>
+</ng-container>

@@ -8,6 +8,8 @@ import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.c
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
 import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
+import { inject } from '@angular/core';
+import { TranslocoService, TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 
 type ProductCard = {
   name: string;
@@ -23,12 +25,17 @@ type ProductCard = {
 @Component({
   selector: 'app-catalog-page',
   standalone: true,
-  imports: [CurrencyPipe, NgClass, FormsModule, PageSectionComponent, PaginatorModule, SelectModule, SliderModule, UiBadgeComponent, UiButtonComponent, UiCardComponent],
+  imports: [CurrencyPipe, NgClass, FormsModule, PageSectionComponent, PaginatorModule, SelectModule, SliderModule, UiBadgeComponent, UiButtonComponent, UiCardComponent, TranslocoDirective, TranslocoPipe],
   templateUrl: './catalog-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './catalog-page.component.scss',
 })
 export class CatalogPageComponent {
+  private readonly transloco = inject(TranslocoService);
+  
+  tKey(prefix: string, value: string): string {
+    return `catalog.${prefix}_${value.replace(/\s+/g, '')}`;
+  }
   search = '';
   selectedCategory = 'All';
   selectedStock = 'Any';
@@ -124,10 +131,18 @@ export class CatalogPageComponent {
     return (rating - 4.5) * -500;
   }
 
-  readonly categories = ['All', 'Outerwear', 'Accessories', 'Home', 'Travel'].map((value) => ({ label: value, value }));
-  readonly stockOptions = ['Any', 'In stock', 'Low stock', 'Back soon'].map((value) => ({ label: value, value }));
-  readonly colorOptions = ['Any', 'Teal', 'Clay', 'Forest', 'Blue', 'Neutral', 'Red'].map((value) => ({ label: value, value }));
-  readonly sortOptions = ['Featured', 'Price low', 'Price high', 'Rating'].map((value) => ({ label: value, value }));
+  get categories() {
+    return ['All', 'Outerwear', 'Accessories', 'Home', 'Travel'].map((value) => ({ label: this.transloco.translate(this.tKey('opt', value)), value }));
+  }
+  get stockOptions() {
+    return ['Any', 'In stock', 'Low stock', 'Back soon'].map((value) => ({ label: this.transloco.translate(this.tKey('opt', value)), value }));
+  }
+  get colorOptions() {
+    return ['Any', 'Teal', 'Clay', 'Forest', 'Blue', 'Neutral', 'Red'].map((value) => ({ label: this.transloco.translate(this.tKey('opt', value)), value }));
+  }
+  get sortOptions() {
+    return ['Featured', 'Price low', 'Price high', 'Rating'].map((value) => ({ label: this.transloco.translate(this.tKey('opt', value)), value }));
+  }
 
   readonly products: ProductCard[] = [
     { name: 'Field Jacket', category: 'Outerwear', price: 128, stock: 'In stock', color: '#214b57', rating: 4.8, tag: 'Teal', image: '/assets/field_jacket_detail.png' },

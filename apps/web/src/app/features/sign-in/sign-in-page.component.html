@@ -1,3 +1,4 @@
+<ng-container *transloco="let t">
 <div class="split-auth-layout">
   <!-- Left panel: Sliding Carousel -->
   <div class="brand-carousel-pane">
@@ -5,13 +6,13 @@
       @for (slide of slides; track slide.title; let i = $index) {
         <div class="carousel-slide" [class.active]="currentSlideIndex === i">
           <div class="slide-image-wrapper">
-            <img [src]="slide.image" [alt]="slide.title" class="slide-image" />
+            <img [src]="slide.image" [alt]="t(slide.title)" class="slide-image" />
             <div class="image-overlay-vignette"></div>
           </div>
           <div class="slide-text-overlay">
-            <app-ui-badge tone="info">Sion Studio</app-ui-badge>
-            <h2 class="slide-headline">{{ slide.title }}</h2>
-            <p class="slide-desc">{{ slide.desc }}</p>
+            <app-ui-badge tone="info">{{ t('signIn.sionStudio') }}</app-ui-badge>
+            <h2 class="slide-headline">{{ t(slide.title) }}</h2>
+            <p class="slide-desc">{{ t(slide.desc) }}</p>
           </div>
         </div>
       }
@@ -24,7 +25,7 @@
           class="indicator-dot"
           [class.active]="currentSlideIndex === i"
           (click)="setSlide(i)"
-          [attr.aria-label]="'Go to slide ' + (i + 1)"
+          [attr.aria-label]="t('signIn.goToSlide') + ' ' + (i + 1)"
         ></button>
       }
     </div>
@@ -34,8 +35,8 @@
   <div class="auth-form-pane">
     <app-ui-card class="auth-card">
       <div class="auth-header">
-        <h3 class="auth-title">Welcome back</h3>
-        <p class="auth-subtitle">Verify your studio credentials to access the workbench.</p>
+        <h3 class="auth-title">{{ t('signIn.welcomeBack') }}</h3>
+        <p class="auth-subtitle">{{ t('signIn.verifyCredentials') }}</p>
       </div>
 
       <!-- Success Alert Banner -->
@@ -43,8 +44,8 @@
         <div class="success-alert-banner">
           <i class="pi pi-check-circle"></i>
           <div>
-            <strong>Access granted</strong>
-            <p>Redirecting you to dashboard workbench...</p>
+            <strong>{{ t('signIn.accessGranted') }}</strong>
+            <p>{{ t('signIn.redirecting') }}</p>
           </div>
         </div>
       }
@@ -54,8 +55,8 @@
         <div class="danger-alert-banner">
           <i class="pi pi-lock"></i>
           <div>
-            <strong>Device ID Locked</strong>
-            <p>This workstation has been frozen by administration rules. Deselect simulate lock check to recover.</p>
+            <strong>{{ t('signIn.deviceLocked') }}</strong>
+            <p>{{ t('signIn.workstationFrozen') }}</p>
           </div>
         </div>
       }
@@ -73,9 +74,9 @@
             class="float-input"
             [disabled]="loading || locked"
           />
-          <label for="login-email" class="float-label">Email Address</label>
+          <label for="login-email" class="float-label">{{ t('signIn.emailAddress') }}</label>
           @if (submitted && !email.includes('&#64;')) {
-            <small class="input-error-msg"><i class="pi pi-exclamation-circle"></i> Enter a valid email address.</small>
+            <small class="input-error-msg"><i class="pi pi-exclamation-circle"></i> {{ t('signIn.validEmailRequired') }}</small>
           }
         </div>
 
@@ -91,18 +92,18 @@
             class="float-input"
             [disabled]="loading || locked"
           />
-          <label for="login-pass" class="float-label">Password</label>
+          <label for="login-pass" class="float-label">{{ t('signIn.password') }}</label>
           <button
             type="button"
             class="reveal-password-btn"
             (click)="showPassword = !showPassword"
-            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+            [attr.aria-label]="showPassword ? t('signIn.hidePassword') : t('signIn.showPassword')"
             tabindex="-1"
           >
             <i class="pi" [class.pi-eye]="!showPassword" [class.pi-eye-slash]="showPassword"></i>
           </button>
           @if (submitted && password.length < 8) {
-            <small class="input-error-msg"><i class="pi pi-exclamation-circle"></i> Password must be at least 8 characters.</small>
+            <small class="input-error-msg"><i class="pi pi-exclamation-circle"></i> {{ t('signIn.passwordMinLength') }}</small>
           }
         </div>
 
@@ -110,17 +111,17 @@
           <label class="remember-checkbox-control">
             <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe" [disabled]="loading || locked" />
             <span class="indicator-checkbox"></span>
-            <span>Remember workstation</span>
+            <span>{{ t('signIn.rememberWorkstation') }}</span>
           </label>
 
-          <a routerLink="/forgot-password" class="forgot-link">Forgot Password?</a>
+          <a routerLink="/forgot-password" class="forgot-link">{{ t('signIn.forgotPassword') }}</a>
         </div>
 
         <div class="locked-simulator-toggle">
           <label class="remember-checkbox-control">
             <input type="checkbox" [checked]="locked" (change)="toggleLocked()" name="locked" />
             <span class="indicator-checkbox"></span>
-            <span>Simulate locked device status</span>
+            <span>{{ t('signIn.simulateLocked') }}</span>
           </label>
         </div>
 
@@ -129,10 +130,11 @@
             [disabled]="loading || locked || !canSubmit"
             style="width: 100%;"
           >
-            {{ loading ? 'Authorizing connection...' : 'Verify & Sign In' }}
+            {{ loading ? t('signIn.authorizing') : t('signIn.verifyAndSignIn') }}
           </app-ui-button>
         </div>
       </form>
     </app-ui-card>
   </div>
 </div>
+</ng-container>

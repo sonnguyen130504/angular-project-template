@@ -1,25 +1,26 @@
-<app-page-section subtitle="Workspace" title="Tasks">
+<ng-container *transloco="let t">
+<app-page-section [subtitle]="t('tasks.workspace')" [title]="t('tasks.title')">
   <div sectionActions class="task-actions">
-    <select [(ngModel)]="priorityFilter" aria-label="Priority filter">
+    <select [(ngModel)]="priorityFilter" [attr.aria-label]="t('tasks.priorityFilter')">
       @for (priority of ['All', 'High', 'Normal', 'Low']; track priority) {
-        <option>{{ priority }}</option>
+        <option value="{{priority}}">{{ t('tasks.priorities.' + priority) }}</option>
       }
     </select>
     <div class="mode-switch">
-      <button type="button" [class.active]="viewMode === 'board'" (click)="viewMode = 'board'">Board</button>
-      <button type="button" [class.active]="viewMode === 'list'" (click)="viewMode = 'list'">List</button>
+      <button type="button" [class.active]="viewMode === 'board'" (click)="viewMode = 'board'">{{ t('tasks.board') }}</button>
+      <button type="button" [class.active]="viewMode === 'list'" (click)="viewMode = 'list'">{{ t('tasks.list') }}</button>
     </div>
   </div>
 
   <section class="task-brief" aria-label="Sprint health">
     <div>
-      <app-ui-badge tone="info">Sprint board</app-ui-badge>
-      <h3>{{ visibleTasks.length }} visible tasks, {{ blockedTasks.length }} blocker</h3>
-      <p>Reference layout for product work queues: filters, board movement, list mode, blockers, and a persistent task inspector.</p>
+      <app-ui-badge tone="info">{{ t('tasks.sprintBoard') }}</app-ui-badge>
+      <h3>{{ t('tasks.sprintStatus', { visible: visibleTasks.length, blocked: blockedTasks.length }) }}</h3>
+      <p>{{ t('tasks.referenceLayout') }}</p>
     </div>
     <div class="task-meter">
       <strong>{{ completionRate }}%</strong>
-      <span>Done</span>
+      <span>{{ t('tasks.done') }}</span>
       <div class="meter"><i [style.width.%]="completionRate"></i></div>
     </div>
   </section>
@@ -27,11 +28,11 @@
   <div class="task-workspace">
     <section class="task-main">
       @if (viewMode === 'board') {
-        <div class="board" aria-label="Task board">
+        <div class="board" [attr.aria-label]="t('tasks.taskBoard')">
           @for (column of columns; track column) {
             <section class="task-column">
               <header>
-                <h3>{{ column }}</h3>
+                <h3>{{ t('tasks.statuses.' + column) }}</h3>
                 <span>{{ tasksFor(column).length }}</span>
               </header>
               @for (task of tasksFor(column); track task.id) {
@@ -39,24 +40,24 @@
                   <button type="button" class="task-select" (click)="selectTask(task)">
                     <span class="task-meta">
                       <app-ui-badge [tone]="task.priority === 'High' ? 'negative' : task.priority === 'Low' ? 'info' : 'positive'">
-                        {{ task.priority }}
+                        {{ t('tasks.priorities.' + task.priority) }}
                       </app-ui-badge>
                       <small>{{ task.type }}</small>
                     </span>
-                    <strong>{{ task.title }}</strong>
-                    <span>{{ task.owner }} · {{ task.due }} · {{ task.estimate }}</span>
+                    <strong>{{ t('tasks.tasksList.' + task.title) }}</strong>
+                    <span>{{ task.owner }} · {{ t('tasks.dueDates.' + task.due) || task.due }} · {{ task.estimate }}</span>
                   </button>
                   <div class="task-moves">
-                    <button type="button" (click)="moveTask(task, -1)" [disabled]="task.status === 'Backlog'" aria-label="Move back">
+                    <button type="button" (click)="moveTask(task, -1)" [disabled]="task.status === 'Backlog'" [attr.aria-label]="t('tasks.moveBack')">
                       <i class="pi pi-arrow-left"></i>
                     </button>
-                    <button type="button" (click)="moveTask(task, 1)" [disabled]="task.status === 'Done'" aria-label="Move forward">
+                    <button type="button" (click)="moveTask(task, 1)" [disabled]="task.status === 'Done'" [attr.aria-label]="t('tasks.moveForward')">
                       <i class="pi pi-arrow-right"></i>
                     </button>
                   </div>
                 </article>
               } @empty {
-                <div class="column-empty">No tasks here</div>
+                <div class="column-empty">{{ t('tasks.noTasksHere') }}</div>
               }
             </section>
           }
@@ -66,45 +67,46 @@
       @if (viewMode === 'list') {
         <div class="task-table">
           <div class="table-head">
-            <span>Task</span>
-            <span>Owner</span>
-            <span>Status</span>
-            <span>Due</span>
-            <span>Priority</span>
+            <span>{{ t('tasks.task') }}</span>
+            <span>{{ t('tasks.owner') }}</span>
+            <span>{{ t('tasks.status') }}</span>
+            <span>{{ t('tasks.due') }}</span>
+            <span>{{ t('tasks.priority') }}</span>
           </div>
           @for (task of visibleTasks; track task.id) {
             <button type="button" class="task-row" [class.selected]="selectedTask.id === task.id" (click)="selectTask(task)">
-              <strong>{{ task.title }}</strong>
+              <strong>{{ t('tasks.tasksList.' + task.title) }}</strong>
               <span>{{ task.owner }}</span>
-              <app-ui-badge>{{ task.status }}</app-ui-badge>
-              <span>{{ task.due }}</span>
-              <small>{{ task.priority }}</small>
+              <app-ui-badge>{{ t('tasks.statuses.' + task.status) }}</app-ui-badge>
+              <span>{{ t('tasks.dueDates.' + task.due) || task.due }}</span>
+              <small>{{ t('tasks.priorities.' + task.priority) }}</small>
             </button>
           } @empty {
-            <div class="column-empty">No tasks match this filter</div>
+            <div class="column-empty">{{ t('tasks.noTasksMatch') }}</div>
           }
         </div>
       }
     </section>
 
     <aside class="task-inspector" aria-label="Selected task detail">
-      <app-ui-badge [tone]="selectedTask.blocked ? 'negative' : 'positive'">{{ selectedTask.blocked ? 'Blocked' : selectedTask.status }}</app-ui-badge>
-      <h3>{{ selectedTask.title }}</h3>
-      <p>{{ selectedTask.summary }}</p>
+      <app-ui-badge [tone]="selectedTask.blocked ? 'negative' : 'positive'">{{ selectedTask.blocked ? t('tasks.blocked') : t('tasks.statuses.' + selectedTask.status) }}</app-ui-badge>
+      <h3>{{ t('tasks.tasksList.' + selectedTask.title) }}</h3>
+      <p>{{ t('tasks.tasksList.' + selectedTask.summary) }}</p>
       <dl>
-        <div><dt>Owner</dt><dd>{{ selectedTask.owner }}</dd></div>
-        <div><dt>Due</dt><dd>{{ selectedTask.due }}</dd></div>
-        <div><dt>Estimate</dt><dd>{{ selectedTask.estimate }}</dd></div>
-        <div><dt>Comments</dt><dd>{{ selectedTask.comments }}</dd></div>
+        <div><dt>{{ t('tasks.owner') }}</dt><dd>{{ selectedTask.owner }}</dd></div>
+        <div><dt>{{ t('tasks.due') }}</dt><dd>{{ t('tasks.dueDates.' + selectedTask.due) || selectedTask.due }}</dd></div>
+        <div><dt>{{ t('tasks.estimate') }}</dt><dd>{{ selectedTask.estimate }}</dd></div>
+        <div><dt>{{ t('tasks.comments') }}</dt><dd>{{ selectedTask.comments }}</dd></div>
       </dl>
       <div class="blocker-panel">
-        <strong>Blocker queue</strong>
+        <strong>{{ t('tasks.blockerQueue') }}</strong>
         @for (task of blockedTasks; track task.id) {
-          <button type="button" (click)="selectTask(task)">{{ task.title }}</button>
+          <button type="button" (click)="selectTask(task)">{{ t('tasks.tasksList.' + task.title) }}</button>
         } @empty {
-          <span>No blockers right now.</span>
+          <span>{{ t('tasks.noBlockers') }}</span>
         }
       </div>
     </aside>
   </div>
 </app-page-section>
+</ng-container>

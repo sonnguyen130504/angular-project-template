@@ -7,6 +7,7 @@ import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
 import { AccordionModule } from 'primeng/accordion';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 
 type ProductImage = {
   label: string;
@@ -34,6 +35,8 @@ type RelatedProduct = {
     UiButtonComponent,
     UiCardComponent,
     FormsModule,
+    TranslocoDirective,
+    TranslocoPipe,
   ],
   templateUrl: './product-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,26 +46,26 @@ export class ProductPageComponent {
   readonly price = 128;
   readonly lowStockThreshold = 4;
   readonly colors = [
-    { label: 'Deep teal', value: '#214b57', stock: 3 },
-    { label: 'Clay', value: '#9a5e34' },
-    { label: 'Forest', value: '#2f6f4e', stock: 12 },
+    { label: 'product.color.deepTeal', value: '#214b57', stock: 3 },
+    { label: 'product.color.clay', value: '#9a5e34' },
+    { label: 'product.color.forest', value: '#2f6f4e', stock: 12 },
   ];
   readonly sizes = ['XS', 'S', 'M', 'L', 'XL'];
   readonly images: ProductImage[] = [
-    { label: 'Front View', color: '#214b57', note: 'Structured front profile', image: '/assets/field_jacket_detail.png' },
-    { label: 'Fabric Detail', color: '#8b6f4f', note: 'Heavy cotton canvas weave', image: '/assets/calm_commerce_hero.png' },
-    { label: 'Pack View', color: '#2f6f4e', note: 'Compact folded travel setup', image: '/assets/market_tote_detail.png' },
+    { label: 'product.image.frontView', color: '#214b57', note: 'product.image.frontViewNote', image: '/assets/field_jacket_detail.png' },
+    { label: 'product.image.fabricDetail', color: '#8b6f4f', note: 'product.image.fabricDetailNote', image: '/assets/calm_commerce_hero.png' },
+    { label: 'product.image.packView', color: '#2f6f4e', note: 'product.image.packViewNote', image: '/assets/market_tote_detail.png' },
   ];
   readonly recommendations: RelatedProduct[] = [
-    { name: 'Travel kit', price: 46, accent: 'var(--accent-2)', image: '/assets/calm_commerce_hero.png' },
-    { name: 'Market tote', price: 64, accent: 'var(--accent)', image: '/assets/market_tote_detail.png' },
-    { name: 'Desk tray', price: 38, accent: '#2f5f91', image: '/assets/desk_tray_detail.png' },
+    { name: 'product.item.travelKit', price: 46, accent: 'var(--accent-2)', image: '/assets/calm_commerce_hero.png' },
+    { name: 'product.item.marketTote', price: 64, accent: 'var(--accent)', image: '/assets/market_tote_detail.png' },
+    { name: 'product.item.deskTray', price: 38, accent: '#2f5f91', image: '/assets/desk_tray_detail.png' },
   ];
   
   bundle = [
-    { name: 'Field Jacket', price: 128, included: true, disabled: true },
-    { name: 'Travel kit', price: 46, included: true, disabled: false },
-    { name: 'Care spray', price: 18, included: false, disabled: false },
+    { name: 'product.item.fieldJacket', price: 128, included: true, disabled: true },
+    { name: 'product.item.travelKit', price: 46, included: true, disabled: false },
+    { name: 'product.item.careSpray', price: 18, included: false, disabled: false },
   ];
 
   selectedColor = this.colors[0].value;
@@ -78,7 +81,7 @@ export class ProductPageComponent {
   }
 
   get selectedColorName(): string {
-    return this.colors.find((color) => color.value === this.selectedColor)?.label ?? 'Custom';
+    return this.colors.find((color) => color.value === this.selectedColor)?.label ?? 'product.color.custom';
   }
 
   get selectedStock(): number {
@@ -121,7 +124,3 @@ export class ProductPageComponent {
     }, 800);
   }
 }
-
-
-
-

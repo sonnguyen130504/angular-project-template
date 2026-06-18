@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 type ThreadStatus = 'Unread' | 'Waiting' | 'Archived';
 
@@ -23,7 +24,7 @@ type InboxThread = {
 @Component({
   selector: 'app-inbox-page',
   standalone: true,
-  imports: [FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent],
+  imports: [FormsModule, PageSectionComponent, UiBadgeComponent, UiButtonComponent, TranslocoDirective],
   templateUrl: './inbox-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './inbox-page.component.scss',
@@ -34,13 +35,13 @@ export class InboxPageComponent {
   selectedId = 101;
 
   threads: InboxThread[] = [
-    { id: 101, from: 'Mina Tran', subject: 'Return label request', preview: 'Customer needs a prepaid label before pickup closes.', status: 'Unread', priority: 'High', time: '09:42', channel: 'Email', assignee: 'Nora', sla: '42m left', tags: ['Returns', 'Shipping'] },
-    { id: 102, from: 'Warehouse', subject: 'Low stock confirmation', preview: 'Travel Kit count is confirmed at 18 units.', status: 'Waiting', priority: 'Normal', time: '08:15', channel: 'System', assignee: 'Minh', sla: '2h left', tags: ['Inventory'] },
-    { id: 103, from: 'Design QA', subject: 'Catalog image notes', preview: 'Three product cards need alternate image crops.', status: 'Unread', priority: 'Normal', time: 'Yesterday', channel: 'Chat', assignee: 'Ari', sla: 'Tomorrow', tags: ['Catalog', 'QA'] },
-    { id: 104, from: 'Support Bot', subject: 'Refund macro updated', preview: 'New refund copy is ready for agent review.', status: 'Archived', priority: 'Normal', time: 'Mon', channel: 'System', assignee: 'Support', sla: 'Closed', tags: ['Macro'] },
+    { id: 101, from: 'Mina Tran', subject: 'thread1.subject', preview: 'thread1.preview', status: 'Unread', priority: 'High', time: '09:42', channel: 'Email', assignee: 'Nora', sla: '42m left', tags: ['Returns', 'Shipping'] },
+    { id: 102, from: 'Warehouse', subject: 'thread2.subject', preview: 'thread2.preview', status: 'Waiting', priority: 'Normal', time: '08:15', channel: 'System', assignee: 'Minh', sla: '2h left', tags: ['Inventory'] },
+    { id: 103, from: 'Design QA', subject: 'thread3.subject', preview: 'thread3.preview', status: 'Unread', priority: 'Normal', time: 'Yesterday', channel: 'Chat', assignee: 'Ari', sla: 'Tomorrow', tags: ['Catalog', 'QA'] },
+    { id: 104, from: 'Support Bot', subject: 'thread4.subject', preview: 'thread4.preview', status: 'Archived', priority: 'Normal', time: 'Mon', channel: 'System', assignee: 'Support', sla: 'Closed', tags: ['Macro'] },
   ];
 
-  readonly macros = ['Send return label', 'Ask for order number', 'Escalate to warehouse'];
+  readonly macros = ['sendReturnLabel', 'askOrderNumber', 'escalateWarehouse'];
   readonly filterOptions: ('All' | ThreadStatus)[] = ['All', 'Unread', 'Waiting', 'Archived'];
 
   get counts(): Record<'All' | ThreadStatus, number> {
@@ -90,6 +91,3 @@ export class InboxPageComponent {
     );
   }
 }
-
-
-

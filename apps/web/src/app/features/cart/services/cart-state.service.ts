@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
-
-export type CartItem = {
+import { Injectable, inject } from '@angular/core';
+import { TranslocoService } from '@jsverse/transloco';export type CartItem = {
   id: number;
   name: string;
   category: string;
@@ -14,8 +13,10 @@ export type CartItem = {
 
 @Injectable()
 export class CartStateService {
+  private transloco = inject(TranslocoService);
+
   promoCode = 'CALM10';
-  promoMessage = 'CALM10 discount ($10.00) is applied.';
+  promoMessage = this.transloco.translate('cart.messages.calm10Applied');
   activeStep = 1;
   selectedShipping = 'standard';
   selectedPayment = 'card';
@@ -40,24 +41,24 @@ export class CartStateService {
   items: CartItem[] = [
     {
       id: 1,
-      name: 'Field Jacket',
-      category: 'Outerwear',
+      name: this.transloco.translate('cart.items.fieldJacket.name'),
+      category: this.transloco.translate('cart.items.fieldJacket.category'),
       price: 128,
       quantity: 1,
       accent: '#214b57',
-      variant: 'Deep Teal / M',
-      delivery: 'Arrives Jun 14-17',
+      variant: this.transloco.translate('cart.items.fieldJacket.variant'),
+      delivery: this.transloco.translate('cart.items.fieldJacket.delivery'),
       image: '/assets/field_jacket_detail.png',
     },
     {
       id: 2,
-      name: 'Travel Kit',
-      category: 'Accessories',
+      name: this.transloco.translate('cart.items.travelKit.name'),
+      category: this.transloco.translate('cart.items.travelKit.category'),
       price: 46,
       quantity: 2,
       accent: '#9a5e34',
-      variant: 'Clay / One size',
-      delivery: 'Pickup ready tomorrow',
+      variant: this.transloco.translate('cart.items.travelKit.variant'),
+      delivery: this.transloco.translate('cart.items.travelKit.delivery'),
       image: '/assets/calm_commerce_hero.png',
     },
   ];
@@ -66,14 +67,14 @@ export class CartStateService {
   readonly discountRate = 0.1; // 10% discount
   readonly taxRate = 0.08;
   readonly shippingMethods = [
-    { id: 'standard', label: 'Standard Delivery', price: 12, note: 'Jun 14-17' },
-    { id: 'express', label: 'Express Delivery', price: 24, note: 'Jun 12-13' },
-    { id: 'pickup', label: 'Store Pickup', price: 0, note: 'Tomorrow' },
+    { id: 'standard', label: this.transloco.translate('cart.shippingMethods.standard.label'), price: 12, note: this.transloco.translate('cart.shippingMethods.standard.note') },
+    { id: 'express', label: this.transloco.translate('cart.shippingMethods.express.label'), price: 24, note: this.transloco.translate('cart.shippingMethods.express.note') },
+    { id: 'pickup', label: this.transloco.translate('cart.shippingMethods.pickup.label'), price: 0, note: this.transloco.translate('cart.shippingMethods.pickup.note') },
   ];
   readonly addOns = [
-    { name: 'Care Spray', price: 18, accent: '#76806f' },
-    { name: 'Gift Wrap', price: 8, accent: '#b57a3a' },
-    { name: 'Warranty Card', price: 12, accent: '#36596a' },
+    { name: this.transloco.translate('cart.addOns.careSpray'), price: 18, accent: '#76806f' },
+    { name: this.transloco.translate('cart.addOns.giftWrap'), price: 8, accent: '#b57a3a' },
+    { name: this.transloco.translate('cart.addOns.warrantyCard'), price: 12, accent: '#36596a' },
   ];
 
   get selectedShippingCost(): number {
@@ -81,7 +82,7 @@ export class CartStateService {
   }
 
   get discount(): number {
-    return this.promoMessage.includes('applied') ? Math.round(this.subtotal * this.discountRate) : 0;
+    return this.promoCode.trim().toUpperCase() === 'CALM10' && this.promoMessage !== this.transloco.translate('cart.messages.calm10Invalid') && this.promoMessage !== '' ? Math.round(this.subtotal * this.discountRate) : 0;
   }
 
   get tax(): number {
@@ -123,11 +124,11 @@ export class CartStateService {
 
   applyPromo(): void {
     if (this.promoCode.trim().toUpperCase() === 'CALM10') {
-      this.promoMessage = 'CALM10 discount (10%) is applied.';
+      this.promoMessage = this.transloco.translate('cart.messages.calm10Applied');
     } else if (this.promoCode.trim() === '') {
       this.promoMessage = '';
     } else {
-      this.promoMessage = 'That code is not valid for this basket.';
+      this.promoMessage = this.transloco.translate('cart.messages.calm10Invalid');
     }
   }
 
@@ -136,21 +137,21 @@ export class CartStateService {
     const existing = this.items.find((item) => item.name === name);
     if (existing) {
       existing.quantity++;
-      this.promoMessage = `Increased quantity of ${name}.`;
+      this.promoMessage = this.transloco.translate('cart.messages.increasedQuantity', { name });
     } else {
       const newItem: CartItem = {
         id: Date.now(),
         name: name,
-        category: 'Add-on',
+        category: this.transloco.translate('cart.items.addonCategory'),
         price: price,
         quantity: 1,
         accent: '#5d625d',
-        variant: 'Standard / One size',
-        delivery: 'Ships with order',
+        variant: this.transloco.translate('cart.items.addonVariant'),
+        delivery: this.transloco.translate('cart.items.addonDelivery'),
         image: '/assets/calm_commerce_hero.png',
       };
       this.items = [...this.items, newItem];
-      this.promoMessage = `Added ${name} add-on to order.`;
+      this.promoMessage = this.transloco.translate('cart.messages.addedAddon', { name });
     }
   }
 

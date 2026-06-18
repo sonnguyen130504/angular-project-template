@@ -1,45 +1,46 @@
+<ng-container *transloco="let t">
       <app-ui-card class="summary-card">
-        <h3>Order Summary</h3>
+        <h3>{{ t('cart.orderSummary.heading') }}</h3>
         
         <div class="summary-details">
           <div class="summary-row">
-            <span>Subtotal</span>
+            <span>{{ t('cart.orderSummary.subtotal') }}</span>
             <strong>{{ state.subtotal | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
           </div>
           @if (state.discount > 0) {
             <div class="summary-row discount">
-              <span>Promo discount (10%)</span>
+              <span>{{ t('cart.orderSummary.promoDiscount') }}</span>
               <strong>-{{ state.discount | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
             </div>
           }
           <div class="summary-row">
-            <span>Shipping</span>
-            <strong>{{ state.selectedShippingCost === 0 ? 'Free' : (state.selectedShippingCost | currency: 'USD' : 'symbol' : '1.0-0') }}</strong>
+            <span>{{ t('cart.orderSummary.shipping') }}</span>
+            <strong>{{ state.selectedShippingCost === 0 ? t('cart.free') : (state.selectedShippingCost | currency: 'USD' : 'symbol' : '1.0-0') }}</strong>
           </div>
           <div class="summary-row">
-            <span>Est. taxes (8%)</span>
+            <span>{{ t('cart.orderSummary.estTaxes') }}</span>
             <strong>{{ state.tax | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
           </div>
           <div class="summary-row total">
-            <span>Grand total</span>
+            <span>{{ t('cart.orderSummary.grandTotal') }}</span>
             <strong>{{ state.total | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
           </div>
         </div>
 
         <!-- Promo Code Input -->
         <div class="promo-box">
-          <label for="promo-input" class="sr-only">Promo Code</label>
+          <label for="promo-input" class="sr-only">{{ t('cart.orderSummary.promoPlaceholder') }}</label>
           <div class="promo-input-row">
             <input 
               type="text" 
               id="promo-input" 
-              placeholder="Promo code" 
+              [placeholder]="t('cart.orderSummary.promoPlaceholder')" 
               [(ngModel)]="state.promoCode" 
             />
-            <button type="button" (click)="state.applyPromo()">Apply</button>
+            <button type="button" (click)="state.applyPromo()">{{ t('cart.orderSummary.applyBtn') }}</button>
           </div>
           @if (state.promoMessage) {
-            <p class="promo-msg" [class.success]="state.promoMessage.includes('applied')">{{ state.promoMessage }}</p>
+            <p class="promo-msg" [class.success]="state.promoMessage.includes('applied') || state.promoMessage.includes('10%') || state.promoMessage.includes('added') || state.promoMessage.includes('Increased')">{{ state.promoMessage }}</p>
           }
         </div>
 
@@ -50,15 +51,15 @@
               class="primary-checkout-btn" 
               [disabled]="state.items.length === 0" 
               (click)="state.nextStep()"
-            >Proceed to Shipping</button>
+            >{{ t('cart.orderSummary.proceedToShipping') }}</button>
           }
           @if (state.activeStep === 2) {
-            <button class="primary-checkout-btn" (click)="state.nextStep()">Proceed to Payment</button>
-            <button class="secondary-checkout-btn" (click)="state.prevStep()">Back to Bag</button>
+            <button class="primary-checkout-btn" (click)="state.nextStep()">{{ t('cart.orderSummary.proceedToPayment') }}</button>
+            <button class="secondary-checkout-btn" (click)="state.prevStep()">{{ t('cart.orderSummary.backToBag') }}</button>
           }
           @if (state.activeStep === 3) {
-            <button class="primary-checkout-btn confirm-btn" (click)="state.nextStep()">Place Order</button>
-            <button class="secondary-checkout-btn" (click)="state.prevStep()">Back to Shipping</button>
+            <button class="primary-checkout-btn confirm-btn" (click)="state.nextStep()">{{ t('cart.orderSummary.placeOrder') }}</button>
+            <button class="secondary-checkout-btn" (click)="state.prevStep()">{{ t('cart.orderSummary.backToShipping') }}</button>
           }
         </div>
       </app-ui-card>
@@ -66,8 +67,8 @@
       <!-- Add-ons section -->
       @if (state.activeStep === 1) {
         <app-ui-card class="addons-card">
-          <h4>Customize your order</h4>
-          <p>Add care and protection setups for your items.</p>
+          <h4>{{ t('cart.orderSummary.customizeHeading') }}</h4>
+          <p>{{ t('cart.orderSummary.customizeBody') }}</p>
           <div class="addons-list">
             @for (addon of state.addOns; track addon.name) {
               <div class="addon-row">
@@ -75,9 +76,10 @@
                   <strong>{{ addon.name }}</strong>
                   <span>{{ addon.price | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
                 </div>
-                <button type="button" (click)="state.addOn(addon.name, addon.price)" aria-label="Add care item">Add</button>
+                <button type="button" (click)="state.addOn(addon.name, addon.price)" [attr.aria-label]="t('cart.orderSummary.addBtn')">{{ t('cart.orderSummary.addBtn') }}</button>
               </div>
             }
           </div>
         </app-ui-card>
       }
+</ng-container>

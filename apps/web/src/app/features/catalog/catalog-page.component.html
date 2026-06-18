@@ -1,58 +1,59 @@
-<app-page-section subtitle="Catalog" title="Shop listing">
+<ng-container *transloco="let t">
+<app-page-section [subtitle]="t('catalog.subtitle')" [title]="t('catalog.title')">
   <div sectionActions>
-    <app-ui-button variant="secondary" (click)="resetFilters()">Reset filters</app-ui-button>
+    <app-ui-button variant="secondary" (click)="resetFilters()">{{ t('catalog.resetFilters') }}</app-ui-button>
   </div>
 
   <!-- Category Spotlight Promo Banner -->
   <div class="catalog-spotlight-banner">
     <div class="banner-info">
-      <app-ui-badge tone="positive">Seasonal Release</app-ui-badge>
-      <h2>The Clay & Teal Collection</h2>
-      <p>Handcrafted travel accessories and outerwear designed for active workshops and transit comfort.</p>
+      <app-ui-badge tone="positive">{{ t('catalog.seasonalRelease') }}</app-ui-badge>
+      <h2>{{ t('catalog.bannerTitle') }}</h2>
+      <p>{{ t('catalog.bannerDesc') }}</p>
     </div>
     <div class="banner-action">
-      <button type="button" class="banner-btn" (click)="selectedCategory = 'Travel'; selectedColor = 'Teal'">Explore Travel Gear</button>
+      <button type="button" class="banner-btn" (click)="selectedCategory = 'Travel'; selectedColor = 'Teal'">{{ t('catalog.exploreTravelGear') }}</button>
     </div>
   </div>
 
   <div class="catalog-shell">
     <!-- Filters Sidebar Panel -->
-    <aside class="filters" aria-label="Catalog filters">
+    <aside class="filters" [attr.aria-label]="t('catalog.filters')">
       <div class="filter-head">
-        <app-ui-badge tone="info">Filters</app-ui-badge>
-        <strong>{{ filteredProducts.length }} matches</strong>
+        <app-ui-badge tone="info">{{ t('catalog.filters') }}</app-ui-badge>
+        <strong>{{ filteredProducts.length }} {{ t('catalog.matches') }}</strong>
       </div>
 
       <label class="search">
-        <span>Search products</span>
-        <input [(ngModel)]="search" placeholder="Search by name or category" />
+        <span>{{ t('catalog.searchProducts') }}</span>
+        <input [(ngModel)]="search" [placeholder]="t('catalog.searchPlaceholder')" />
       </label>
 
       <label>
-        <span>Category</span>
+        <span>{{ t('catalog.category') }}</span>
         <p-select [options]="categories" [(ngModel)]="selectedCategory" class="full-width-select" />
       </label>
 
       <label>
-        <span>Availability</span>
+        <span>{{ t('catalog.availability') }}</span>
         <p-select [options]="stockOptions" [(ngModel)]="selectedStock" class="full-width-select" />
       </label>
 
       <label>
-        <span>Color family</span>
+        <span>{{ t('catalog.colorFamily') }}</span>
         <p-select [options]="colorOptions" [(ngModel)]="selectedColor" class="full-width-select" />
       </label>
 
       <label class="range">
-        <span>Price range</span>
+        <span>{{ t('catalog.priceRange') }}</span>
         <p-slider [(ngModel)]="priceRange" [range]="true" [min]="20" [max]="220" />
-        <strong>{{ priceRange[0] | currency: 'USD' : 'symbol' : '1.0-0' }} to {{ priceRange[1] | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+        <strong>{{ priceRange[0] | currency: 'USD' : 'symbol' : '1.0-0' }} {{ t('catalog.to') }} {{ priceRange[1] | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
       </label>
 
       <label class="range">
-        <span>Minimum rating</span>
+        <span>{{ t('catalog.minimumRating') }}</span>
         <p-slider [(ngModel)]="minimumRating" [min]="4" [max]="5" [step]="0.1" />
-        <strong>{{ minimumRating }} stars</strong>
+        <strong>{{ minimumRating }} {{ t('catalog.stars') }}</strong>
       </label>
     </aside>
 
@@ -60,23 +61,23 @@
     <section class="results">
       <div class="toolbar">
         <div>
-          <h3>All products</h3>
-          <p>Filters, comparison, wishlist and quick view states for commerce pages.</p>
+          <h3>{{ t('catalog.allProducts') }}</h3>
+          <p>{{ t('catalog.allProductsDesc') }}</p>
         </div>
 
         <div class="toolbar-actions">
           <label>
-            <span>Sort</span>
+            <span>{{ t('catalog.sort') }}</span>
             <p-select [options]="sortOptions" [(ngModel)]="sort" />
           </label>
-          <div class="view-switch" aria-label="View mode">
-            <button type="button" [class.is-active]="viewMode === 'grid'" (click)="setViewMode('grid')" aria-label="Grid view">
+          <div class="view-switch" [attr.aria-label]="t('catalog.viewMode')">
+            <button type="button" [class.is-active]="viewMode === 'grid'" (click)="setViewMode('grid')" [attr.aria-label]="t('catalog.gridView')">
               <i class="pi pi-th-large"></i>
             </button>
-            <button type="button" [class.is-active]="viewMode === 'list'" (click)="setViewMode('list')" aria-label="List view">
+            <button type="button" [class.is-active]="viewMode === 'list'" (click)="setViewMode('list')" [attr.aria-label]="t('catalog.listView')">
               <i class="pi pi-list"></i>
             </button>
-            <button type="button" [class.is-active]="viewMode === 'canvas'" (click)="setViewMode('canvas')" aria-label="Spatial Canvas view">
+            <button type="button" [class.is-active]="viewMode === 'canvas'" (click)="setViewMode('canvas')" [attr.aria-label]="t('catalog.spatialCanvasView')">
               <i class="pi pi-map"></i>
             </button>
           </div>
@@ -86,21 +87,21 @@
       <!-- Active Filters Summary Strip -->
       @if (search || selectedCategory !== 'All' || selectedColor !== 'Any' || priceRange[0] !== 20 || priceRange[1] !== 220) {
         <div class="active-filters-strip">
-          <span class="strip-label">Active filters:</span>
+          <span class="strip-label">{{ t('catalog.activeFilters') }}:</span>
           <div class="filter-pills">
             @if (search) {
-              <span class="filter-pill">Query: "{{ search }}" <i class="pi pi-times" (click)="search = ''"></i></span>
+              <span class="filter-pill">{{ t('catalog.query') }}: "{{ search }}" <i class="pi pi-times" (click)="search = ''"></i></span>
             }
             @if (selectedCategory !== 'All') {
-              <span class="filter-pill">Cat: {{ selectedCategory }} <i class="pi pi-times" (click)="selectedCategory = 'All'"></i></span>
+              <span class="filter-pill">{{ t('catalog.cat') }}: {{ t(tKey('opt', selectedCategory)) }} <i class="pi pi-times" (click)="selectedCategory = 'All'"></i></span>
             }
             @if (selectedColor !== 'Any') {
-              <span class="filter-pill">Color: {{ selectedColor }} <i class="pi pi-times" (click)="selectedColor = 'Any'"></i></span>
+              <span class="filter-pill">{{ t('catalog.color') }}: {{ t(tKey('opt', selectedColor)) }} <i class="pi pi-times" (click)="selectedColor = 'Any'"></i></span>
             }
             @if (priceRange[0] !== 20 || priceRange[1] !== 220) {
               <span class="filter-pill">${{ priceRange[0] }}-${{ priceRange[1] }} <i class="pi pi-times" (click)="priceRange = [20, 220]"></i></span>
             }
-            <button type="button" class="clear-pills-btn" (click)="resetFilters()">Clear all</button>
+            <button type="button" class="clear-pills-btn" (click)="resetFilters()">{{ t('catalog.clearAll') }}</button>
           </div>
         </div>
       }
@@ -138,10 +139,10 @@
             <div class="axis-line y-axis"></div>
 
             <!-- Axis Labels -->
-            <div class="axis-label x-axis-label-left">Lower Price</div>
-            <div class="axis-label x-axis-label-right">Higher Price</div>
-            <div class="axis-label y-axis-label-top">Higher Rating</div>
-            <div class="axis-label y-axis-label-bottom">Lower Rating</div>
+            <div class="axis-label x-axis-label-left">{{ t('catalog.lowerPrice') }}</div>
+            <div class="axis-label x-axis-label-right">{{ t('catalog.higherPrice') }}</div>
+            <div class="axis-label y-axis-label-top">{{ t('catalog.higherRating') }}</div>
+            <div class="axis-label y-axis-label-bottom">{{ t('catalog.lowerRating') }}</div>
 
             @for (product of filteredProducts; track product.name) {
               <div 
@@ -154,20 +155,20 @@
                     <div class="node-badge">{{ product.price | currency }}</div>
                   </div>
                   <div class="node-info">
-                    <h4>{{ product.name }}</h4>
+                    <h4>{{ t(tKey('prod', product.name)) }}</h4>
                     <div class="node-rating">
                       <i class="pi pi-star-fill"></i>
                       <span>{{ product.rating }}</span>
                     </div>
                   </div>
                   <div class="node-actions">
-                    <button class="node-btn" (click)="openQuickView(product.name)" title="Quick View">
+                    <button class="node-btn" (click)="openQuickView(product.name)" [title]="t('catalog.quickView')">
                       <i class="pi pi-eye"></i>
                     </button>
-                    <button class="node-btn" [class.is-active]="wishlist.has(product.name)" (click)="toggleWishlist(product.name)" title="Wishlist">
+                    <button class="node-btn" [class.is-active]="wishlist.has(product.name)" (click)="toggleWishlist(product.name)" [title]="t('catalog.wishlist')">
                       <i class="pi pi-heart"></i>
                     </button>
-                    <button class="node-btn primary" title="Add to Cart">
+                    <button class="node-btn primary" [title]="t('catalog.addToCart')">
                       <i class="pi pi-shopping-cart"></i>
                     </button>
                   </div>
@@ -175,24 +176,24 @@
               </div>
             } @empty {
               <div class="canvas-empty-state">
-                <app-ui-badge tone="warning">No results</app-ui-badge>
-                <h3>No products match these filters</h3>
-                <p>Pan back to center or reset filters.</p>
+                <app-ui-badge tone="warning">{{ t('catalog.noResults') }}</app-ui-badge>
+                <h3>{{ t('catalog.noProductsMatch') }}</h3>
+                <p>{{ t('catalog.panBackToCenter') }}</p>
               </div>
             }
           </div>
 
           <!-- Zoom & Reset HUD Controls -->
           <div class="canvas-hud-controls">
-            <button class="hud-btn" (click)="zoomIn()" title="Zoom In"><i class="pi pi-plus"></i></button>
-            <button class="hud-btn" (click)="zoomOut()" title="Zoom Out"><i class="pi pi-minus"></i></button>
-            <button class="hud-btn reset-btn" (click)="resetZoom()" title="Reset view"><i class="pi pi-refresh"></i> Reset</button>
+            <button class="hud-btn" (click)="zoomIn()" [title]="t('catalog.zoomIn')"><i class="pi pi-plus"></i></button>
+            <button class="hud-btn" (click)="zoomOut()" [title]="t('catalog.zoomOut')"><i class="pi pi-minus"></i></button>
+            <button class="hud-btn reset-btn" (click)="resetZoom()" [title]="t('catalog.resetView')"><i class="pi pi-refresh"></i> {{ t('catalog.reset') }}</button>
             <span class="hud-zoom-lbl">{{ (zoom * 100).toFixed(0) }}%</span>
           </div>
 
           <!-- Interactive Hint Banner -->
           <div class="canvas-hud-hint">
-            <i class="pi pi-info-circle"></i> Drag Background to Pan &bull; Mouse Wheel to Zoom
+            <i class="pi pi-info-circle"></i> {{ t('catalog.dragBackgroundHint') }} &bull; {{ t('catalog.mouseWheelZoomHint') }}
           </div>
         </div>
       } @else {
@@ -202,41 +203,41 @@
               <div class="product-media">
                 <img [src]="product.image" [alt]="product.name" class="product-img" />
                 <div class="swatch" [style.background]="product.color">
-                  <span>{{ product.tag }}</span>
+                  <span>{{ t(tKey('opt', product.tag)) }}</span>
                 </div>
               </div>
               <div class="product-copy">
-                <p class="category">{{ product.category }}</p>
-                <h3>{{ product.name }}</h3>
+                <p class="category">{{ t(tKey('opt', product.category)) }}</p>
+                <h3>{{ t(tKey('prod', product.name)) }}</h3>
                 <div class="rating-row">
                   <span class="rating-stars"><i class="pi pi-star-fill"></i> {{ product.rating }}</span>
-                  <span class="stock-lbl" [class.low-stock]="product.stock === 'Low stock'">{{ product.stock }}</span>
+                  <span class="stock-lbl" [class.low-stock]="product.stock === 'Low stock'">{{ t(tKey('opt', product.stock)) }}</span>
                 </div>
               </div>
               <div class="product-actions">
                 <div class="actions-row-top">
                   <strong>{{ product.price | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
                   <div class="quick-actions">
-                    <button type="button" [class.is-active]="wishlist.has(product.name)" (click)="toggleWishlist(product.name)" aria-label="Add to wishlist">
+                    <button type="button" [class.is-active]="wishlist.has(product.name)" (click)="toggleWishlist(product.name)" [attr.aria-label]="t('catalog.addToWishlist')">
                       <i class="pi pi-heart"></i>
                     </button>
-                    <button type="button" [class.is-active]="compare.has(product.name)" (click)="toggleCompare(product.name)" aria-label="Compare">
+                    <button type="button" [class.is-active]="compare.has(product.name)" (click)="toggleCompare(product.name)" [attr.aria-label]="t('catalog.compare')">
                       <i class="pi pi-clone"></i>
                     </button>
-                    <button type="button" (click)="openQuickView(product.name)" aria-label="Quick view">
+                    <button type="button" (click)="openQuickView(product.name)" [attr.aria-label]="t('catalog.quickView')">
                       <i class="pi pi-eye"></i>
                     </button>
                   </div>
                 </div>
-                <app-ui-button class="add-btn full-width">Add to cart</app-ui-button>
+                <app-ui-button class="add-btn full-width">{{ t('catalog.addToCart') }}</app-ui-button>
               </div>
             </app-ui-card>
           } @empty {
             <app-ui-card class="empty">
-              <app-ui-badge tone="warning">No results</app-ui-badge>
-              <h3>No products match these filters</h3>
-              <p>Clear one filter, lower the minimum rating, or reset the catalog.</p>
-              <app-ui-button variant="secondary" (click)="resetFilters()">Reset filters</app-ui-button>
+              <app-ui-badge tone="warning">{{ t('catalog.noResults') }}</app-ui-badge>
+              <h3>{{ t('catalog.noProductsMatch') }}</h3>
+              <p>{{ t('catalog.clearFilterHint') }}</p>
+              <app-ui-button variant="secondary" (click)="resetFilters()">{{ t('catalog.resetFilters') }}</app-ui-button>
             </app-ui-card>
           }
         </div>
@@ -244,9 +245,9 @@
 
       <div class="result-footer">
         <div class="wishlist-status">
-          Wishlist: <strong>{{ wishlist.size }}</strong> &middot; Compare: <strong>{{ compare.size }}</strong>
+          {{ t('catalog.wishlistLabel') }}: <strong>{{ wishlist.size }}</strong> &middot; {{ t('catalog.compareLabel') }}: <strong>{{ compare.size }}</strong>
           @if (quickViewProduct) {
-            &middot; Quick view: <strong>{{ quickViewProduct }}</strong>
+            &middot; {{ t('catalog.quickViewLabel') }}: <strong>{{ t(tKey('prod', quickViewProduct)) }}</strong>
           }
         </div>
         <p-paginator
@@ -266,9 +267,9 @@
       <div class="compare-drawer-header">
         <div class="compare-title">
           <i class="pi pi-clone"></i>
-          <strong>Product Comparison Matrix ({{ compare.size }} selected)</strong>
+          <strong>{{ t('catalog.productComparisonMatrix') }} ({{ compare.size }} {{ t('catalog.selected') }})</strong>
         </div>
-        <button type="button" class="compare-clear-all" (click)="clearCompare()">Clear comparison</button>
+        <button type="button" class="compare-clear-all" (click)="clearCompare()">{{ t('catalog.clearComparison') }}</button>
       </div>
 
       <div class="compare-matrix-grid">
@@ -277,22 +278,22 @@
             <div class="compare-card-head">
               <img [src]="item.image" [alt]="item.name" />
               <div>
-                <h4>{{ item.name }}</h4>
-                <small>{{ item.category }}</small>
+                <h4>{{ t(tKey('prod', item.name)) }}</h4>
+                <small>{{ t(tKey('opt', item.category)) }}</small>
               </div>
             </div>
             <div class="compare-card-body">
               <div class="attribute-row">
-                <span>Price:</span>
+                <span>{{ t('catalog.price') }}:</span>
                 <strong>{{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
               </div>
               <div class="attribute-row">
-                <span>Rating:</span>
+                <span>{{ t('catalog.rating') }}:</span>
                 <strong><i class="pi pi-star-fill"></i> {{ item.rating }}</strong>
               </div>
               <div class="attribute-row">
-                <span>Stock:</span>
-                <span class="stock-status" [class.low-stock]="item.stock === 'Low stock'">{{ item.stock }}</span>
+                <span>{{ t('catalog.stock') }}:</span>
+                <span class="stock-status" [class.low-stock]="item.stock === 'Low stock'">{{ t(tKey('opt', item.stock)) }}</span>
               </div>
             </div>
           </div>
@@ -301,3 +302,4 @@
     </div>
   }
 </app-page-section>
+</ng-container>

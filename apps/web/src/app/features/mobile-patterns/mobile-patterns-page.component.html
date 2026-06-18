@@ -1,8 +1,9 @@
+<ng-container *transloco="let t">
 <div class="showroom-layout">
   <aside class="sidebar">
     <header class="sidebar-header">
-      <h2>Mobile Patterns</h2>
-      <p>A live simulator showcasing impeccable responsive behaviors across the template.</p>
+      <h2>{{ t('mobilePatterns.mobile_patterns') }}</h2>
+      <p>{{ t('mobilePatterns.a_live_simulator_showcasing_im') }}</p>
     </header>
 
     <nav class="pattern-nav">
@@ -22,7 +23,7 @@
   <main class="canvas">
     <div class="canvas-toolbar">
       <span>{{ activePattern().name }} Preview</span>
-      <span class="badge">Live iframe</span>
+      <span class="badge">{{ t('mobilePatterns.live_iframe') }}</span>
     </div>
     
     <div class="simulator-wrapper">
@@ -30,9 +31,11 @@
         <iframe 
           [src]="iframeUrl()" 
           class="mobile-iframe" 
-          title="Mobile Viewport">
+          [title]="t('mobilePatterns.mobile_viewport')">
         </iframe>
       </app-mobile-simulator>
     </div>
   </main>
 </div>
+
+</ng-container>

@@ -1,3 +1,4 @@
+<ng-container *transloco="let t">
 <div class="storytelling-layout" [style.--active-glow]="glowColor()">
   <!-- Sticky Left Column: 3D Model Visualizer -->
   <div class="visualizer-pane">
@@ -22,14 +23,14 @@
     @if (isLoading()) {
       <div class="loading-overlay">
         <div class="loading-spinner"></div>
-        <span class="loading-text">Calibrating 3D Visualizer...</span>
+        <span class="loading-text">{{ t('product-3dStorytelling.calibrating_3d_visualizer') }}</span>
       </div>
     }
 
     <!-- Scroll Guide Alert (Desktop Only) -->
     <div class="scroll-guide desktop-only" [class.hidden]="isLoading()">
       <i class="pi pi-chevron-down animate-bounce"></i>
-      <span>Scroll right panel to explore</span>
+      <span>{{ t('product-3dStorytelling.scroll_right_panel_to_explore') }}</span>
     </div>
 
     <!-- Mobile Active Slide Card Overlay -->
@@ -43,17 +44,15 @@
       
       <div class="mobile-card-actions">
         <button class="nav-arrow-btn" [disabled]="activeSlideIndex() === 0" (click)="scrollToSlide(activeSlideIndex() - 1)">
-          <i class="pi pi-chevron-left"></i> Prev
-        </button>
+          <i class="pi pi-chevron-left"></i>{{ t('product-3dStorytelling.prev') }}</button>
         
         @if (activeSlideIndex() === slides.length - 1) {
           <div class="mobile-outro-actions">
-            <a href="/3d-showcase" class="action-link primary-action">Configurator</a>
-            <a href="/tactile-sound" class="action-link secondary-action">Synth</a>
+            <a href="/3d-showcase" class="action-link primary-action">{{ t('product-3dStorytelling.configurator') }}</a>
+            <a href="/tactile-sound" class="action-link secondary-action">{{ t('product-3dStorytelling.synth') }}</a>
           </div>
         } @else {
-          <button class="nav-arrow-btn" (click)="scrollToSlide(activeSlideIndex() + 1)">
-            Next <i class="pi pi-chevron-right"></i>
+          <button class="nav-arrow-btn" (click)="scrollToSlide(activeSlideIndex() + 1)">{{ t('product-3dStorytelling.next') }}<i class="pi pi-chevron-right"></i>
           </button>
         }
       </div>
@@ -95,11 +94,9 @@
               
               @if ($index === slides.length - 1) {
                 <div class="outro-actions">
-                  <a href="/3d-showcase" class="action-link primary-action">
-                    Open Configurator <i class="pi pi-sliders-h"></i>
+                  <a href="/3d-showcase" class="action-link primary-action">{{ t('product-3dStorytelling.open_configurator') }}<i class="pi pi-sliders-h"></i>
                   </a>
-                  <a href="/tactile-sound" class="action-link secondary-action">
-                    Test Synthesizer <i class="pi pi-volume-up"></i>
+                  <a href="/tactile-sound" class="action-link secondary-action">{{ t('product-3dStorytelling.test_synthesizer') }}<i class="pi pi-volume-up"></i>
                   </a>
                 </div>
               }
@@ -110,3 +107,5 @@
     </div>
   </div>
 </div>
+
+</ng-container>

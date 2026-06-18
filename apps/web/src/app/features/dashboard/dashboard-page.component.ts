@@ -10,6 +10,7 @@ import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.c
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
 import { UiStatComponent } from '@app/shared/ui/ui-stat/ui-stat.component';
+import { TranslocoService, TranslocoModule } from '@jsverse/transloco';
 
 type OrderRow = {
   id: string;
@@ -34,6 +35,7 @@ type OrderRow = {
     UiBadgeComponent,
     UiButtonComponent,
     UiStatComponent,
+    TranslocoModule,
   ],
   providers: [MessageService],
   templateUrl: './dashboard-page.component.html',
@@ -143,6 +145,7 @@ export class DashboardPageComponent {
   }
 
   private readonly messages = inject(MessageService);
+  private readonly transloco = inject(TranslocoService);
 
   refresh(): void {
     this.showSkeleton = true;
@@ -151,12 +154,8 @@ export class DashboardPageComponent {
     }, 500);
     this.messages.add({
       severity: 'success',
-      summary: 'Dashboard refreshed',
-      detail: `${this.selectedRange} metrics refreshed for ${this.selectedChannel}.`,
+      summary: this.transloco.translate('dashboard.messages.refreshSummary'),
+      detail: this.transloco.translate('dashboard.messages.refreshDetail', { range: this.transloco.translate('dashboard.ranges.' + this.selectedRange), channel: this.transloco.translate('dashboard.channelOptions.' + this.selectedChannel) }),
     });
   }
 }
-
-
-
-

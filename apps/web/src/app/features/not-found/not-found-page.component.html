@@ -1,35 +1,31 @@
+<ng-container *transloco="let t">
 <div class="not-found-hero">
   <div class="not-found-glyph" aria-hidden="true">404</div>
   <div class="not-found-icon-ring">
     <i class="pi pi-compass"></i>
   </div>
-  <h1 class="not-found-title">Page not found</h1>
-  <p class="not-found-desc">
-    The page you're looking for may have moved, been removed, or never existed.
-    Check the URL or navigate back to safety.
-  </p>
+  <h1 class="not-found-title">{{ t('notFound.page_not_found') }}</h1>
+  <p class="not-found-desc">{{ t('notFound.the_page_you_re_looking_for_ma') }}</p>
   <div class="not-found-actions">
     <a class="nf-btn primary" routerLink="/">
-      <i class="pi pi-home"></i>
-      Back to home
-    </a>
+      <i class="pi pi-home"></i>{{ t('notFound.back_to_home') }}</a>
     <a class="nf-btn secondary" routerLink="/catalog">
-      <i class="pi pi-th-large"></i>
-      View catalog
-    </a>
+      <i class="pi pi-th-large"></i>{{ t('notFound.view_catalog') }}</a>
   </div>
 
-  <div class="route-recovery" aria-label="Suggested routes">
+  <div class="route-recovery" [aria-label]="t('notFound.suggested_routes')">
     <div class="recovery-search">
       <i class="pi pi-search"></i>
-      <span>Try searching from the top navigation, or jump to a known route below.</span>
+      <span>{{ t('notFound.try_searching_from_the_top_nav') }}</span>
     </div>
     <div class="quick-routes">
-      <a routerLink="/dashboard">Dashboard</a>
-      <a routerLink="/inbox">Inbox</a>
-      <a routerLink="/tasks">Tasks</a>
-      <a routerLink="/component-gallery">Components</a>
-      <a routerLink="/setup">Setup</a>
+      <a routerLink="/dashboard">{{ t('notFound.dashboard') }}</a>
+      <a routerLink="/inbox">{{ t('notFound.inbox') }}</a>
+      <a routerLink="/tasks">{{ t('notFound.tasks') }}</a>
+      <a routerLink="/component-gallery">{{ t('notFound.components') }}</a>
+      <a routerLink="/setup">{{ t('notFound.setup') }}</a>
     </div>
   </div>
 </div>
+
+</ng-container>

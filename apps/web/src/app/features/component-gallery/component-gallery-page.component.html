@@ -1,94 +1,83 @@
-<app-page-section subtitle="Reference Catalog" title="Interactive Component Explorer">
+<ng-container *transloco="let t">
+<app-page-section sub[title]="t('componentGallery.reference_catalog')" [title]="t('componentGallery.interactive_component_explorer')">
   <div class="explorer-intro">
-    <p class="intro-desc">
-      Configure props in real-time, inspect visual states (default, hover, active), and copy implementation-ready templates.
-    </p>
+    <p class="intro-desc">{{ t('componentGallery.configure_props_in_real_time_i') }}</p>
   </div>
 
   <div class="explorer-workspace">
     <!-- Left panel: Navigation & Configurations -->
     <div class="explorer-sidebar">
-      <div class="category-tabs" role="tablist" aria-label="Explorer categories">
+      <div class="category-tabs" role="tablist" [aria-label]="t('componentGallery.explorer_categories')">
         <button
           type="button"
           class="category-tab-btn"
           [class.active]="state.activeExplorerTab === 'button'"
           (click)="state.activeExplorerTab = 'button'"
           >
-          <i class="pi pi-box"></i> Buttons
-        </button>
+          <i class="pi pi-box"></i>{{ t('componentGallery.buttons') }}</button>
         <button
           type="button"
           class="category-tab-btn"
           [class.active]="state.activeExplorerTab === 'badge'"
           (click)="state.activeExplorerTab = 'badge'"
           >
-          <i class="pi pi-bookmark"></i> Badges
-        </button>
+          <i class="pi pi-bookmark"></i>{{ t('componentGallery.badges') }}</button>
         <button
           type="button"
           class="category-tab-btn"
           [class.active]="state.activeExplorerTab === 'card'"
           (click)="state.activeExplorerTab = 'card'"
           >
-          <i class="pi pi-clone"></i> Cards
-        </button>
+          <i class="pi pi-clone"></i>{{ t('componentGallery.cards') }}</button>
         <button
           type="button"
           class="category-tab-btn"
           [class.active]="state.activeExplorerTab === 'dialog'"
           (click)="state.activeExplorerTab = 'dialog'"
           >
-          <i class="pi pi-window-maximize"></i> Dialogs
-        </button>
+          <i class="pi pi-window-maximize"></i>{{ t('componentGallery.dialogs') }}</button>
         <button
           type="button"
           class="category-tab-btn"
           [class.active]="state.activeExplorerTab === 'toggle'"
           (click)="state.activeExplorerTab = 'toggle'"
           >
-          <i class="pi pi-toggle-on"></i> Toggles
-        </button>
+          <i class="pi pi-toggle-on"></i>{{ t('componentGallery.toggles') }}</button>
         <button
           type="button"
           class="category-tab-btn"
           [class.active]="state.activeExplorerTab === 'input'"
           (click)="state.activeExplorerTab = 'input'"
           >
-          <i class="pi pi-pencil"></i> Float Inputs
-        </button>
+          <i class="pi pi-pencil"></i>{{ t('componentGallery.float_inputs') }}</button>
         <button
           type="button"
           class="category-tab-btn"
           [class.active]="state.activeExplorerTab === 'toast'"
           (click)="state.activeExplorerTab = 'toast'"
           >
-          <i class="pi pi-bell"></i> Toast Alerts
-        </button>
+          <i class="pi pi-bell"></i>{{ t('componentGallery.toast_alerts') }}</button>
         <button
           type="button"
           class="category-tab-btn"
           [class.active]="state.activeExplorerTab === 'palette'"
           (click)="state.activeExplorerTab = 'palette'"
           >
-          <i class="pi pi-search"></i> Command Palette
-        </button>
+          <i class="pi pi-search"></i>{{ t('componentGallery.command_palette') }}</button>
         <button
           type="button"
           class="category-tab-btn"
           [class.active]="state.activeExplorerTab === 'skeleton'"
           (click)="state.activeExplorerTab = 'skeleton'"
           >
-          <i class="pi pi-align-left"></i> Skeleton Loader
-        </button>
+          <i class="pi pi-align-left"></i>{{ t('componentGallery.skeleton_loader') }}</button>
         <button
           type="button"
           class="category-tab-btn"
           [class.active]="state.activeExplorerTab === 'spinner'"
           (click)="state.activeExplorerTab = 'spinner'"
           >
-          <i class="pi pi-spinner-dotted"></i> Premium Spinner
-        </button>
+          <i class="pi pi-spinner-dotted"></i>{{ t('componentGallery.premium_spinner') }}</button>
       </div>
 
       <app-component-properties-knobs></app-component-properties-knobs>
@@ -106,29 +95,29 @@
 
   <section class="product-patterns" aria-labelledby="product-patterns-title">
     <div class="pattern-head">
-      <app-ui-badge tone="info">Product app patterns</app-ui-badge>
-      <h3 id="product-patterns-title">Compact references for new workspace pages</h3>
+      <app-ui-badge tone="info">{{ t('componentGallery.product_app_patterns') }}</app-ui-badge>
+      <h3 id="product-patterns-title">{{ t('componentGallery.compact_references_for_new_wor') }}</h3>
     </div>
     <div class="pattern-grid">
       <div class="pattern-card">
-        <span class="status-chip info">Timeline</span>
-        <strong>Audit trail row</strong>
-        <p>Actor, action, target, severity, and timestamp in one scannable line.</p>
+        <span class="status-chip info">{{ t('componentGallery.timeline') }}</span>
+        <strong>{{ t('componentGallery.audit_trail_row') }}</strong>
+        <p>{{ t('componentGallery.actor_action_target_severity_a') }}</p>
       </div>
       <div class="pattern-card">
-        <span class="status-chip success">Permission</span>
-        <strong>Role matrix</strong>
-        <p>Use enabled chips for access rather than dense checkboxes in every cell.</p>
+        <span class="status-chip success">{{ t('componentGallery.permission') }}</span>
+        <strong>{{ t('componentGallery.role_matrix') }}</strong>
+        <p>{{ t('componentGallery.use_enabled_chips_for_access_r') }}</p>
       </div>
       <div class="pattern-card">
-        <span class="status-chip warning">Upload</span>
-        <strong>File dropzone</strong>
-        <p>Drop state, queued state, empty folder, and selected metadata panel.</p>
+        <span class="status-chip warning">{{ t('componentGallery.upload') }}</span>
+        <strong>{{ t('componentGallery.file_dropzone') }}</strong>
+        <p>{{ t('componentGallery.drop_state_queued_state_empty_') }}</p>
       </div>
       <div class="pattern-card">
-        <span class="status-chip neutral">Command</span>
-        <strong>Route search</strong>
-        <p>Small command search affordance for jumping across reference pages.</p>
+        <span class="status-chip neutral">{{ t('componentGallery.command') }}</span>
+        <strong>{{ t('componentGallery.route_search') }}</strong>
+        <p>{{ t('componentGallery.small_command_search_affordanc') }}</p>
       </div>
     </div>
   </section>
@@ -141,16 +130,14 @@
     [style]="{ width: state.dialogSize === 'small' ? 'min(92vw, 420px)' : 'min(92vw, 640px)' }"
     >
     <div class="dialog-content-inner">
-      <p style="color: var(--muted); line-height: 1.6; margin-bottom: 24px;">
-        This modal dialog is dynamically compiled using Sion Studio parameters. Click actions below will dismiss this view.
-      </p>
+      <p style="color: var(--muted); line-height: 1.6; margin-bottom: 24px;">{{ t('componentGallery.this_modal_dialog_is_dynamical') }}</p>
     </div>
     <div class="dialog-actions">
       @if (state.dialogActionCount === 2) {
-        <app-ui-button (click)="state.dialogVisible = false">Confirm Action</app-ui-button>
-        <app-ui-button variant="secondary" (click)="state.dialogVisible = false">Cancel</app-ui-button>
+        <app-ui-button (click)="state.dialogVisible = false">{{ t('componentGallery.confirm_action') }}</app-ui-button>
+        <app-ui-button variant="secondary" (click)="state.dialogVisible = false">{{ t('componentGallery.cancel') }}</app-ui-button>
       } @else {
-        <app-ui-button (click)="state.dialogVisible = false" style="width: 100%;">Close</app-ui-button>
+        <app-ui-button (click)="state.dialogVisible = false" style="width: 100%;">{{ t('componentGallery.close') }}</app-ui-button>
       }
     </div>
   </p-dialog>
@@ -170,10 +157,12 @@
             <p class="toast-msg">{{ state.toastMessage }}</p>
           </div>
         </div>
-        <button type="button" class="toast-close-btn" (click)="state.closeToast()" aria-label="Close notification" id="btn-close-toast">
+        <button type="button" class="toast-close-btn" (click)="state.closeToast()" [aria-label]="t('componentGallery.close_notification')" id="btn-close-toast">
           <i class="pi pi-times" aria-hidden="true"></i>
         </button>
       </div>
     }
   </div>
 </app-page-section>
+
+</ng-container>

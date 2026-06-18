@@ -1,3 +1,4 @@
+<ng-container *transloco="let t">
 <app-page-section
   heading="3D Product Showcase"
   subheading="Explore products in immersive 3D — rotate, zoom, and interact with every detail."
@@ -35,7 +36,7 @@
         <div class="viewer-overlay-controls">
           <div class="viewer-badge">
             <i class="pi pi-box"></i>
-            <span>3D Interactive</span>
+            <span>{{ t('product-3dShowcase.3d_interactive') }}</span>
           </div>
           <button
             class="audio-toggle-btn"
@@ -70,7 +71,7 @@
     <div class="info-column">
       <!-- Product Switcher -->
       <div class="switcher-section-inline">
-        <h3 class="section-label">Select Product</h3>
+        <h3 class="section-label">{{ t('product-3dShowcase.select_product') }}</h3>
         <app-product-switcher
           [products]="products"
           [activeId]="activeProduct().id"
@@ -88,10 +89,10 @@
       <!-- Customizer Panel (PBR & Variant Customization) -->
       <div class="product-customizer">
         @if (activeProduct().id === 'shoe') {
-          <h3 class="section-label">Style Customizer</h3>
+          <h3 class="section-label">{{ t('product-3dShowcase.style_customizer') }}</h3>
           <!-- Variant selector -->
           <div class="customizer-section">
-            <span class="customizer-label">Select Design Style</span>
+            <span class="customizer-label">{{ t('product-3dShowcase.select_design_style') }}</span>
             <div class="part-pills">
               @for (variant of shoeVariants; track variant) {
                 <button
@@ -105,15 +106,13 @@
               }
             </div>
           </div>
-          <p class="description-text mt-2" style="font-size: 0.75rem; font-style: italic; line-height: 1.4;">
-            * This high-fidelity model is styled using pre-designed texture variant coordinates.
-          </p>
+          <p class="description-text mt-2" style="font-size: 0.75rem; font-style: italic; line-height: 1.4;">{{ t('product-3dShowcase.this_high_fidelity_model_is_st') }}</p>
         } @else {
-          <h3 class="section-label">Real-time PBR Customizer</h3>
+          <h3 class="section-label">{{ t('product-3dShowcase.real_time_pbr_customizer') }}</h3>
           
           <!-- Part selector -->
           <div class="customizer-section">
-            <span class="customizer-label">Select Part</span>
+            <span class="customizer-label">{{ t('product-3dShowcase.select_part') }}</span>
             <div class="part-pills">
               @for (part of currentParts(); track part.name) {
                 <button
@@ -130,7 +129,7 @@
 
           <!-- Color Swatches -->
           <div class="customizer-section">
-            <span class="customizer-label">Material Color</span>
+            <span class="customizer-label">{{ t('product-3dShowcase.material_color') }}</span>
             <div class="color-swatches">
               @for (color of premiumColors; track color.name) {
                 <button
@@ -153,7 +152,7 @@
           <div class="customizer-section sliders-section">
             <div class="slider-row">
               <div class="slider-header">
-                <span class="customizer-label">Roughness / Gloss</span>
+                <span class="customizer-label">{{ t('product-3dShowcase.roughness_gloss') }}</span>
                 <span class="slider-value">{{ (selectedPartProps().roughness ?? 0.5) | number:'1.1-1' }}</span>
               </div>
               <input
@@ -169,7 +168,7 @@
 
             <div class="slider-row">
               <div class="slider-header">
-                <span class="customizer-label">Metallic Factor</span>
+                <span class="customizer-label">{{ t('product-3dShowcase.metallic_factor') }}</span>
                 <span class="slider-value">{{ (selectedPartProps().metallic ?? 0.5) | number:'1.1-1' }}</span>
               </div>
               <input
@@ -187,18 +186,13 @@
       </div>
 
       <div class="product-description">
-        <h3 class="section-label">About this product</h3>
-        <p class="description-text">
-          High-fidelity 3D model rendered in real-time. Drag to rotate 360°, 
-          scroll to zoom, and tap the highlighted points to discover product details.
-          This showcase demonstrates interactive 3D product visualization for 
-          modern e-commerce experiences.
-        </p>
+        <h3 class="section-label">{{ t('product-3dShowcase.about_this_product') }}</h3>
+        <p class="description-text">{{ t('product-3dShowcase.high_fidelity_3d_model_rendere') }}</p>
       </div>
 
       <!-- Specs -->
       <div class="product-specs">
-        <h3 class="section-label">Specifications</h3>
+        <h3 class="section-label">{{ t('product-3dShowcase.specifications') }}</h3>
         <div class="specs-grid">
           @for (spec of currentSpecs(); track spec.label) {
             <div class="spec-row">
@@ -211,34 +205,34 @@
 
       <!-- Interaction hints -->
       <div class="interaction-hints">
-        <h3 class="section-label">How to interact</h3>
+        <h3 class="section-label">{{ t('product-3dShowcase.how_to_interact') }}</h3>
         <div class="hints-grid">
           <div class="hint">
             <div class="hint-icon"><i class="pi pi-arrows-alt"></i></div>
             <div class="hint-content">
-              <strong>Drag</strong>
-              <span>Rotate the model</span>
+              <strong>{{ t('product-3dShowcase.drag') }}</strong>
+              <span>{{ t('product-3dShowcase.rotate_the_model') }}</span>
             </div>
           </div>
           <div class="hint">
             <div class="hint-icon"><i class="pi pi-search-plus"></i></div>
             <div class="hint-content">
-              <strong>Scroll</strong>
-              <span>Zoom in & out</span>
+              <strong>{{ t('product-3dShowcase.scroll') }}</strong>
+              <span>{{ t('product-3dShowcase.zoom_in_out') }}</span>
             </div>
           </div>
           <div class="hint">
             <div class="hint-icon"><i class="pi pi-circle-fill"></i></div>
             <div class="hint-content">
-              <strong>Hotspots</strong>
-              <span>Tap for details</span>
+              <strong>{{ t('product-3dShowcase.hotspots') }}</strong>
+              <span>{{ t('product-3dShowcase.tap_for_details') }}</span>
             </div>
           </div>
           <div class="hint">
             <div class="hint-icon"><i class="pi pi-mobile"></i></div>
             <div class="hint-content">
-              <strong>AR View</strong>
-              <span>See in your space</span>
+              <strong>{{ t('product-3dShowcase.ar_view') }}</strong>
+              <span>{{ t('product-3dShowcase.see_in_your_space') }}</span>
             </div>
           </div>
         </div>
@@ -247,15 +241,13 @@
       <!-- CTA -->
       <div class="cta-section">
         <button class="btn-primary" disabled>
-          <i class="pi pi-shopping-cart"></i>
-          Add to Cart
-        </button>
+          <i class="pi pi-shopping-cart"></i>{{ t('product-3dShowcase.add_to_cart') }}</button>
         <button class="btn-secondary" disabled>
-          <i class="pi pi-heart"></i>
-          Save
-        </button>
+          <i class="pi pi-heart"></i>{{ t('product-3dShowcase.save') }}</button>
       </div>
     </div>
   </div>
 
 </app-page-section>
+
+</ng-container>

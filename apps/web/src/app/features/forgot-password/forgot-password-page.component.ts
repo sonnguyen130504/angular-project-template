@@ -7,6 +7,7 @@ import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.c
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
 import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-forgot-password-page',
@@ -18,7 +19,8 @@ import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
     UiBadgeComponent,
     UiButtonComponent,
     UiCardComponent,
-    DecimalPipe
+    DecimalPipe,
+    TranslocoDirective
 ],
   templateUrl: './forgot-password-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

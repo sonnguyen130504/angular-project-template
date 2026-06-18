@@ -1,5 +1,6 @@
 import { Component, inject, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { FormsModule } from '@angular/forms';
 import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.component';
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
@@ -24,7 +25,9 @@ import { RouterLink } from '@angular/router';
     UiCardComponent,
     CartItemListComponent,
     CartOrderSummaryComponent,
-    RouterLink
+    RouterLink,
+    TranslocoDirective,
+    TranslocoPipe
 ],
   providers: [CartStateService],
   templateUrl: './cart-page.component.html',

@@ -1,5 +1,6 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { FormsModule } from '@angular/forms';
 import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
 import { CartStateService } from '../../services/cart-state.service';
@@ -7,7 +8,7 @@ import { CartStateService } from '../../services/cart-state.service';
 @Component({
   selector: 'app-cart-order-summary',
   standalone: true,
-  imports: [FormsModule, CurrencyPipe, UiCardComponent],
+  imports: [FormsModule, CurrencyPipe, UiCardComponent, TranslocoDirective, TranslocoPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './cart-order-summary.component.html',
 })

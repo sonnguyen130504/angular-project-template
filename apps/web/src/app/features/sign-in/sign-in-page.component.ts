@@ -6,6 +6,7 @@ import { PageSectionComponent } from '@app/shared/ui/page-section/page-section.c
 import { UiBadgeComponent } from '@app/shared/ui/ui-badge/ui-badge.component';
 import { UiButtonComponent } from '@app/shared/ui/ui-button/ui-button.component';
 import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-sign-in-page',
@@ -16,7 +17,8 @@ import { UiCardComponent } from '@app/shared/ui/ui-card/ui-card.component';
     PageSectionComponent,
     UiBadgeComponent,
     UiButtonComponent,
-    UiCardComponent
+    UiCardComponent,
+    TranslocoDirective
 ],
   templateUrl: './sign-in-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,18 +31,18 @@ export class SignInPageComponent implements OnInit, OnDestroy {
 
   readonly slides = [
     {
-      title: 'Calm Commerce Workbench',
-      desc: 'Practical tools, clear metadata labels, and minimal layout structures.',
+      title: 'signIn.slide1Title',
+      desc: 'signIn.slide1Desc',
       image: 'assets/calm_commerce_hero.png',
     },
     {
-      title: 'Tactile Motion Controls',
-      desc: 'Real-time spring physics engines and staggered initialization pipelines.',
+      title: 'signIn.slide2Title',
+      desc: 'signIn.slide2Desc',
       image: 'assets/field_jacket_detail.png',
     },
     {
-      title: 'Minimalist Architecture',
-      desc: 'Rebuilt for visual hierarchy, scanning speed, and extreme responsiveness.',
+      title: 'signIn.slide3Title',
+      desc: 'signIn.slide3Desc',
       image: 'assets/market_tote_detail.png',
     },
   ];
@@ -106,7 +108,3 @@ export class SignInPageComponent implements OnInit, OnDestroy {
     this.locked = !this.locked;
   }
 }
-
-
-
-
