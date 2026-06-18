@@ -4,8 +4,9 @@
 }
 
 .device-bezel {
-  width: 393px;
-  height: 852px; // Typical modern large phone
+  width: min(393px, calc(100vw - 32px));
+  aspect-ratio: 393 / 852;
+  height: auto;
   background: var(--surface);
   border-radius: 54px;
   border: 12px solid #1a1a1a;
@@ -77,6 +78,7 @@
   .device-bezel {
     width: 100%;
     height: 100dvh;
+    aspect-ratio: auto;
     border: none;
     border-radius: 0;
     box-shadow: none;
