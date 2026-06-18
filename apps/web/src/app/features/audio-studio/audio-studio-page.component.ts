@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, signal, viewChild, ElementRef, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
-import { CommonModule, UpperCasePipe } from '@angular/common';
+import { UpperCasePipe } from '@angular/common';
 
 type AmbientChannel = {
   id: string;
@@ -263,16 +263,228 @@ export class AudioStudioPageComponent implements OnInit, OnDestroy, AfterViewIni
     );
   }
 
+  // --- SOUNDBOARD COMMON SOUND GENERATION METHODS ---
+
+  private getNoiseBuffer(): AudioBuffer {
+    const ctx = this.audioCtx!;
+    const bufferSize = ctx.sampleRate * 2.0; // 2 seconds audio loop buffer
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+    return buffer;
+  }
+
+  triggerCommonSound(type: string): void {
+    if (!this.powerOn() || !this.audioCtx) return;
+    
+    const now = this.audioCtx.currentTime;
+
+    switch (type) {
+      case 'keyboard':
+        this.playKeyboardClick(now);
+        break;
+      case 'bowl':
+        this.playTibetanBowl(now);
+        break;
+      case 'radar':
+        this.playRadarPing(now);
+        break;
+      case 'phone':
+        this.playTelephoneRing(now);
+        break;
+      case 'wind':
+        this.playWindGust(now);
+        break;
+      case 'fire':
+        this.playFireCrackle(now);
+        break;
+    }
+  }
+
+  private playKeyboardClick(now: number): void {
+    const ctx = this.audioCtx!;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1400, now);
+    osc.frequency.exponentialRampToValueAtTime(350, now + 0.03);
+
+    gain.gain.setValueAtTime(0.25, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+
+    osc.connect(gain);
+    gain.connect(this.analyser || ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.03);
+  }
+
+  private playTibetanBowl(now: number): void {
+    const ctx = this.audioCtx!;
+    const freqs = [261.63, 392.00, 587.33]; // Harmonious C4, G4, D5 chord
+    const gains = [0.3, 0.15, 0.08];
+
+    freqs.forEach((f, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(f, now);
+      osc.detune.setValueAtTime(idx * 5, now); // metal vibrato beat
+
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(gains[idx], now + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 2.8);
+
+      osc.connect(gain);
+      gain.connect(this.analyser || ctx.destination);
+      osc.start(now);
+      osc.stop(now + 2.8);
+    });
+  }
+
+  private playRadarPing(now: number): void {
+    const ctx = this.audioCtx!;
+    const echoCount = 3;
+    
+    for (let i = 0; i < echoCount; i++) {
+      const delay = i * 0.5;
+      const vol = 0.28 * Math.pow(0.4, i);
+      
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(900, now + delay);
+      osc.frequency.exponentialRampToValueAtTime(200, now + delay + 0.6);
+
+      gain.gain.setValueAtTime(0, now + delay);
+      gain.gain.linearRampToValueAtTime(vol, now + delay + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + delay + 0.6);
+
+      osc.connect(gain);
+      gain.connect(this.analyser || ctx.destination);
+      osc.start(now + delay);
+      osc.stop(now + delay + 0.6);
+    }
+  }
+
+  private playTelephoneRing(now: number): void {
+    const ctx = this.audioCtx!;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const duration = 1.3;
+
+    osc.type = 'square';
+    
+    // Toggle tone sweep
+    const toggleRate = 0.06; // ~16Hz wobble
+    for (let t = 0; t < duration; t += toggleRate) {
+      const isHigh = Math.floor(t / toggleRate) % 2 === 0;
+      osc.frequency.setValueAtTime(isHigh ? 420 : 480, now + t);
+    }
+
+    // Double ring burst gating
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.12, now + 0.03);
+    gain.gain.setValueAtTime(0.12, now + 0.45);
+    gain.gain.linearRampToValueAtTime(0, now + 0.48);
+
+    gain.gain.setValueAtTime(0, now + 0.65);
+    gain.gain.linearRampToValueAtTime(0.12, now + 0.68);
+    gain.gain.setValueAtTime(0.12, now + 1.1);
+    gain.gain.linearRampToValueAtTime(0, now + 1.15);
+
+    osc.connect(gain);
+    gain.connect(this.analyser || ctx.destination);
+    osc.start(now);
+    osc.stop(now + duration);
+  }
+
+  private playWindGust(now: number): void {
+    const ctx = this.audioCtx!;
+    const noise = ctx.createBufferSource();
+    noise.buffer = this.getNoiseBuffer();
+    noise.loop = true;
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(250, now);
+    filter.Q.setValueAtTime(4.0, now);
+
+    // sweep frequency envelope
+    filter.frequency.exponentialRampToValueAtTime(750, now + 0.7);
+    filter.frequency.exponentialRampToValueAtTime(200, now + 1.8);
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.2, now + 0.4);
+    gain.gain.linearRampToValueAtTime(0.18, now + 1.0);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.8);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.analyser || ctx.destination);
+
+    noise.start(now);
+    noise.stop(now + 1.8);
+  }
+
+  private playFireCrackle(now: number): void {
+    const ctx = this.audioCtx!;
+    
+    // Background low frequencies
+    const rumble = ctx.createBufferSource();
+    rumble.buffer = this.getNoiseBuffer();
+    rumble.loop = true;
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(70, now);
+    filter.Q.setValueAtTime(1.5, now);
+
+    const rumbleGain = ctx.createGain();
+    rumbleGain.gain.setValueAtTime(0, now);
+    rumbleGain.gain.linearRampToValueAtTime(0.24, now + 0.15);
+    rumbleGain.gain.exponentialRampToValueAtTime(0.0001, now + 2.0);
+
+    rumble.connect(filter);
+    filter.connect(rumbleGain);
+    rumbleGain.connect(this.analyser || ctx.destination);
+    
+    rumble.start(now);
+    rumble.stop(now + 2.0);
+
+    // Trigger random cracking clicks
+    const crackCount = 14;
+    for (let i = 0; i < crackCount; i++) {
+      const timeOffset = Math.random() * 1.8;
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(1400 + Math.random() * 800, now + timeOffset);
+
+      gainNode.gain.setValueAtTime(0, now + timeOffset);
+      gainNode.gain.linearRampToValueAtTime(0.08 + Math.random() * 0.1, now + timeOffset + 0.002);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + timeOffset + 0.012);
+
+      osc.connect(gainNode);
+      gainNode.connect(this.analyser || ctx.destination);
+      osc.start(now + timeOffset);
+      osc.stop(now + timeOffset + 0.02);
+    }
+  }
+
   // --- KNOB INTERACTION MATH ---
 
   getKnobRotation(value: number): number {
-    // Maps standard scale range into rotating angle (from -135deg to +135deg)
     let percent = 0;
     if (this.activeDragKnob === 'frequency' || value > 100) {
-      // Frequency slider range: 40Hz to 1000Hz
       percent = (value - 40) / (1000 - 40);
     } else {
-      // Volume range: 0% to 100%
       percent = value / 100;
     }
     percent = Math.min(1, Math.max(0, percent));

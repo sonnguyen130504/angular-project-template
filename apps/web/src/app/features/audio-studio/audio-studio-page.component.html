@@ -110,6 +110,80 @@
       </section>
     </div>
 
+    <!-- Common Environmental Sounds Soundboard -->
+    <section class="control-card neumorphic-panel soundboard-panel">
+      <h3>Tactile Soundboard</h3>
+      <p class="panel-desc">Trigger synthesized representations of common environmental sounds (Web Audio API)</p>
+      
+      <div class="soundboard-grid">
+        <button 
+          type="button" 
+          class="sound-btn" 
+          [class.is-disabled]="!powerOn()"
+          [disabled]="!powerOn()"
+          (click)="triggerCommonSound('keyboard')"
+        >
+          <i class="pi pi-keyboard"></i>
+          <span>Keyboard click</span>
+        </button>
+        
+        <button 
+          type="button" 
+          class="sound-btn" 
+          [class.is-disabled]="!powerOn()"
+          [disabled]="!powerOn()"
+          (click)="triggerCommonSound('bowl')"
+        >
+          <i class="pi pi-bell"></i>
+          <span>Tibetan bowl</span>
+        </button>
+
+        <button 
+          type="button" 
+          class="sound-btn" 
+          [class.is-disabled]="!powerOn()"
+          [disabled]="!powerOn()"
+          (click)="triggerCommonSound('radar')"
+        >
+          <i class="pi pi-compass"></i>
+          <span>Radar ping</span>
+        </button>
+
+        <button 
+          type="button" 
+          class="sound-btn" 
+          [class.is-disabled]="!powerOn()"
+          [disabled]="!powerOn()"
+          (click)="triggerCommonSound('phone')"
+        >
+          <i class="pi pi-phone"></i>
+          <span>Retro alarm</span>
+        </button>
+
+        <button 
+          type="button" 
+          class="sound-btn" 
+          [class.is-disabled]="!powerOn()"
+          [disabled]="!powerOn()"
+          (click)="triggerCommonSound('wind')"
+        >
+          <i class="pi pi-cloud"></i>
+          <span>Wind gust</span>
+        </button>
+
+        <button 
+          type="button" 
+          class="sound-btn" 
+          [class.is-disabled]="!powerOn()"
+          [disabled]="!powerOn()"
+          (click)="triggerCommonSound('fire')"
+        >
+          <i class="pi pi-bolt"></i>
+          <span>Fire crackle</span>
+        </button>
+      </div>
+    </section>
+
     <!-- Quick Presets Dock -->
     <footer class="presets-dock">
       <span class="presets-title">Studio presets:</span>

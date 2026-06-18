@@ -63,4 +63,14 @@ describe('AudioStudioPageComponent', () => {
     // Max boundary rotation for 100% volume
     expect(component.getKnobRotation(100)).toBe(135);
   });
+
+  it('renders tactile soundboard panel', () => {
+    const fixture = TestBed.createComponent(AudioStudioPageComponent);
+    fixture.detectChanges();
+
+    const text = fixture.nativeElement.textContent;
+    expect(text).toContain('Tactile Soundboard');
+    expect(text).toContain('Keyboard click');
+    expect(text).toContain('Tibetan bowl');
+  });
 });
