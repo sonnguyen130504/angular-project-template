@@ -347,13 +347,42 @@
 }
 
 @media (max-width: 600px) {
+  .showcase-layout {
+    gap: 18px;
+  }
+
   .viewer-frame {
     height: 300px;
     border-radius: var(--radius-lg);
   }
 
+  .viewer-overlay-controls {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    justify-content: space-between;
+  }
+
   .product-name {
     font-size: 1.25rem;
+  }
+
+  .product-customizer {
+    padding: 16px;
+  }
+
+  .part-pills,
+  .color-swatches {
+    gap: 8px;
+  }
+
+  .part-pill {
+    flex: 1 1 calc(50% - 4px);
+  }
+
+  .color-swatch {
+    width: 34px;
+    height: 34px;
   }
 
   .cta-section {
@@ -364,6 +393,20 @@
   .btn-secondary {
     width: 100%;
     justify-content: center;
+  }
+
+  .spec-row,
+  .hint {
+    align-items: flex-start;
+  }
+
+  .spec-row {
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  .hint {
+    padding: 12px;
   }
 }
 

@@ -519,9 +519,53 @@
   .half-grid {
     grid-template-columns: 1fr;
   }
+
+  .order-row,
+  .session-row,
+  .list-item-row {
+    gap: 12px;
+  }
+
+  .order-pricing,
+  .session-row,
+  .list-item-row {
+    flex-wrap: wrap;
+  }
 }
 
 @media (max-width: 600px) {
+  .sidebar-card,
+  .content-block {
+    padding: 20px;
+  }
+
+  .profile-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-actions .success-message {
+    justify-content: flex-start;
+  }
+
+  .order-row,
+  .session-row {
+    align-items: flex-start;
+  }
+
+  .order-pricing {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .session-info {
+    align-items: flex-start;
+  }
+
   .toggle-row {
     flex-direction: column;
     align-items: flex-start;
@@ -541,5 +585,16 @@
     align-items: flex-start;
     gap: 12px;
   }
-}
 
+  .list-item-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .action-btn,
+  .text-action-btn,
+  .revoke-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

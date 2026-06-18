@@ -174,4 +174,34 @@
   .severity-strip {
     justify-content: flex-start;
   }
+
+  .timeline li {
+    align-items: stretch;
+  }
+
+  .timeline li > :last-child {
+    justify-self: start;
+  }
+
+  .summary-row {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .log-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .log-actions select,
+  .log-actions app-ui-button {
+    width: 100%;
+  }
+
+  .log-brief,
+  .timeline-panel,
+  .summary-panel {
+    padding: 16px;
+  }
 }
